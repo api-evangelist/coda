@@ -1,0 +1,29 @@
+aid: coda
+url: https://raw.githubusercontent.com/api-evangelist/coda/refs/heads/main/apis.yml
+name: Coda
+x-type: company
+description: >-
+  Coda is an all-in-one doc platform combining documents, spreadsheets, and apps. The Coda API exposes docs, tables, rows, controls, formulas, automations, and packs for programmatic integration.
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+tags:
+  - Productivity
+  - Docs
+  - No-Code
+  - Collaboration
+  - Database
+created: '2026-05-08'
+modified: '2026-05-08'
+specificationVersion: '0.19'
+apis: []
+common:
+  - type: Website
+    url: https://coda.io/
+  - type: Plans
+    url: plans/coda-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/coda-rate-limits.yml
+  - type: FinOps
+    url: finops/coda-finops.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
