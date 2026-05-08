@@ -26,6 +26,8 @@ apis:
     properties:
       - url: https://coda.io/developers/apis/v1
         type: Documentation
+      - url: openapi/coda-openapi.json
+        type: OpenAPI
     description: >-
       List, create, copy, share, and manage Coda documents. Provides the top-level container for pages, tables, and other elements within a workspace.
   - aid: coda:coda-folders-api
@@ -39,6 +41,8 @@ apis:
     properties:
       - url: https://coda.io/developers/apis/v1
         type: Documentation
+      - url: openapi/coda-openapi.json
+        type: OpenAPI
     description: >-
       Organize and retrieve folders that contain Coda docs within a workspace.
   - aid: coda:coda-pages-api
@@ -52,6 +56,8 @@ apis:
     properties:
       - url: https://coda.io/developers/apis/v1
         type: Documentation
+      - url: openapi/coda-openapi.json
+        type: OpenAPI
     description: >-
       Manage document structure and page content. Create, update, and retrieve hierarchical pages within a Coda doc.
   - aid: coda:coda-tables-api
@@ -65,6 +71,8 @@ apis:
     properties:
       - url: https://coda.io/developers/apis/v1
         type: Documentation
+      - url: openapi/coda-openapi.json
+        type: OpenAPI
     description: >-
       Access table resources within docs. List, retrieve, and inspect tables and their schema.
   - aid: coda:coda-columns-api
@@ -78,6 +86,8 @@ apis:
     properties:
       - url: https://coda.io/developers/apis/v1
         type: Documentation
+      - url: openapi/coda-openapi.json
+        type: OpenAPI
     description: >-
       Retrieve column definitions, types, and metadata for tables in a Coda doc.
   - aid: coda:coda-rows-api
@@ -92,6 +102,8 @@ apis:
     properties:
       - url: https://coda.io/developers/apis/v1
         type: Documentation
+      - url: openapi/coda-openapi.json
+        type: OpenAPI
     description: >-
       Read, insert, upsert, update, and delete table rows. Primary CRUD surface for table data; supports filtering, sorting, and column-key references.
   - aid: coda:coda-formulas-api
@@ -105,6 +117,8 @@ apis:
     properties:
       - url: https://coda.io/developers/apis/v1
         type: Documentation
+      - url: openapi/coda-openapi.json
+        type: OpenAPI
     description: >-
       Access named formula definitions and evaluate them within a doc.
   - aid: coda:coda-controls-api
@@ -118,6 +132,8 @@ apis:
     properties:
       - url: https://coda.io/developers/apis/v1
         type: Documentation
+      - url: openapi/coda-openapi.json
+        type: OpenAPI
     description: >-
       Read and update interactive controls embedded in a Coda doc (sliders, dropdowns, checkboxes, buttons).
   - aid: coda:coda-automations-api
@@ -132,6 +148,8 @@ apis:
     properties:
       - url: https://coda.io/developers/apis/v1
         type: Documentation
+      - url: openapi/coda-openapi.json
+        type: OpenAPI
     description: >-
       Trigger automation rules and inspect automation execution within a Coda doc.
   - aid: coda:coda-permissions-api
@@ -146,6 +164,8 @@ apis:
     properties:
       - url: https://coda.io/developers/apis/v1
         type: Documentation
+      - url: openapi/coda-openapi.json
+        type: OpenAPI
     description: >-
       Manage doc-level sharing, ACLs, and access controls. Add, modify, or revoke user/group permissions.
   - aid: coda:coda-publishing-api
@@ -159,6 +179,8 @@ apis:
     properties:
       - url: https://coda.io/developers/apis/v1
         type: Documentation
+      - url: openapi/coda-openapi.json
+        type: OpenAPI
     description: >-
       Publish and unpublish Coda docs to the public web, including category and discoverability metadata.
   - aid: coda:coda-account-api
@@ -172,6 +194,8 @@ apis:
     properties:
       - url: https://coda.io/developers/apis/v1
         type: Documentation
+      - url: openapi/coda-openapi.json
+        type: OpenAPI
     description: >-
       Retrieve information about the authenticated user (whoami).
   - aid: coda:coda-analytics-api
@@ -185,6 +209,8 @@ apis:
     properties:
       - url: https://coda.io/developers/apis/v1
         type: Documentation
+      - url: openapi/coda-openapi.json
+        type: OpenAPI
     description: >-
       Access usage analytics for docs, pages, and Packs across a workspace.
   - aid: coda:coda-packs-api
@@ -201,6 +227,8 @@ apis:
         type: Documentation
       - url: https://github.com/coda/packs-sdk
         type: SDK
+      - url: openapi/coda-openapi.json
+        type: OpenAPI
     description: >-
       Build and publish Coda Packs — TypeScript-based extensions that add custom formulas, sync tables, action buttons, and OAuth-authenticated integrations to Coda docs.
 common:
