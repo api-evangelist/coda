@@ -1,6 +1,6 @@
 # Coda (coda)
 
-Coda is an all-in-one doc platform combining documents, spreadsheets, and apps. The Coda API exposes docs, tables, rows, controls, formulas, automations, and packs for programmatic integration.
+Coda is an all-in-one doc platform combining documents, spreadsheets, and apps. The Coda API exposes docs, pages, tables, rows, columns, controls, formulas, automations, packs, permissions, and analytics for programmatic integration.
 
 **URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/coda/refs/heads/main/apis.yml)
 
@@ -19,20 +19,42 @@ Coda is an all-in-one doc platform combining documents, spreadsheets, and apps. 
 - **Created:** 2026-05-08
 - **Modified:** 2026-05-08
 
+## APIs
+
+| API | Description |
+|---|---|
+| Coda Docs API | List, create, copy, share, and manage Coda documents. |
+| Coda Folders API | Organize and retrieve workspace folders. |
+| Coda Pages API | Manage hierarchical page content within docs. |
+| Coda Tables API | Access table resources and schema. |
+| Coda Columns API | Retrieve column definitions and metadata. |
+| Coda Rows API | Read, insert, update, delete table rows. |
+| Coda Formulas API | Access named formula definitions. |
+| Coda Controls API | Read and update interactive controls. |
+| Coda Automations API | Trigger automation rules. |
+| Coda Permissions API | Manage doc-level sharing and ACLs. |
+| Coda Publishing API | Publish/unpublish docs to the public web. |
+| Coda Account API | Authenticated user info (whoami). |
+| Coda Analytics API | Usage analytics for docs, pages, and Packs. |
+| Coda Packs SDK | Build TypeScript Packs that extend Coda docs. |
+
 ## Common Properties
 
 - [Website](https://coda.io/)
-- [Plans](plans/coda-plans-pricing.yml) — API Commons Plans 0.1 (placeholder; pipeline will replace with real pricing)
-- [RateLimits](rate-limits/coda-rate-limits.yml) — API Commons Rate Limits 0.1 (placeholder)
-- [FinOps](finops/coda-finops.yml) — FOCUS-aligned FinOps Framework 1.0 (placeholder)
+- [Documentation](https://coda.io/developers/apis/v1)
+- [Pricing](https://coda.io/pricing)
+- [GitHub](https://github.com/coda)
+- [Plans](plans/coda-plans-pricing.yml) — API Commons Plans 0.1
+- [RateLimits](rate-limits/coda-rate-limits.yml) — API Commons Rate Limits 0.1
+- [FinOps](finops/coda-finops.yml) — FOCUS-aligned FinOps Framework 1.0
 
 ## Artifacts
 
 | Artifact | Path | Notes |
 |---|---|---|
-| Plans | `plans/coda-plans-pricing.yml` | Placeholder — pipeline will fetch real pricing |
-| Rate Limits | `rate-limits/coda-rate-limits.yml` | Placeholder — pipeline will fetch real limits |
-| FinOps | `finops/coda-finops.yml` | FOCUS-aligned placeholder |
+| Plans | `plans/coda-plans-pricing.yml` | Free / Pro ($12/Maker) / Team ($36/Maker) / Enterprise |
+| Rate Limits | `rate-limits/coda-rate-limits.yml` | Per-API-token; reads vs mutations rate-limited separately |
+| FinOps | `finops/coda-finops.yml` | Per-Doc-Maker subscription billing |
 
 ## Maintainers
 
