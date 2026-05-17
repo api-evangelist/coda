@@ -1,7 +1,7 @@
 aid: coda
 url: https://raw.githubusercontent.com/api-evangelist/coda/refs/heads/main/apis.yml
 name: Coda
-x-type: company
+kind: company
 description: >-
   Coda is an all-in-one doc platform combining documents, spreadsheets, and apps. The Coda API exposes docs, pages, tables, rows, columns, controls, formulas, automations, packs, permissions, and analytics for programmatic integration.
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
