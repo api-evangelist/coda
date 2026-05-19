@@ -1,0 +1,112 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Coda API — Tables
+  description: 'Coda API — Tables. 2 operations. Lead operation: List tables. Self-contained Naftiko capability covering one
+    Coda business surface.'
+  tags:
+  - Coda
+  - Tables
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    CODA_API_KEY: CODA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: coda-tables
+    baseUri: https://coda.io/apis/v1
+    description: Coda API — Tables business capability. Self-contained, no shared references.
+    resources:
+    - name: docs-docId-tables
+      path: /docs/{docId}/tables
+      operations:
+      - name: listtables
+        method: GET
+        description: List tables
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: docs-docId-tables-tableIdOrName
+      path: /docs/{docId}/tables/{tableIdOrName}
+      operations:
+      - name: gettable
+        method: GET
+        description: Get a table
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: useUpdatedTableLayouts
+          in: query
+          type: boolean
+          description: Return "detail" and "form" for the `layout` field of detail and form layouts respectively (instead
+            of "masterDetail" for both)
+    authentication:
+      type: bearer
+      token: '{{env.CODA_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: coda-tables-rest
+    port: 8080
+    description: REST adapter for Coda API — Tables. One Spectral-compliant resource per consumed operation, prefixed with
+      /v1.
+    resources:
+    - path: /v1/docs/{docid}/tables
+      name: docs-docid-tables
+      description: REST surface for docs-docId-tables.
+      operations:
+      - method: GET
+        name: listtables
+        description: List tables
+        call: coda-tables.listtables
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/docs/{docid}/tables/{tableidorname}
+      name: docs-docid-tables-tableidorname
+      description: REST surface for docs-docId-tables-tableIdOrName.
+      operations:
+      - method: GET
+        name: gettable
+        description: Get a table
+        call: coda-tables.gettable
+        with:
+          useUpdatedTableLayouts: rest.useUpdatedTableLayouts
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: coda-tables-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Coda API — Tables. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-tables
+      description: List tables
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-tables.listtables
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-table
+      description: Get a table
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-tables.gettable
+      with:
+        useUpdatedTableLayouts: tools.useUpdatedTableLayouts
+      outputParameters:
+      - type: object
+        mapping: $.

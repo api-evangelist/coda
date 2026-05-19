@@ -1,0 +1,268 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Coda API — Permissions
+  description: 'Coda API — Permissions. 7 operations. Lead operation: Get sharing metadata. Self-contained Naftiko capability
+    covering one Coda business surface.'
+  tags:
+  - Coda
+  - Permissions
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    CODA_API_KEY: CODA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: coda-permissions
+    baseUri: https://coda.io/apis/v1
+    description: Coda API — Permissions business capability. Self-contained, no shared references.
+    resources:
+    - name: docs-docId-acl-metadata
+      path: /docs/{docId}/acl/metadata
+      operations:
+      - name: getsharingmetadata
+        method: GET
+        description: Get sharing metadata
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: docs-docId-acl-permissions
+      path: /docs/{docId}/acl/permissions
+      operations:
+      - name: getpermissions
+        method: GET
+        description: List permissions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: addpermission
+        method: POST
+        description: Add permission
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: docs-docId-acl-permissions-permissionId
+      path: /docs/{docId}/acl/permissions/{permissionId}
+      operations:
+      - name: deletepermission
+        method: DELETE
+        description: Delete permission
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: docs-docId-acl-principals-search
+      path: /docs/{docId}/acl/principals/search
+      operations:
+      - name: searchprincipals
+        method: GET
+        description: Search principals
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: docs-docId-acl-settings
+      path: /docs/{docId}/acl/settings
+      operations:
+      - name: getaclsettings
+        method: GET
+        description: Get ACL settings
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateaclsettings
+        method: PATCH
+        description: Update ACL settings
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.CODA_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: coda-permissions-rest
+    port: 8080
+    description: REST adapter for Coda API — Permissions. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/docs/{docid}/acl/metadata
+      name: docs-docid-acl-metadata
+      description: REST surface for docs-docId-acl-metadata.
+      operations:
+      - method: GET
+        name: getsharingmetadata
+        description: Get sharing metadata
+        call: coda-permissions.getsharingmetadata
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/docs/{docid}/acl/permissions
+      name: docs-docid-acl-permissions
+      description: REST surface for docs-docId-acl-permissions.
+      operations:
+      - method: GET
+        name: getpermissions
+        description: List permissions
+        call: coda-permissions.getpermissions
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: addpermission
+        description: Add permission
+        call: coda-permissions.addpermission
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/docs/{docid}/acl/permissions/{permissionid}
+      name: docs-docid-acl-permissions-permissionid
+      description: REST surface for docs-docId-acl-permissions-permissionId.
+      operations:
+      - method: DELETE
+        name: deletepermission
+        description: Delete permission
+        call: coda-permissions.deletepermission
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/docs/{docid}/acl/principals/search
+      name: docs-docid-acl-principals-search
+      description: REST surface for docs-docId-acl-principals-search.
+      operations:
+      - method: GET
+        name: searchprincipals
+        description: Search principals
+        call: coda-permissions.searchprincipals
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/docs/{docid}/acl/settings
+      name: docs-docid-acl-settings
+      description: REST surface for docs-docId-acl-settings.
+      operations:
+      - method: GET
+        name: getaclsettings
+        description: Get ACL settings
+        call: coda-permissions.getaclsettings
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updateaclsettings
+        description: Update ACL settings
+        call: coda-permissions.updateaclsettings
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: coda-permissions-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Coda API — Permissions. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: get-sharing-metadata
+      description: Get sharing metadata
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-permissions.getsharingmetadata
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-permissions
+      description: List permissions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-permissions.getpermissions
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: add-permission
+      description: Add permission
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: coda-permissions.addpermission
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-permission
+      description: Delete permission
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: coda-permissions.deletepermission
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: search-principals
+      description: Search principals
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-permissions.searchprincipals
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-acl-settings
+      description: Get ACL settings
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-permissions.getaclsettings
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-acl-settings
+      description: Update ACL settings
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: coda-permissions.updateaclsettings
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

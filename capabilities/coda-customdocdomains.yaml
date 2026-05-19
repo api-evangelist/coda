@@ -1,0 +1,204 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Coda API — CustomDocDomains
+  description: 'Coda API — CustomDocDomains. 5 operations. Lead operation: List custom doc domains. Self-contained Naftiko
+    capability covering one Coda business surface.'
+  tags:
+  - Coda
+  - CustomDocDomains
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    CODA_API_KEY: CODA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: coda-customdocdomains
+    baseUri: https://coda.io/apis/v1
+    description: Coda API — CustomDocDomains business capability. Self-contained, no shared references.
+    resources:
+    - name: docs-${docId}-domains
+      path: /docs/${docId}/domains
+      operations:
+      - name: listcustomdocdomains
+        method: GET
+        description: List custom doc domains
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: addcustomdocdomain
+        method: POST
+        description: Add custom domain
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: docs-docId-domains-customDocDomain
+      path: /docs/{docId}/domains/{customDocDomain}
+      operations:
+      - name: deletecustomdocdomain
+        method: DELETE
+        description: Deletes a custom domain
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updatecustomdocdomain
+        method: PATCH
+        description: Updates a custom domain
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: domains-provider-customDocDomain
+      path: /domains/provider/{customDocDomain}
+      operations:
+      - name: getcustomdocdomainprovider
+        method: GET
+        description: Gets custom doc domains providers
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.CODA_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: coda-customdocdomains-rest
+    port: 8080
+    description: REST adapter for Coda API — CustomDocDomains. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/docs/docid/domains
+      name: docs-docid-domains
+      description: REST surface for docs-${docId}-domains.
+      operations:
+      - method: GET
+        name: listcustomdocdomains
+        description: List custom doc domains
+        call: coda-customdocdomains.listcustomdocdomains
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: addcustomdocdomain
+        description: Add custom domain
+        call: coda-customdocdomains.addcustomdocdomain
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/docs/{docid}/domains/{customdocdomain}
+      name: docs-docid-domains-customdocdomain
+      description: REST surface for docs-docId-domains-customDocDomain.
+      operations:
+      - method: DELETE
+        name: deletecustomdocdomain
+        description: Deletes a custom domain
+        call: coda-customdocdomains.deletecustomdocdomain
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updatecustomdocdomain
+        description: Updates a custom domain
+        call: coda-customdocdomains.updatecustomdocdomain
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/domains/provider/{customdocdomain}
+      name: domains-provider-customdocdomain
+      description: REST surface for domains-provider-customDocDomain.
+      operations:
+      - method: GET
+        name: getcustomdocdomainprovider
+        description: Gets custom doc domains providers
+        call: coda-customdocdomains.getcustomdocdomainprovider
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: coda-customdocdomains-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Coda API — CustomDocDomains. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: list-custom-doc-domains
+      description: List custom doc domains
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-customdocdomains.listcustomdocdomains
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: add-custom-domain
+      description: Add custom domain
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: coda-customdocdomains.addcustomdocdomain
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: deletes-custom-domain
+      description: Deletes a custom domain
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: coda-customdocdomains.deletecustomdocdomain
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: updates-custom-domain
+      description: Updates a custom domain
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: coda-customdocdomains.updatecustomdocdomain
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: gets-custom-doc-domains-providers
+      description: Gets custom doc domains providers
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-customdocdomains.getcustomdocdomainprovider
+      outputParameters:
+      - type: object
+        mapping: $.

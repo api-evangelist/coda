@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Coda API — Go Links
+  description: 'Coda API — Go Links. 1 operations. Lead operation: Add a go link. Self-contained Naftiko capability covering
+    one Coda business surface.'
+  tags:
+  - Coda
+  - Go Links
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    CODA_API_KEY: CODA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: coda-go-links
+    baseUri: https://coda.io/apis/v1
+    description: Coda API — Go Links business capability. Self-contained, no shared references.
+    resources:
+    - name: organizations-organizationId-goLinks
+      path: /organizations/{organizationId}/goLinks
+      operations:
+      - name: addgolink
+        method: POST
+        description: Add a go link
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.CODA_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: coda-go-links-rest
+    port: 8080
+    description: REST adapter for Coda API — Go Links. One Spectral-compliant resource per consumed operation, prefixed with
+      /v1.
+    resources:
+    - path: /v1/organizations/{organizationid}/golinks
+      name: organizations-organizationid-golinks
+      description: REST surface for organizations-organizationId-goLinks.
+      operations:
+      - method: POST
+        name: addgolink
+        description: Add a go link
+        call: coda-go-links.addgolink
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: coda-go-links-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Coda API — Go Links. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: add-go-link
+      description: Add a go link
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: coda-go-links.addgolink
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

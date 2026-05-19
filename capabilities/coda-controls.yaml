@@ -1,0 +1,102 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Coda API — Controls
+  description: 'Coda API — Controls. 2 operations. Lead operation: List controls. Self-contained Naftiko capability covering
+    one Coda business surface.'
+  tags:
+  - Coda
+  - Controls
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    CODA_API_KEY: CODA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: coda-controls
+    baseUri: https://coda.io/apis/v1
+    description: Coda API — Controls business capability. Self-contained, no shared references.
+    resources:
+    - name: docs-docId-controls
+      path: /docs/{docId}/controls
+      operations:
+      - name: listcontrols
+        method: GET
+        description: List controls
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: docs-docId-controls-controlIdOrName
+      path: /docs/{docId}/controls/{controlIdOrName}
+      operations:
+      - name: getcontrol
+        method: GET
+        description: Get a control
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.CODA_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: coda-controls-rest
+    port: 8080
+    description: REST adapter for Coda API — Controls. One Spectral-compliant resource per consumed operation, prefixed with
+      /v1.
+    resources:
+    - path: /v1/docs/{docid}/controls
+      name: docs-docid-controls
+      description: REST surface for docs-docId-controls.
+      operations:
+      - method: GET
+        name: listcontrols
+        description: List controls
+        call: coda-controls.listcontrols
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/docs/{docid}/controls/{controlidorname}
+      name: docs-docid-controls-controlidorname
+      description: REST surface for docs-docId-controls-controlIdOrName.
+      operations:
+      - method: GET
+        name: getcontrol
+        description: Get a control
+        call: coda-controls.getcontrol
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: coda-controls-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Coda API — Controls. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-controls
+      description: List controls
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-controls.listcontrols
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-control
+      description: Get a control
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-controls.getcontrol
+      outputParameters:
+      - type: object
+        mapping: $.

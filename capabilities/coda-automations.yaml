@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Coda API — Automations
+  description: 'Coda API — Automations. 1 operations. Lead operation: Trigger automation. Self-contained Naftiko capability
+    covering one Coda business surface.'
+  tags:
+  - Coda
+  - Automations
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    CODA_API_KEY: CODA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: coda-automations
+    baseUri: https://coda.io/apis/v1
+    description: Coda API — Automations business capability. Self-contained, no shared references.
+    resources:
+    - name: docs-docId-hooks-automation-ruleId
+      path: /docs/{docId}/hooks/automation/{ruleId}
+      operations:
+      - name: triggerwebhookautomation
+        method: POST
+        description: Trigger automation
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.CODA_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: coda-automations-rest
+    port: 8080
+    description: REST adapter for Coda API — Automations. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/docs/{docid}/hooks/automation/{ruleid}
+      name: docs-docid-hooks-automation-ruleid
+      description: REST surface for docs-docId-hooks-automation-ruleId.
+      operations:
+      - method: POST
+        name: triggerwebhookautomation
+        description: Trigger automation
+        call: coda-automations.triggerwebhookautomation
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: coda-automations-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Coda API — Automations. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: trigger-automation
+      description: Trigger automation
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: coda-automations.triggerwebhookautomation
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

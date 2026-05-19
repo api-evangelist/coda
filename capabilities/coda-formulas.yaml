@@ -1,0 +1,102 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Coda API — Formulas
+  description: 'Coda API — Formulas. 2 operations. Lead operation: List formulas. Self-contained Naftiko capability covering
+    one Coda business surface.'
+  tags:
+  - Coda
+  - Formulas
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    CODA_API_KEY: CODA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: coda-formulas
+    baseUri: https://coda.io/apis/v1
+    description: Coda API — Formulas business capability. Self-contained, no shared references.
+    resources:
+    - name: docs-docId-formulas
+      path: /docs/{docId}/formulas
+      operations:
+      - name: listformulas
+        method: GET
+        description: List formulas
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: docs-docId-formulas-formulaIdOrName
+      path: /docs/{docId}/formulas/{formulaIdOrName}
+      operations:
+      - name: getformula
+        method: GET
+        description: Get a formula
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.CODA_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: coda-formulas-rest
+    port: 8080
+    description: REST adapter for Coda API — Formulas. One Spectral-compliant resource per consumed operation, prefixed with
+      /v1.
+    resources:
+    - path: /v1/docs/{docid}/formulas
+      name: docs-docid-formulas
+      description: REST surface for docs-docId-formulas.
+      operations:
+      - method: GET
+        name: listformulas
+        description: List formulas
+        call: coda-formulas.listformulas
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/docs/{docid}/formulas/{formulaidorname}
+      name: docs-docid-formulas-formulaidorname
+      description: REST surface for docs-docId-formulas-formulaIdOrName.
+      operations:
+      - method: GET
+        name: getformula
+        description: Get a formula
+        call: coda-formulas.getformula
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: coda-formulas-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Coda API — Formulas. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-formulas
+      description: List formulas
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-formulas.listformulas
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-formula
+      description: Get a formula
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-formulas.getformula
+      outputParameters:
+      - type: object
+        mapping: $.

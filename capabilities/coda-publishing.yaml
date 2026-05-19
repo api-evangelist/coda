@@ -1,0 +1,137 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Coda API — Publishing
+  description: 'Coda API — Publishing. 3 operations. Lead operation: Get doc categories. Self-contained Naftiko capability
+    covering one Coda business surface.'
+  tags:
+  - Coda
+  - Publishing
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    CODA_API_KEY: CODA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: coda-publishing
+    baseUri: https://coda.io/apis/v1
+    description: Coda API — Publishing business capability. Self-contained, no shared references.
+    resources:
+    - name: categories
+      path: /categories
+      operations:
+      - name: listcategories
+        method: GET
+        description: Get doc categories
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: docs-docId-publish
+      path: /docs/{docId}/publish
+      operations:
+      - name: publishdoc
+        method: PUT
+        description: Publish doc
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: unpublishdoc
+        method: DELETE
+        description: Unpublish doc
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.CODA_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: coda-publishing-rest
+    port: 8080
+    description: REST adapter for Coda API — Publishing. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/categories
+      name: categories
+      description: REST surface for categories.
+      operations:
+      - method: GET
+        name: listcategories
+        description: Get doc categories
+        call: coda-publishing.listcategories
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/docs/{docid}/publish
+      name: docs-docid-publish
+      description: REST surface for docs-docId-publish.
+      operations:
+      - method: PUT
+        name: publishdoc
+        description: Publish doc
+        call: coda-publishing.publishdoc
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: unpublishdoc
+        description: Unpublish doc
+        call: coda-publishing.unpublishdoc
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: coda-publishing-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Coda API — Publishing. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: get-doc-categories
+      description: Get doc categories
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-publishing.listcategories
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: publish-doc
+      description: Publish doc
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: coda-publishing.publishdoc
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: unpublish-doc
+      description: Unpublish doc
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: coda-publishing.unpublishdoc
+      outputParameters:
+      - type: object
+        mapping: $.

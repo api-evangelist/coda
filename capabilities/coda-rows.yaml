@@ -1,0 +1,313 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Coda API — Rows
+  description: 'Coda API — Rows. 7 operations. Lead operation: List table rows. Self-contained Naftiko capability covering
+    one Coda business surface.'
+  tags:
+  - Coda
+  - Rows
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    CODA_API_KEY: CODA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: coda-rows
+    baseUri: https://coda.io/apis/v1
+    description: Coda API — Rows business capability. Self-contained, no shared references.
+    resources:
+    - name: docs-docId-tables-tableIdOrName-rows
+      path: /docs/{docId}/tables/{tableIdOrName}/rows
+      operations:
+      - name: listrows
+        method: GET
+        description: List table rows
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: query
+          in: query
+          type: string
+          description: Query used to filter returned rows, specified as `<column_id_or_name>:<value>`. If you'd like to use
+            a column name instead of an ID, you must quote it (e.g., `"
+        - name: sortBy
+          in: query
+          type: string
+          description: Specifies the sort order of the rows returned. If left unspecified, rows are returned by creation time
+            ascending. "UpdatedAt" sort ordering is the order of rows
+        - name: valueFormat
+          in: query
+          type: string
+          description: The format that cell values are returned as.
+        - name: visibleOnly
+          in: query
+          type: boolean
+          description: If true, returns only visible rows and columns for the table.
+      - name: upsertrows
+        method: POST
+        description: Insert/upsert rows
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: disableParsing
+          in: query
+          type: boolean
+          description: If true, the API will not attempt to parse the data in any way.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deleterows
+        method: DELETE
+        description: Delete multiple rows
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: docs-docId-tables-tableIdOrName-rows-rowIdOrName
+      path: /docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}
+      operations:
+      - name: getrow
+        method: GET
+        description: Get a row
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: valueFormat
+          in: query
+          type: string
+          description: The format that cell values are returned as.
+      - name: updaterow
+        method: PUT
+        description: Update row
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: disableParsing
+          in: query
+          type: boolean
+          description: If true, the API will not attempt to parse the data in any way.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deleterow
+        method: DELETE
+        description: Delete row
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: docs-docId-tables-tableIdOrName-rows-rowIdOrName-buttons-columnIdOrName
+      path: /docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}/buttons/{columnIdOrName}
+      operations:
+      - name: pushbutton
+        method: POST
+        description: Push a button
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.CODA_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: coda-rows-rest
+    port: 8080
+    description: REST adapter for Coda API — Rows. One Spectral-compliant resource per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/docs/{docid}/tables/{tableidorname}/rows
+      name: docs-docid-tables-tableidorname-rows
+      description: REST surface for docs-docId-tables-tableIdOrName-rows.
+      operations:
+      - method: GET
+        name: listrows
+        description: List table rows
+        call: coda-rows.listrows
+        with:
+          query: rest.query
+          sortBy: rest.sortBy
+          valueFormat: rest.valueFormat
+          visibleOnly: rest.visibleOnly
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: upsertrows
+        description: Insert/upsert rows
+        call: coda-rows.upsertrows
+        with:
+          disableParsing: rest.disableParsing
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleterows
+        description: Delete multiple rows
+        call: coda-rows.deleterows
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/docs/{docid}/tables/{tableidorname}/rows/{rowidorname}
+      name: docs-docid-tables-tableidorname-rows-rowidorname
+      description: REST surface for docs-docId-tables-tableIdOrName-rows-rowIdOrName.
+      operations:
+      - method: GET
+        name: getrow
+        description: Get a row
+        call: coda-rows.getrow
+        with:
+          valueFormat: rest.valueFormat
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updaterow
+        description: Update row
+        call: coda-rows.updaterow
+        with:
+          disableParsing: rest.disableParsing
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleterow
+        description: Delete row
+        call: coda-rows.deleterow
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/docs/{docid}/tables/{tableidorname}/rows/{rowidorname}/buttons/{columnidorname}
+      name: docs-docid-tables-tableidorname-rows-rowidorname-buttons-columnidorname
+      description: REST surface for docs-docId-tables-tableIdOrName-rows-rowIdOrName-buttons-columnIdOrName.
+      operations:
+      - method: POST
+        name: pushbutton
+        description: Push a button
+        call: coda-rows.pushbutton
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: coda-rows-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Coda API — Rows. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-table-rows
+      description: List table rows
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-rows.listrows
+      with:
+        query: tools.query
+        sortBy: tools.sortBy
+        valueFormat: tools.valueFormat
+        visibleOnly: tools.visibleOnly
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: insert-upsert-rows
+      description: Insert/upsert rows
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: coda-rows.upsertrows
+      with:
+        disableParsing: tools.disableParsing
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-multiple-rows
+      description: Delete multiple rows
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: coda-rows.deleterows
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-row
+      description: Get a row
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-rows.getrow
+      with:
+        valueFormat: tools.valueFormat
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-row
+      description: Update row
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: coda-rows.updaterow
+      with:
+        disableParsing: tools.disableParsing
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-row
+      description: Delete row
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: coda-rows.deleterow
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: push-button
+      description: Push a button
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: coda-rows.pushbutton
+      outputParameters:
+      - type: object
+        mapping: $.

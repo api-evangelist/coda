@@ -1,0 +1,338 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Coda API — Pages
+  description: 'Coda API — Pages. 9 operations. Lead operation: List pages. Self-contained Naftiko capability covering one
+    Coda business surface.'
+  tags:
+  - Coda
+  - Pages
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    CODA_API_KEY: CODA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: coda-pages
+    baseUri: https://coda.io/apis/v1
+    description: Coda API — Pages business capability. Self-contained, no shared references.
+    resources:
+    - name: docs-docId-pages
+      path: /docs/{docId}/pages
+      operations:
+      - name: listpages
+        method: GET
+        description: List pages
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createpage
+        method: POST
+        description: Create a page
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: docs-docId-pages-pageIdOrName
+      path: /docs/{docId}/pages/{pageIdOrName}
+      operations:
+      - name: getpage
+        method: GET
+        description: Get a page
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updatepage
+        method: PUT
+        description: Update a page
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deletepage
+        method: DELETE
+        description: Delete a page
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: docs-docId-pages-pageIdOrName-content
+      path: /docs/{docId}/pages/{pageIdOrName}/content
+      operations:
+      - name: listpagecontent
+        method: GET
+        description: List page content
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deletepagecontent
+        method: DELETE
+        description: Delete page content
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: docs-docId-pages-pageIdOrName-export
+      path: /docs/{docId}/pages/{pageIdOrName}/export
+      operations:
+      - name: beginpagecontentexport
+        method: POST
+        description: Begin content export
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: docs-docId-pages-pageIdOrName-export-requestId
+      path: /docs/{docId}/pages/{pageIdOrName}/export/{requestId}
+      operations:
+      - name: getpagecontentexportstatus
+        method: GET
+        description: Content export status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.CODA_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: coda-pages-rest
+    port: 8080
+    description: REST adapter for Coda API — Pages. One Spectral-compliant resource per consumed operation, prefixed with
+      /v1.
+    resources:
+    - path: /v1/docs/{docid}/pages
+      name: docs-docid-pages
+      description: REST surface for docs-docId-pages.
+      operations:
+      - method: GET
+        name: listpages
+        description: List pages
+        call: coda-pages.listpages
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createpage
+        description: Create a page
+        call: coda-pages.createpage
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/docs/{docid}/pages/{pageidorname}
+      name: docs-docid-pages-pageidorname
+      description: REST surface for docs-docId-pages-pageIdOrName.
+      operations:
+      - method: GET
+        name: getpage
+        description: Get a page
+        call: coda-pages.getpage
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updatepage
+        description: Update a page
+        call: coda-pages.updatepage
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletepage
+        description: Delete a page
+        call: coda-pages.deletepage
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/docs/{docid}/pages/{pageidorname}/content
+      name: docs-docid-pages-pageidorname-content
+      description: REST surface for docs-docId-pages-pageIdOrName-content.
+      operations:
+      - method: GET
+        name: listpagecontent
+        description: List page content
+        call: coda-pages.listpagecontent
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletepagecontent
+        description: Delete page content
+        call: coda-pages.deletepagecontent
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/docs/{docid}/pages/{pageidorname}/export
+      name: docs-docid-pages-pageidorname-export
+      description: REST surface for docs-docId-pages-pageIdOrName-export.
+      operations:
+      - method: POST
+        name: beginpagecontentexport
+        description: Begin content export
+        call: coda-pages.beginpagecontentexport
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/docs/{docid}/pages/{pageidorname}/export/{requestid}
+      name: docs-docid-pages-pageidorname-export-requestid
+      description: REST surface for docs-docId-pages-pageIdOrName-export-requestId.
+      operations:
+      - method: GET
+        name: getpagecontentexportstatus
+        description: Content export status
+        call: coda-pages.getpagecontentexportstatus
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: coda-pages-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Coda API — Pages. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-pages
+      description: List pages
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-pages.listpages
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-page
+      description: Create a page
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: coda-pages.createpage
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-page
+      description: Get a page
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-pages.getpage
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-page
+      description: Update a page
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: coda-pages.updatepage
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-page
+      description: Delete a page
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: coda-pages.deletepage
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-page-content
+      description: List page content
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-pages.listpagecontent
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-page-content
+      description: Delete page content
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: coda-pages.deletepagecontent
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: begin-content-export
+      description: Begin content export
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: coda-pages.beginpagecontentexport
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: content-export-status
+      description: Content export status
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-pages.getpagecontentexportstatus
+      outputParameters:
+      - type: object
+        mapping: $.

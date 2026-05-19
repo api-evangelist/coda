@@ -1,0 +1,118 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Coda API — Columns
+  description: 'Coda API — Columns. 2 operations. Lead operation: List columns. Self-contained Naftiko capability covering
+    one Coda business surface.'
+  tags:
+  - Coda
+  - Columns
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    CODA_API_KEY: CODA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: coda-columns
+    baseUri: https://coda.io/apis/v1
+    description: Coda API — Columns business capability. Self-contained, no shared references.
+    resources:
+    - name: docs-docId-tables-tableIdOrName-columns
+      path: /docs/{docId}/tables/{tableIdOrName}/columns
+      operations:
+      - name: listcolumns
+        method: GET
+        description: List columns
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: limit
+          in: query
+          type: integer
+          description: Maximum number of results to return in this query.
+        - name: visibleOnly
+          in: query
+          type: boolean
+          description: If true, returns only visible columns for the table. This parameter only applies to base tables, and
+            not views.
+    - name: docs-docId-tables-tableIdOrName-columns-columnIdOrName
+      path: /docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName}
+      operations:
+      - name: getcolumn
+        method: GET
+        description: Get a column
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.CODA_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: coda-columns-rest
+    port: 8080
+    description: REST adapter for Coda API — Columns. One Spectral-compliant resource per consumed operation, prefixed with
+      /v1.
+    resources:
+    - path: /v1/docs/{docid}/tables/{tableidorname}/columns
+      name: docs-docid-tables-tableidorname-columns
+      description: REST surface for docs-docId-tables-tableIdOrName-columns.
+      operations:
+      - method: GET
+        name: listcolumns
+        description: List columns
+        call: coda-columns.listcolumns
+        with:
+          limit: rest.limit
+          visibleOnly: rest.visibleOnly
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/docs/{docid}/tables/{tableidorname}/columns/{columnidorname}
+      name: docs-docid-tables-tableidorname-columns-columnidorname
+      description: REST surface for docs-docId-tables-tableIdOrName-columns-columnIdOrName.
+      operations:
+      - method: GET
+        name: getcolumn
+        description: Get a column
+        call: coda-columns.getcolumn
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: coda-columns-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Coda API — Columns. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-columns
+      description: List columns
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-columns.listcolumns
+      with:
+        limit: tools.limit
+        visibleOnly: tools.visibleOnly
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-column
+      description: Get a column
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-columns.getcolumn
+      outputParameters:
+      - type: object
+        mapping: $.

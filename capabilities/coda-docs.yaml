@@ -1,0 +1,241 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Coda API — Docs
+  description: 'Coda API — Docs. 5 operations. Lead operation: List available docs. Self-contained Naftiko capability covering
+    one Coda business surface.'
+  tags:
+  - Coda
+  - Docs
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    CODA_API_KEY: CODA_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: coda-docs
+    baseUri: https://coda.io/apis/v1
+    description: Coda API — Docs business capability. Self-contained, no shared references.
+    resources:
+    - name: docs
+      path: /docs
+      operations:
+      - name: listdocs
+        method: GET
+        description: List available docs
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: isOwner
+          in: query
+          type: boolean
+          description: Show only docs owned by the user.
+        - name: isPublished
+          in: query
+          type: boolean
+          description: Show only published docs.
+        - name: sourceDoc
+          in: query
+          type: string
+          description: Show only docs copied from the specified doc ID.
+        - name: isStarred
+          in: query
+          type: boolean
+          description: If true, returns docs that are starred. If false, returns docs that are not starred.
+        - name: inGallery
+          in: query
+          type: boolean
+          description: Show only docs visible within the gallery.
+        - name: workspaceId
+          in: query
+          type: string
+          description: Show only docs belonging to the given workspace.
+        - name: folderId
+          in: query
+          type: string
+          description: Show only docs belonging to the given folder.
+      - name: createdoc
+        method: POST
+        description: Create doc
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: docs-docId
+      path: /docs/{docId}
+      operations:
+      - name: getdoc
+        method: GET
+        description: Get info about a doc
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deletedoc
+        method: DELETE
+        description: Delete doc
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updatedoc
+        method: PATCH
+        description: Update doc
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.CODA_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: coda-docs-rest
+    port: 8080
+    description: REST adapter for Coda API — Docs. One Spectral-compliant resource per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/docs
+      name: docs
+      description: REST surface for docs.
+      operations:
+      - method: GET
+        name: listdocs
+        description: List available docs
+        call: coda-docs.listdocs
+        with:
+          isOwner: rest.isOwner
+          isPublished: rest.isPublished
+          sourceDoc: rest.sourceDoc
+          isStarred: rest.isStarred
+          inGallery: rest.inGallery
+          workspaceId: rest.workspaceId
+          folderId: rest.folderId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createdoc
+        description: Create doc
+        call: coda-docs.createdoc
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/docs/{docid}
+      name: docs-docid
+      description: REST surface for docs-docId.
+      operations:
+      - method: GET
+        name: getdoc
+        description: Get info about a doc
+        call: coda-docs.getdoc
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletedoc
+        description: Delete doc
+        call: coda-docs.deletedoc
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updatedoc
+        description: Update doc
+        call: coda-docs.updatedoc
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: coda-docs-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Coda API — Docs. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-available-docs
+      description: List available docs
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-docs.listdocs
+      with:
+        isOwner: tools.isOwner
+        isPublished: tools.isPublished
+        sourceDoc: tools.sourceDoc
+        isStarred: tools.isStarred
+        inGallery: tools.inGallery
+        workspaceId: tools.workspaceId
+        folderId: tools.folderId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-doc
+      description: Create doc
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: coda-docs.createdoc
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-info-about-doc
+      description: Get info about a doc
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: coda-docs.getdoc
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-doc
+      description: Delete doc
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: coda-docs.deletedoc
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-doc
+      description: Update doc
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: coda-docs.updatedoc
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
