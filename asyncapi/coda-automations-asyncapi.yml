@@ -1,0 +1,253 @@
+asyncapi: 2.6.0
+info:
+  title: Coda Automations Push API
+  version: '1.0.0'
+  description: |-
+    AsyncAPI description of Coda's documented automation/webhook surface.
+
+    Coda does NOT publish an outbound webhook subscription API in the public
+    REST reference. The documented eventing surface is inbound: a single
+    "Push API" / "webhook-invoked automation" endpoint that a caller POSTs to
+    in order to trigger a webhook-typed automation rule defined inside a Coda
+    doc. The automation rule itself is configured in the Coda doc UI; the API
+    only exposes the per-rule trigger URL.
+
+    Source documentation:
+      - Coda REST API v1 reference: https://coda.io/developers/apis/v1
+      - Operation: triggerWebhookAutomation
+        (POST /docs/{docId}/hooks/automation/{ruleId})
+      - Coda OpenAPI 3.0 source: bundled in this repository at
+        openapi/coda-openapi.json (info.version 1.5.0)
+
+    Modelled surface:
+      - One inbound channel: the per-rule webhook trigger endpoint hosted by
+        Coda at https://coda.io/apis/v1/docs/{docId}/hooks/automation/{ruleId}.
+      - One publish operation: a client (the publisher) sends a JSON, form, or
+        plain-text payload to that endpoint; Coda responds 202 with a
+        requestId once the trigger has been queued for processing.
+
+    Out of scope (not documented as a public API):
+      - Outbound webhook subscriptions from Coda to third-party endpoints.
+      - Schedule, button, table-row-change, and other in-doc automation
+        trigger types. These exist as automation rule "trigger types" inside
+        the Coda doc editor but are not exposed as separate REST or eventing
+        endpoints in the public reference. Only the "webhook" trigger type
+        is reachable via the documented API.
+      - Pack triggers and Pack-defined sync/formula events. The Coda Packs
+        SDK (https://coda.io/packs/build/latest/) supports webhook-based
+        Pack auth and Pack sync, but no Pack-level webhook ingress endpoint
+        is published in the REST API v1 reference.
+  contact:
+    name: Coda API Support
+    email: help+api@coda.io
+    url: https://coda.io/developers/apis/v1
+  license:
+    name: Coda Developer Terms
+    url: https://coda.io/trust/developer
+
+defaultContentType: application/json
+
+servers:
+  production:
+    url: coda.io/apis/v1
+    protocol: https
+    description: |-
+      Coda hosts the inbound webhook trigger endpoint. Subscribers (i.e. the
+      systems that want to trigger a Coda automation) POST to the per-rule
+      URL on this host. Authentication uses the same Bearer API token as the
+      rest of the Coda REST API.
+    security:
+      - bearerAuth: []
+
+channels:
+  docs/{docId}/hooks/automation/{ruleId}:
+    description: |-
+      Inbound channel: the per-rule webhook trigger URL for a single
+      webhook-invoked automation rule inside a single Coda doc. The
+      {docId} and {ruleId} path parameters identify the target doc and
+      automation rule; the rule itself is created in the Coda doc UI by
+      selecting the "Webhook" trigger type, which provisions this URL.
+
+      One inbound POST corresponds to one automation trigger. The body is
+      delivered to the rule as the webhook payload and is available to the
+      rule's actions via Coda formula references.
+    parameters:
+      docId:
+        description: ID of the doc. Example value from the API reference.
+        schema:
+          type: string
+          example: AbCDeFGH
+      ruleId:
+        description: |-
+          ID of the automation rule. Coda automation rule IDs are prefixed
+          with the surface they live on (e.g. "grid-auto-").
+        schema:
+          type: string
+          example: grid-auto-b3Jmey6jBS
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: '0.3.0'
+    publish:
+      operationId: triggerWebhookAutomation
+      summary: Trigger a webhook-invoked automation rule
+      description: |-
+        Triggers a webhook-invoked automation rule. The request body is the
+        payload delivered to the automation. The endpoint accepts
+        application/json, application/x-www-form-urlencoded, or text/plain.
+
+        The Coda OpenAPI source documents the success response as HTTP 202
+        with a JSON body containing a `requestId` field that uniquely
+        identifies the trigger request. Documented error responses are 400,
+        401, 403, 404, 422, and 429.
+
+        Authentication: Bearer API token (same as the rest of the Coda REST
+        API). Tokens may be restricted to specific docs or read/write
+        operation classes; triggering an automation requires write access
+        on the target doc.
+      bindings:
+        http:
+          bindingVersion: '0.3.0'
+      message:
+        oneOf:
+          - $ref: '#/components/messages/WebhookTriggerJson'
+          - $ref: '#/components/messages/WebhookTriggerForm'
+          - $ref: '#/components/messages/WebhookTriggerText'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: UUID
+      description: |-
+        Coda API bearer token, obtained from https://coda.io/account.
+        Sent as `Authorization: Bearer <api_token>`. Tokens can be created
+        with restrictions limiting them to specific docs, tables, or
+        read/write operation classes (see the Coda API authentication
+        section in the REST reference).
+
+  messages:
+    WebhookTriggerJson:
+      name: WebhookTriggerJsonRequest
+      title: Webhook trigger (JSON body)
+      summary: |-
+        JSON payload delivered to a webhook-invoked Coda automation rule.
+        The payload is an open object; Coda does not constrain its shape
+        and exposes the parsed fields to the rule's actions.
+      contentType: application/json
+      bindings:
+        http:
+          headers:
+            type: object
+            properties:
+              Authorization:
+                type: string
+                description: Bearer token, e.g. `Bearer <api_token>`.
+              Content-Type:
+                type: string
+                const: application/json
+            required:
+              - Authorization
+              - Content-Type
+          bindingVersion: '0.3.0'
+      payload:
+        $ref: '#/components/schemas/WebhookTriggerPayload'
+    WebhookTriggerForm:
+      name: WebhookTriggerFormRequest
+      title: Webhook trigger (form-urlencoded body)
+      summary: |-
+        Form-encoded payload delivered to a webhook-invoked Coda automation
+        rule. The Coda OpenAPI source lists
+        `application/x-www-form-urlencoded` as an accepted content type for
+        this endpoint alongside JSON.
+      contentType: application/x-www-form-urlencoded
+      bindings:
+        http:
+          headers:
+            type: object
+            properties:
+              Authorization:
+                type: string
+              Content-Type:
+                type: string
+                const: application/x-www-form-urlencoded
+            required:
+              - Authorization
+              - Content-Type
+          bindingVersion: '0.3.0'
+      payload:
+        $ref: '#/components/schemas/WebhookTriggerPayload'
+    WebhookTriggerText:
+      name: WebhookTriggerTextRequest
+      title: Webhook trigger (plain text body)
+      summary: |-
+        Raw text payload delivered to a webhook-invoked Coda automation
+        rule. The Coda OpenAPI source lists `text/plain` as an accepted
+        content type for this endpoint; the body is treated as an opaque
+        string.
+      contentType: text/plain
+      bindings:
+        http:
+          headers:
+            type: object
+            properties:
+              Authorization:
+                type: string
+              Content-Type:
+                type: string
+                const: text/plain
+            required:
+              - Authorization
+              - Content-Type
+          bindingVersion: '0.3.0'
+      payload:
+        type: string
+        description: Opaque text body forwarded to the automation rule.
+    WebhookTriggerResultAck:
+      name: WebhookTriggerResultAck
+      title: Webhook trigger queued (HTTP 202)
+      summary: |-
+        Synchronous acknowledgement returned by Coda when the webhook
+        trigger has been queued for processing. Not a separately-delivered
+        event; documented here for completeness because the channel is a
+        synchronous HTTP request/response.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/WebhookTriggerResult'
+
+  schemas:
+    WebhookTriggerPayload:
+      type: object
+      description: |-
+        Payload for a webhook-invoked automation trigger. The Coda OpenAPI
+        source defines this as an open object (`additionalProperties: true`)
+        with no required fields; callers may supply any JSON object that
+        their automation rule expects to consume.
+      additionalProperties: true
+      example:
+        message: The doc that brings words, data, & teams together.
+
+    WebhookTriggerResult:
+      allOf:
+        - $ref: '#/components/schemas/DocumentMutateResponse'
+        - type: object
+          description: |-
+            Result of triggering a webhook-invoked automation. Inherits
+            `requestId` from DocumentMutateResponse and adds no further
+            fields in the current OpenAPI source.
+          additionalProperties: false
+          properties: {}
+
+    DocumentMutateResponse:
+      type: object
+      description: Base response type for an operation that mutates a document.
+      additionalProperties: false
+      required:
+        - requestId
+      properties:
+        requestId:
+          type: string
+          description: An arbitrary unique identifier for this request.
+          example: abc-123-def-456

@@ -12,7 +12,7 @@ tags:
 - Collaboration
 - Database
 created: '2026-05-08'
-modified: '2026-05-19'
+modified: '2026-05-30'
 specificationVersion: '0.19'
 apis:
 - aid: coda:coda-docs-api
@@ -180,6 +180,8 @@ apis:
     type: Documentation
   - url: openapi/coda-openapi.json
     type: OpenAPI
+  - url: asyncapi/coda-automations-asyncapi.yml
+    type: AsyncAPI
   description: Trigger automation rules and inspect automation execution within a Coda doc.
 - aid: coda:coda-permissions-api
   name: Coda Permissions API
