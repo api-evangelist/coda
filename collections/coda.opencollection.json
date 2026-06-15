@@ -1,0 +1,4180 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Coda API",
+    "version": "1.5.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Publishing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get doc categories",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/categories"
+          },
+          "docs": "Gets all available doc categories."
+        },
+        {
+          "info": {
+            "name": "Publish doc",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://coda.io/apis/v1/docs/:docId/publish",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update publish settings for a doc."
+        },
+        {
+          "info": {
+            "name": "Unpublish doc",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://coda.io/apis/v1/docs/:docId/publish",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ]
+          },
+          "docs": "Unpublishes a doc."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Docs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List available docs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs",
+            "params": [
+              {
+                "name": "isOwner",
+                "value": "",
+                "type": "query",
+                "description": "Show only docs owned by the user."
+              },
+              {
+                "name": "isPublished",
+                "value": "",
+                "type": "query",
+                "description": "Show only published docs."
+              },
+              {
+                "name": "query",
+                "value": "Supercalifragilisticexpialidocious",
+                "type": "query",
+                "description": "Search term used to filter down results."
+              },
+              {
+                "name": "sourceDoc",
+                "value": "",
+                "type": "query",
+                "description": "Show only docs copied from the specified doc ID."
+              },
+              {
+                "name": "isStarred",
+                "value": "",
+                "type": "query",
+                "description": "If true, returns docs that are starred. If false, returns docs that are not starred."
+              },
+              {
+                "name": "inGallery",
+                "value": "",
+                "type": "query",
+                "description": "Show only docs visible within the gallery."
+              },
+              {
+                "name": "workspaceId",
+                "value": "",
+                "type": "query",
+                "description": "Show only docs belonging to the given workspace."
+              },
+              {
+                "name": "folderId",
+                "value": "",
+                "type": "query",
+                "description": "Show only docs belonging to the given folder."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of Coda docs accessible by the user, and which they have opened at least once. These are returned in the same order as on the docs page: reverse chronological by the latest event relevant to the user (last viewed, edited, or shared).\n"
+        },
+        {
+          "info": {
+            "name": "Create doc",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/docs",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new Coda doc, optionally copying an existing doc. Note that creating a doc requires you to be a Doc Maker in the applicable workspace (or be auto-promoted to one).\n"
+        },
+        {
+          "info": {
+            "name": "Get info about a doc",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ]
+          },
+          "docs": "Returns metadata for the specified doc."
+        },
+        {
+          "info": {
+            "name": "Update doc",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://coda.io/apis/v1/docs/:docId",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates metadata for a doc. Note that updating a doc title requires you to be a Doc Maker in the applicable workspace."
+        },
+        {
+          "info": {
+            "name": "Delete doc",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://coda.io/apis/v1/docs/:docId",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ]
+          },
+          "docs": "Deletes a doc."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Permissions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get sharing metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId/acl/metadata",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ]
+          },
+          "docs": "Returns metadata associated with sharing for this Coda doc."
+        },
+        {
+          "info": {
+            "name": "List permissions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId/acl/permissions",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of permissions for this Coda doc."
+        },
+        {
+          "info": {
+            "name": "Add permission",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/docs/:docId/acl/permissions",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds a new permission to the doc.\n"
+        },
+        {
+          "info": {
+            "name": "Delete permission",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://coda.io/apis/v1/docs/:docId/acl/permissions/:permissionId",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "permissionId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of a permission on a doc."
+              }
+            ]
+          },
+          "docs": "Deletes an existing permission.\n"
+        },
+        {
+          "info": {
+            "name": "Search principals",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId/acl/principals/search",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "query",
+                "value": "Supercalifragilisticexpialidocious",
+                "type": "query",
+                "description": "Search term used to filter down results."
+              }
+            ]
+          },
+          "docs": "Searches for user and group principals matching the query that this doc can be shared with.\nAt most 20 results will be returned for both users and groups. If no query is given then no results are returned.\n"
+        },
+        {
+          "info": {
+            "name": "Get ACL settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId/acl/settings",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ]
+          },
+          "docs": "Returns settings associated with ACLs for this Coda doc."
+        },
+        {
+          "info": {
+            "name": "Update ACL settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://coda.io/apis/v1/docs/:docId/acl/settings",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update settings associated with ACLs for this Coda doc."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Pages",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List pages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId/pages",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of pages in a Coda doc."
+        },
+        {
+          "info": {
+            "name": "Create a page",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/docs/:docId/pages",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new page in a doc. Note that creating a page requires you to be a Doc Maker in the applicable workspace.\n"
+        },
+        {
+          "info": {
+            "name": "Get a page",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId/pages/:pageIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageIdOrName",
+                "value": "canvas-IjkLmnO",
+                "type": "path",
+                "description": "ID or name of the page. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.\n"
+              }
+            ]
+          },
+          "docs": "Returns details about a page."
+        },
+        {
+          "info": {
+            "name": "Update a page",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://coda.io/apis/v1/docs/:docId/pages/:pageIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageIdOrName",
+                "value": "canvas-IjkLmnO",
+                "type": "path",
+                "description": "ID or name of the page. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update properties for a page. Note that updating a page title or icon requires you to be a Doc Maker in the applicable workspace.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a page",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://coda.io/apis/v1/docs/:docId/pages/:pageIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageIdOrName",
+                "value": "canvas-IjkLmnO",
+                "type": "path",
+                "description": "ID or name of the page. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.\n"
+              }
+            ]
+          },
+          "docs": "Deletes the specified page."
+        },
+        {
+          "info": {
+            "name": "List page content",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId/pages/:pageIdOrName/content",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageIdOrName",
+                "value": "canvas-IjkLmnO",
+                "type": "path",
+                "description": "ID or name of the page. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.\n"
+              },
+              {
+                "name": "limit",
+                "value": "50",
+                "type": "query",
+                "description": "Maximum number of content items to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "contentFormat",
+                "value": "plainText",
+                "type": "query",
+                "description": "The format to return content in. Defaults to plainText."
+              }
+            ]
+          },
+          "docs": "Returns a list of content elements in a page."
+        },
+        {
+          "info": {
+            "name": "Delete page content",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://coda.io/apis/v1/docs/:docId/pages/:pageIdOrName/content",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageIdOrName",
+                "value": "canvas-IjkLmnO",
+                "type": "path",
+                "description": "ID or name of the page. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Delete content from a page. You can delete specific elements by providing their IDs, or delete all content from the page.\n"
+        },
+        {
+          "info": {
+            "name": "Begin content export",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/docs/:docId/pages/:pageIdOrName/export",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageIdOrName",
+                "value": "canvas-IjkLmnO",
+                "type": "path",
+                "description": "ID or name of the page. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiate an export of content for the given page."
+        },
+        {
+          "info": {
+            "name": "Content export status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId/pages/:pageIdOrName/export/:requestId",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageIdOrName",
+                "value": "canvas-IjkLmnO",
+                "type": "path",
+                "description": "ID or name of the page. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.\n"
+              },
+              {
+                "name": "requestId",
+                "value": "abc-123-def-456",
+                "type": "path",
+                "description": "ID of the request."
+              }
+            ]
+          },
+          "docs": "Check the status of a page content export"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Tables",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List tables",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId/tables",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "sortBy",
+                "value": "name",
+                "type": "query",
+                "description": "Determines how to sort the given objects."
+              },
+              {
+                "name": "tableTypes",
+                "value": "table,view",
+                "type": "query",
+                "description": "Comma-separated list of table types to include in results. If omitted, includes both tables and views."
+              }
+            ]
+          },
+          "docs": "Returns a list of tables in a Coda doc."
+        },
+        {
+          "info": {
+            "name": "Get a table",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId/tables/:tableIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "tableIdOrName",
+                "value": "grid-pqRst-U",
+                "type": "path",
+                "description": "ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              },
+              {
+                "name": "useUpdatedTableLayouts",
+                "value": "",
+                "type": "query",
+                "description": "Return \"detail\" and \"form\" for the `layout` field of detail and form layouts respectively (instead of \"masterDetail\" for both)"
+              }
+            ]
+          },
+          "docs": "Returns details about a specific table or view."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Columns",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List columns",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId/tables/:tableIdOrName/columns",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "tableIdOrName",
+                "value": "grid-pqRst-U",
+                "type": "path",
+                "description": "ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "visibleOnly",
+                "value": "true",
+                "type": "query",
+                "description": "If true, returns only visible columns for the table. This parameter only applies to base tables, and not views."
+              }
+            ]
+          },
+          "docs": "Returns a list of columns in a table."
+        },
+        {
+          "info": {
+            "name": "Get a column",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId/tables/:tableIdOrName/columns/:columnIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "tableIdOrName",
+                "value": "grid-pqRst-U",
+                "type": "path",
+                "description": "ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              },
+              {
+                "name": "columnIdOrName",
+                "value": "c-tuVwxYz",
+                "type": "path",
+                "description": "ID or name of the column. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              }
+            ]
+          },
+          "docs": "Returns details about a column in a table."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Rows",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List table rows",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId/tables/:tableIdOrName/rows",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "tableIdOrName",
+                "value": "grid-pqRst-U",
+                "type": "path",
+                "description": "ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              },
+              {
+                "name": "query",
+                "value": "c-tuVwxYz:\"Apple\"",
+                "type": "query",
+                "description": "Query used to filter returned rows, specified as `<column_id_or_name>:<value>`. If you'd like to use a column name instead of an ID, you must quote it (e.g., `\"My Column\":123`). Also note that `value` is a JSON value; if you'd like to use a string, you must surround it in quotes (e.g., `\"groceries\"`).\n"
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the sort order of the rows returned. If left unspecified, rows are returned by creation time ascending. \"UpdatedAt\" sort ordering is the order of rows based upon when they were last updated. This does not include updates to calculated values. \"Natural\" sort ordering is the order that the rows appear in the table view in the application. This ordering is only meaningfully defined for rows that are visible (unfiltered). Because of this, using this sort order will imply visibleOnly=true, that is, to only return visible rows. If you pass sortBy=natural and visibleOnly=false explicitly, this will result in a Bad Request error as this condition cannot be satisfied.\n"
+              },
+              {
+                "name": "useColumnNames",
+                "value": "true",
+                "type": "query",
+                "description": "Use column names instead of column IDs in the returned output. This is generally discouraged as it is fragile. If columns are renamed, code using original names may throw errors.\n"
+              },
+              {
+                "name": "valueFormat",
+                "value": "",
+                "type": "query",
+                "description": "The format that cell values are returned as."
+              },
+              {
+                "name": "visibleOnly",
+                "value": "true",
+                "type": "query",
+                "description": "If true, returns only visible rows and columns for the table."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "syncToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token returned from a previous call that can be used to return results that are relevant to the query since the call where the syncToken was generated.\n"
+              }
+            ]
+          },
+          "docs": "Returns a list of rows in a table.\n### Value results\nThe `valueFormat` parameter dictates in what format the API should return values for individual cells.\n* `simple` (default): Returns cell values as the following JSON values: `string`, `number`, or `boolean`. Array values (like multiselects) are returned as comma-delimited strings.\n* `simpleWithArrays`: Singleton values are returned as `simple`. Array values are returned as JSON arrays and the values within are `simple` values (including neste"
+        },
+        {
+          "info": {
+            "name": "Insert/upsert rows",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/docs/:docId/tables/:tableIdOrName/rows",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "tableIdOrName",
+                "value": "grid-pqRst-U",
+                "type": "path",
+                "description": "ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              },
+              {
+                "name": "disableParsing",
+                "value": "true",
+                "type": "query",
+                "description": "If true, the API will not attempt to parse the data in any way."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Inserts rows into a table, optionally updating existing rows if any upsert key columns are provided. This endpoint will always return a 202, so long as the doc and table exist and are accessible (and the update is structurally valid). Row inserts/upserts are generally processed within several seconds. Note: this endpoint only works for base tables, not views.\nWhen upserting, if multiple rows match the specified key column(s), they will all be updated with the specified value.\n"
+        },
+        {
+          "info": {
+            "name": "Delete multiple rows",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://coda.io/apis/v1/docs/:docId/tables/:tableIdOrName/rows",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "tableIdOrName",
+                "value": "grid-pqRst-U",
+                "type": "path",
+                "description": "ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deletes the specified rows from the table or view. This endpoint will always return a 202. Row deletions are generally processed within several seconds.\n"
+        },
+        {
+          "info": {
+            "name": "Get a row",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId/tables/:tableIdOrName/rows/:rowIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "tableIdOrName",
+                "value": "grid-pqRst-U",
+                "type": "path",
+                "description": "ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              },
+              {
+                "name": "rowIdOrName",
+                "value": "i-tuVwxYz",
+                "type": "path",
+                "description": "ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+              },
+              {
+                "name": "useColumnNames",
+                "value": "true",
+                "type": "query",
+                "description": "Use column names instead of column IDs in the returned output. This is generally discouraged as it is fragile. If columns are renamed, code using original names may throw errors.\n"
+              },
+              {
+                "name": "valueFormat",
+                "value": "",
+                "type": "query",
+                "description": "The format that cell values are returned as."
+              }
+            ]
+          },
+          "docs": "Returns details about a row in a table."
+        },
+        {
+          "info": {
+            "name": "Update row",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://coda.io/apis/v1/docs/:docId/tables/:tableIdOrName/rows/:rowIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "tableIdOrName",
+                "value": "grid-pqRst-U",
+                "type": "path",
+                "description": "ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              },
+              {
+                "name": "rowIdOrName",
+                "value": "i-tuVwxYz",
+                "type": "path",
+                "description": "ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+              },
+              {
+                "name": "disableParsing",
+                "value": "true",
+                "type": "query",
+                "description": "If true, the API will not attempt to parse the data in any way."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the specified row in the table. This endpoint will always return a 202, so long as the row exists and is accessible (and the update is structurally valid). Row updates are generally processed within several seconds. When updating using a name as opposed to an ID, an arbitrary row will be affected.\n"
+        },
+        {
+          "info": {
+            "name": "Delete row",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://coda.io/apis/v1/docs/:docId/tables/:tableIdOrName/rows/:rowIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "tableIdOrName",
+                "value": "grid-pqRst-U",
+                "type": "path",
+                "description": "ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              },
+              {
+                "name": "rowIdOrName",
+                "value": "i-tuVwxYz",
+                "type": "path",
+                "description": "ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+              }
+            ]
+          },
+          "docs": "Deletes the specified row from the table or view. This endpoint will always return a 202, so long as the row exists and is accessible (and the update is structurally valid). Row deletions are generally processed within several seconds. When deleting using a name as opposed to an ID, an arbitrary row will be removed.\n"
+        },
+        {
+          "info": {
+            "name": "Push a button",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/docs/:docId/tables/:tableIdOrName/rows/:rowIdOrName/buttons/:columnIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "tableIdOrName",
+                "value": "grid-pqRst-U",
+                "type": "path",
+                "description": "ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              },
+              {
+                "name": "rowIdOrName",
+                "value": "i-tuVwxYz",
+                "type": "path",
+                "description": "ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+              },
+              {
+                "name": "columnIdOrName",
+                "value": "c-tuVwxYz",
+                "type": "path",
+                "description": "ID or name of the column. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              }
+            ]
+          },
+          "docs": "Pushes a button on a row in a table.\nAuthorization note: This action is available to API tokens that are authorized to write to the table. However, the underlying button can perform any action on the document, including writing to other tables and performing Pack actions.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Formulas",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List formulas",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId/formulas",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "sortBy",
+                "value": "name",
+                "type": "query",
+                "description": "Determines how to sort the given objects."
+              }
+            ]
+          },
+          "docs": "Returns a list of named formulas in a Coda doc."
+        },
+        {
+          "info": {
+            "name": "Get a formula",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId/formulas/:formulaIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "formulaIdOrName",
+                "value": "f-fgHijkLm",
+                "type": "path",
+                "description": "ID or name of the formula. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              }
+            ]
+          },
+          "docs": "Returns info on a formula."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Controls",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List controls",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId/controls",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "sortBy",
+                "value": "name",
+                "type": "query",
+                "description": "Determines how to sort the given objects."
+              }
+            ]
+          },
+          "docs": "Returns a list of controls in a Coda doc."
+        },
+        {
+          "info": {
+            "name": "Get a control",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId/controls/:controlIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "controlIdOrName",
+                "value": "ctrl-cDefGhij",
+                "type": "path",
+                "description": "ID or name of the control. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+              }
+            ]
+          },
+          "docs": "Returns info on a control."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "CustomDocDomains",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List custom doc domains",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/$:docId/domains",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ]
+          },
+          "docs": "List all custom domains for a published doc."
+        },
+        {
+          "info": {
+            "name": "Add custom domain",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/docs/$:docId/domains",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a custom domain to a published doc."
+        },
+        {
+          "info": {
+            "name": "Updates a custom domain",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://coda.io/apis/v1/docs/:docId/domains/:customDocDomain",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "customDocDomain",
+                "value": "",
+                "type": "path",
+                "description": "A custom domain for a published doc."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates properties of a document's custom domain."
+        },
+        {
+          "info": {
+            "name": "Deletes a custom domain",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://coda.io/apis/v1/docs/:docId/domains/:customDocDomain",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "customDocDomain",
+                "value": "",
+                "type": "path",
+                "description": "A custom domain for a published doc."
+              }
+            ]
+          },
+          "docs": "Deletes a custom domain from a published doc."
+        },
+        {
+          "info": {
+            "name": "Gets custom doc domains providers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/domains/provider/:customDocDomain",
+            "params": [
+              {
+                "name": "customDocDomain",
+                "value": "",
+                "type": "path",
+                "description": "A custom domain for a published doc."
+              }
+            ]
+          },
+          "docs": "Gets the provider (ie. GoDaddy) of a custom domain."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Folders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List folders",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/folders",
+            "params": [
+              {
+                "name": "workspaceId",
+                "value": "ws-1Ab234",
+                "type": "query",
+                "description": "Show only folders belonging to the given workspace."
+              },
+              {
+                "name": "isStarred",
+                "value": "",
+                "type": "query",
+                "description": "If true, returns folders that are starred. If false, returns folders that are not starred. If not specified, returns all folders."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of folders the user has access to.\n"
+        },
+        {
+          "info": {
+            "name": "Create folder",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/folders",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new folder.\n"
+        },
+        {
+          "info": {
+            "name": "Get folder",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/folders/:folderId",
+            "params": [
+              {
+                "name": "folderId",
+                "value": "fl-1Ab234",
+                "type": "path",
+                "description": "ID of the folder."
+              }
+            ]
+          },
+          "docs": "Returns the requested folder.\n"
+        },
+        {
+          "info": {
+            "name": "Update folder",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://coda.io/apis/v1/folders/:folderId",
+            "params": [
+              {
+                "name": "folderId",
+                "value": "fl-1Ab234",
+                "type": "path",
+                "description": "ID of the folder."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates metadata for a folder.\n"
+        },
+        {
+          "info": {
+            "name": "Delete folder",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://coda.io/apis/v1/folders/:folderId",
+            "params": [
+              {
+                "name": "folderId",
+                "value": "fl-1Ab234",
+                "type": "path",
+                "description": "ID of the folder."
+              }
+            ]
+          },
+          "docs": "Deletes a folder. The folder must be empty (contain no docs).\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Account",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get user info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/whoami"
+          },
+          "docs": "Returns basic info about the current user."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Miscellaneous",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Resolve browser link",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/resolveBrowserLink",
+            "params": [
+              {
+                "name": "url",
+                "value": "https://coda.io/d/_dAbCDeFGH/Launch-Status_sumnO",
+                "type": "query",
+                "description": "The browser link to try to resolve."
+              },
+              {
+                "name": "degradeGracefully",
+                "value": "true",
+                "type": "query",
+                "description": "By default, attempting to resolve the Coda URL of a deleted object will result in an error. If this flag is set, the next-available object, all the way up to the doc itself, will be resolved.\n"
+              }
+            ]
+          },
+          "docs": "Given a browser link to a Coda object, attempts to find it and return metadata that can be used to get more info on it. Returns a 400 if the URL does not appear to be a Coda URL or a 404 if the resource cannot be located with the current credentials.\n"
+        },
+        {
+          "info": {
+            "name": "Get mutation status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/mutationStatus/:requestId",
+            "params": [
+              {
+                "name": "requestId",
+                "value": "abc-123-def-456",
+                "type": "path",
+                "description": "ID of the request."
+              }
+            ]
+          },
+          "docs": "Get the status for an asynchronous mutation to know whether or not it has been completed. Each API endpoint that mutates a document will return a request id that you can pass to this endpoint to check the completion status. Status information is not guaranteed to be available for more than one day after the mutation was completed. It is intended to be used shortly after the request was made.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Automations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Trigger automation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/docs/:docId/hooks/automation/:ruleId",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "ruleId",
+                "value": "grid-auto-b3Jmey6jBS",
+                "type": "path",
+                "description": "ID of the automation rule."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Triggers webhook-invoked automation"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Analytics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List doc analytics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/analytics/docs",
+            "params": [
+              {
+                "name": "docIds",
+                "value": "",
+                "type": "query",
+                "description": "List of docIds to fetch."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-1Ab234",
+                "type": "query",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "query",
+                "value": "Supercalifragilisticexpialidocious",
+                "type": "query",
+                "description": "Search term used to filter down results."
+              },
+              {
+                "name": "isPublished",
+                "value": "",
+                "type": "query",
+                "description": "Limit results to only published items."
+              },
+              {
+                "name": "sinceDate",
+                "value": "2020-08-01",
+                "type": "query",
+                "description": "Limit results to activity on or after this date."
+              },
+              {
+                "name": "untilDate",
+                "value": "2020-08-05",
+                "type": "query",
+                "description": "Limit results to activity on or before this date."
+              },
+              {
+                "name": "scale",
+                "value": "daily",
+                "type": "query",
+                "description": "Quantization period over which to view analytics. Defaults to daily."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "orderBy",
+                "value": "",
+                "type": "query",
+                "description": "Use this parameter to order the doc analytics returned."
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Direction to sort results in."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              }
+            ]
+          },
+          "docs": "Returns analytics data for available docs per day.\n"
+        },
+        {
+          "info": {
+            "name": "List page analytics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/analytics/docs/:docId/pages",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "sinceDate",
+                "value": "2020-08-01",
+                "type": "query",
+                "description": "Limit results to activity on or after this date."
+              },
+              {
+                "name": "untilDate",
+                "value": "2020-08-05",
+                "type": "query",
+                "description": "Limit results to activity on or before this date."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              }
+            ]
+          },
+          "docs": "Returns analytics data for a given doc within the day.\nThis method will return a 401 if the given doc is not in an Enterprise workspace.\n"
+        },
+        {
+          "info": {
+            "name": "Get doc analytics summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/analytics/docs/summary",
+            "params": [
+              {
+                "name": "isPublished",
+                "value": "",
+                "type": "query",
+                "description": "Limit results to only published items."
+              },
+              {
+                "name": "sinceDate",
+                "value": "2020-08-01",
+                "type": "query",
+                "description": "Limit results to activity on or after this date."
+              },
+              {
+                "name": "untilDate",
+                "value": "2020-08-05",
+                "type": "query",
+                "description": "Limit results to activity on or before this date."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-1Ab234",
+                "type": "query",
+                "description": "ID of the workspace."
+              }
+            ]
+          },
+          "docs": "Returns summarized analytics data for available docs.\n"
+        },
+        {
+          "info": {
+            "name": "List Pack analytics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/analytics/packs",
+            "params": [
+              {
+                "name": "packIds",
+                "value": "",
+                "type": "query",
+                "description": "Which Pack IDs to fetch."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-1Ab234",
+                "type": "query",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "query",
+                "value": "Supercalifragilisticexpialidocious",
+                "type": "query",
+                "description": "Search term used to filter down results."
+              },
+              {
+                "name": "sinceDate",
+                "value": "2020-08-01",
+                "type": "query",
+                "description": "Limit results to activity on or after this date."
+              },
+              {
+                "name": "untilDate",
+                "value": "2020-08-05",
+                "type": "query",
+                "description": "Limit results to activity on or before this date."
+              },
+              {
+                "name": "scale",
+                "value": "daily",
+                "type": "query",
+                "description": "Quantization period over which to view analytics. Defaults to daily."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "orderBy",
+                "value": "",
+                "type": "query",
+                "description": "Use this parameter to order the Pack analytics returned."
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Direction to sort results in."
+              },
+              {
+                "name": "isPublished",
+                "value": "",
+                "type": "query",
+                "description": "Limit results to only published items. If false or unspecified, returns all items including published ones.\n"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              }
+            ]
+          },
+          "docs": "Returns analytics data for Packs the user can edit.\n"
+        },
+        {
+          "info": {
+            "name": "Get Pack analytics summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/analytics/packs/summary",
+            "params": [
+              {
+                "name": "packIds",
+                "value": "",
+                "type": "query",
+                "description": "Which Pack IDs to fetch."
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-1Ab234",
+                "type": "query",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "isPublished",
+                "value": "",
+                "type": "query",
+                "description": "Limit results to only published items. If false or unspecified, returns all items including published ones.\n"
+              },
+              {
+                "name": "sinceDate",
+                "value": "2020-08-01",
+                "type": "query",
+                "description": "Limit results to activity on or after this date."
+              },
+              {
+                "name": "untilDate",
+                "value": "2020-08-05",
+                "type": "query",
+                "description": "Limit results to activity on or before this date."
+              }
+            ]
+          },
+          "docs": "Returns summarized analytics data for Packs the user can edit.\n"
+        },
+        {
+          "info": {
+            "name": "List Pack formula analytics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/analytics/packs/:packId/formulas",
+            "params": [
+              {
+                "name": "packFormulaNames",
+                "value": "SquareRoot,CubeRoot",
+                "type": "query",
+                "description": "A list of Pack formula names (case-sensitive) for which to retrieve analytics."
+              },
+              {
+                "name": "packFormulaTypes",
+                "value": "action,formula",
+                "type": "query",
+                "description": "A list of Pack formula types corresponding to the `packFormulaNames`. If specified, this must have the same length as `packFormulaNames`."
+              },
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "sinceDate",
+                "value": "2020-08-01",
+                "type": "query",
+                "description": "Limit results to activity on or after this date."
+              },
+              {
+                "name": "untilDate",
+                "value": "2020-08-05",
+                "type": "query",
+                "description": "Limit results to activity on or before this date."
+              },
+              {
+                "name": "scale",
+                "value": "daily",
+                "type": "query",
+                "description": "Quantization period over which to view analytics. Defaults to daily."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "orderBy",
+                "value": "",
+                "type": "query",
+                "description": "Use this parameter to order the Pack formula analytics returned."
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Direction to sort results in."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              }
+            ]
+          },
+          "docs": "Returns analytics data for Pack formulas.\n"
+        },
+        {
+          "info": {
+            "name": "Get analytics last updated day",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/analytics/updated"
+          },
+          "docs": "Returns days based on Pacific Standard Time when analytics were last updated.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Workspaces",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List workspace users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/workspaces/:workspaceId/users",
+            "params": [
+              {
+                "name": "workspaceId",
+                "value": "ws-1Ab234",
+                "type": "path",
+                "description": "ID of the workspace."
+              },
+              {
+                "name": "includedRoles",
+                "value": "Editor,DocMaker",
+                "type": "query",
+                "description": "Show only the members that match the included roles. Multiple roles can be specified with a comma-delimited list."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of members in the given workspace. This list will be ordered with the requesting user first and then ordered by role.\n"
+        },
+        {
+          "info": {
+            "name": "Updates user role",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/workspaces/:workspaceId/users/role",
+            "params": [
+              {
+                "name": "workspaceId",
+                "value": "ws-1Ab234",
+                "type": "path",
+                "description": "ID of the workspace."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the workspace user role of a user that matches the parameters. Only succeeds if the requesting user has admin permissions in the workspace.\n"
+        },
+        {
+          "info": {
+            "name": "List workspace roles",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/workspaces/:workspaceId/roles",
+            "params": [
+              {
+                "name": "workspaceId",
+                "value": "ws-1Ab234",
+                "type": "path",
+                "description": "ID of the workspace."
+              }
+            ]
+          },
+          "docs": "Returns a list of the counts of users over time by role for the workspace.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Packs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Packs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs",
+            "params": [
+              {
+                "name": "accessType",
+                "value": "edit",
+                "type": "query",
+                "description": "Deprecated, use accessTypes instead. Filter to only return the Packs for which the current user has this access type"
+              },
+              {
+                "name": "accessTypes",
+                "value": "edit",
+                "type": "query",
+                "description": "Filter to only return the Packs for which the current user has these access types."
+              },
+              {
+                "name": "sortBy",
+                "value": "true",
+                "type": "query",
+                "description": "The sort order of the Packs returned."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Direction to sort results in."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "onlyWorkspaceId",
+                "value": "",
+                "type": "query",
+                "description": "Use only this workspace (not all of a user's workspaces) to check for Packs shared via workspace ACL."
+              },
+              {
+                "name": "parentWorkspaceIds",
+                "value": "",
+                "type": "query",
+                "description": "Filter to only Packs whose parent workspace is one of the given IDs."
+              },
+              {
+                "name": "excludePublicPacks",
+                "value": "",
+                "type": "query",
+                "description": "Only get Packs shared with users/workspaces, not publicly."
+              },
+              {
+                "name": "excludeIndividualAcls",
+                "value": "",
+                "type": "query",
+                "description": "Do not include Packs that are only shared with the user individually."
+              },
+              {
+                "name": "excludeWorkspaceAcls",
+                "value": "",
+                "type": "query",
+                "description": "Do not include Packs that are only shared with workspaces."
+              },
+              {
+                "name": "excludeNomosOrganizationAcls",
+                "value": "",
+                "type": "query",
+                "description": "Do not include Packs that are only shared with the user's NOMOS organization."
+              },
+              {
+                "name": "excludeGrammarlyInstitutionAcls",
+                "value": "",
+                "type": "query",
+                "description": "Do not include Packs that are only shared with the user's Grammarly institution."
+              },
+              {
+                "name": "packEntrypoint",
+                "value": "",
+                "type": "query",
+                "description": "Entrypoint for which this pack call is being made. Used to filter non relevant packs"
+              }
+            ]
+          },
+          "docs": "Get the list of accessible Packs.\n"
+        },
+        {
+          "info": {
+            "name": "Create Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/packs",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new Pack, essentially registering a new Pack ID. The contents of the Pack will be uploaded separately.\n"
+        },
+        {
+          "info": {
+            "name": "Get a single Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "Returns a single Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Update Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://coda.io/apis/v1/packs/:packId",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing Pack for non-versioned fields.\n"
+        },
+        {
+          "info": {
+            "name": "Delete Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://coda.io/apis/v1/packs/:packId",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "Delete a given Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Gets the JSON Schema for Pack configuration.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId/configurations/schema",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "Returns a JSON Schema applicable for customizing the pack using Pack configurations.\n"
+        },
+        {
+          "info": {
+            "name": "List the versions for a Pack.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId/versions",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Get the list of versions of a Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Get the next valid version for a Pack.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/packs/:packId/nextVersion",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get the next valid version based on the proposed metadata.\n"
+        },
+        {
+          "info": {
+            "name": "Get the difference between two pack versions.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId/versions/:basePackVersion/diff/:targetPackVersion",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "basePackVersion",
+                "value": "1.2.3",
+                "type": "path",
+                "description": "Semantic version of the previous Pack version."
+              },
+              {
+                "name": "targetPackVersion",
+                "value": "1.2.3",
+                "type": "path",
+                "description": "Semantic version of the new Pack version."
+              }
+            ]
+          },
+          "docs": "Gets information about the difference between the specified previous version and next version of a Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Register Pack version",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/packs/:packId/versions/:packVersion/register",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "packVersion",
+                "value": "1.2.3",
+                "type": "path",
+                "description": "Semantic version of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Registers a new Pack version. This simply returns a signed URL to use for uploading the Pack version definition. Following the completion of the upload, POST to /apis/v1/packs/{packId}/versions/{packVersion} trigger the rest of the creation process.\n"
+        },
+        {
+          "info": {
+            "name": "Pack version upload complete",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/packs/:packId/versions/:packVersion/uploadComplete",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "packVersion",
+                "value": "1.2.3",
+                "type": "path",
+                "description": "Semantic version of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Note the completion of the upload of a Pack version bundle in order to create that Pack version.\n"
+        },
+        {
+          "info": {
+            "name": "List the releases for a Pack.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId/releases",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Get the list of releases of a Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Create a new Pack release.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/packs/:packId/releases",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new Pack release based on an existing Pack version.\n"
+        },
+        {
+          "info": {
+            "name": "Update an existing Pack release.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://coda.io/apis/v1/packs/:packId/releases/:packReleaseId",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "packReleaseId",
+                "value": "2",
+                "type": "path",
+                "description": "ID of a Pack release"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update details of a Pack release.\n"
+        },
+        {
+          "info": {
+            "name": "List pack reviews",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId/reviews",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter reviews by status."
+              }
+            ]
+          },
+          "docs": "List reviews for a specific pack."
+        },
+        {
+          "info": {
+            "name": "Create pack review",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/packs/:packId/reviews",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a pack for review in Superhuman GO."
+        },
+        {
+          "info": {
+            "name": "Cancel pending pack review",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/packs/:packId/reviews/pending/cancel",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "Cancel the pending pack review for this pack. Any user with edit permission on the pack can cancel the review."
+        },
+        {
+          "info": {
+            "name": "Get Pack listing draft",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId/listingDraft",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "Get the current listing draft for a Pack."
+        },
+        {
+          "info": {
+            "name": "Upsert Pack listing draft",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://coda.io/apis/v1/packs/:packId/listingDraft",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or update the listing draft for a Pack."
+        },
+        {
+          "info": {
+            "name": "Delete Pack listing draft",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://coda.io/apis/v1/packs/:packId/listingDraft",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "Delete the listing draft for a Pack, discarding any unsaved changes."
+        },
+        {
+          "info": {
+            "name": "Retrieve the OAuth configuration of the Pack.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId/oauthConfig",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "Retrieve the OAuth configuration of the Pack for display purpose. Secrets will be returned with masks.\n"
+        },
+        {
+          "info": {
+            "name": "Set the OAuth configurations of the Pack.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://coda.io/apis/v1/packs/:packId/oauthConfig",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set the OAuth configurations of the Pack, including client id and secret.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve the system connection metadata of the Pack.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId/systemConnection",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "Retrieve the system connection metadata of the Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Set the system connection credentials of the Pack.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://coda.io/apis/v1/packs/:packId/systemConnection",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set the system connection credentials of the Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Patch the system connection credentials of the Pack.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://coda.io/apis/v1/packs/:packId/systemConnection",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Patch the system connection credentials of the Pack.\n"
+        },
+        {
+          "info": {
+            "name": "List permissions for a Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId/permissions",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "Get user, workspace, and/or global permissions for a given Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Add a permission for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/packs/:packId/permissions",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or modify user, workspace, organization, group, or global permissions for a given Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a user's own permissions for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://coda.io/apis/v1/packs/:packId/permissions",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "Delete a user's own permissions for a given Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a permission for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://coda.io/apis/v1/packs/:packId/permissions/:permissionId",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "permissionId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of a permission on a doc."
+              }
+            ]
+          },
+          "docs": "Delete user, workspace, or global permissions for a given Pack.\n"
+        },
+        {
+          "info": {
+            "name": "List pending Pack invitations for the current user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/invitations",
+            "params": [
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Get pending Pack invitations for the authenticated user.\n"
+        },
+        {
+          "info": {
+            "name": "List invitations for a Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId/invitations",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Get pending invitations for a given Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Create an invitation for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/packs/:packId/invitations",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create an invitation for a user to access a Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Update an invitation for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://coda.io/apis/v1/packs/:packId/invitations/:invitationId",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "invitationId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "ID of a Pack invitation"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the access level of an existing Pack invitation.\n"
+        },
+        {
+          "info": {
+            "name": "Revoke an invitation for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://coda.io/apis/v1/packs/:packId/invitations/:invitationId",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "invitationId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "ID of a Pack invitation"
+              }
+            ]
+          },
+          "docs": "Revoke a pending Pack invitation.\n"
+        },
+        {
+          "info": {
+            "name": "Reply to a Pack invitation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/packs/invitations/:invitationId/reply",
+            "params": [
+              {
+                "name": "invitationId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "ID of a Pack invitation"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Reply to a Pack invitation (accept or reject). Requires authentication as the invited user.\n"
+        },
+        {
+          "info": {
+            "name": "List makers for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId/makers",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "List makers for a given pack.\n"
+        },
+        {
+          "info": {
+            "name": "Add a maker for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/packs/:packId/maker",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set a maker for a given Pack. Used to display makers for a pack in the corresponding packs page.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a maker for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://coda.io/apis/v1/packs/:packId/maker/:loginId",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "loginId",
+                "value": "api@coda.io",
+                "type": "path",
+                "description": "Email of a Coda user."
+              }
+            ]
+          },
+          "docs": "Delete a maker for a given Pack, who will not be displayed in the corresponding packs page.\n"
+        },
+        {
+          "info": {
+            "name": "List categories for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId/categories",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "List publishing categories for a given pack.\n"
+        },
+        {
+          "info": {
+            "name": "Add a category for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/packs/:packId/category",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a publishing category for a given pack.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a category for Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://coda.io/apis/v1/packs/:packId/category/:categoryName",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "categoryName",
+                "value": "Project management",
+                "type": "path",
+                "description": "Name of a publishing category"
+              }
+            ]
+          },
+          "docs": "Delete a publishing category for a given pack.\n"
+        },
+        {
+          "info": {
+            "name": "Upload a Pack asset.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/packs/:packId/uploadAsset",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Request a signed s3 URL to upload your Pack asset.\n"
+        },
+        {
+          "info": {
+            "name": "Upload Pack source code.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/packs/:packId/uploadSourceCode",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Request a signed s3 URL to upload your Pack source code.\n"
+        },
+        {
+          "info": {
+            "name": "Pack asset upload complete",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/packs/:packId/assets/:packAssetId/assetType/:packAssetType/uploadComplete",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "packAssetId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for a Pack asset."
+              },
+              {
+                "name": "packAssetType",
+                "value": "",
+                "type": "path",
+                "description": "Pack asset type."
+              }
+            ]
+          },
+          "docs": "Note the completion of the upload of a Pack asset.\n"
+        },
+        {
+          "info": {
+            "name": "Pack source code upload complete",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/packs/:packId/versions/:packVersion/sourceCode/uploadComplete",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "packVersion",
+                "value": "1.2.3",
+                "type": "path",
+                "description": "Semantic version of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Note the completion of the upload of a Pack source code.\n"
+        },
+        {
+          "info": {
+            "name": "get the source code for a Pack version.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId/versions/:packVersion/sourceCode",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "packVersion",
+                "value": "1.2.3",
+                "type": "path",
+                "description": "Semantic version of a Pack"
+              }
+            ]
+          },
+          "docs": "Get temporary links used to download the source code for the given packId and version\n"
+        },
+        {
+          "info": {
+            "name": "List the Pack listings accessible to a user.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/listings",
+            "params": [
+              {
+                "name": "packAccessTypes",
+                "value": "",
+                "type": "query",
+                "description": "Pack access types."
+              },
+              {
+                "name": "packIds",
+                "value": "",
+                "type": "query",
+                "description": "Which Pack IDs to fetch."
+              },
+              {
+                "name": "onlyWorkspaceId",
+                "value": "",
+                "type": "query",
+                "description": "Use only this workspace (not all of a user's workspaces) to check for Packs shared via workspace ACL."
+              },
+              {
+                "name": "parentWorkspaceIds",
+                "value": "",
+                "type": "query",
+                "description": "Filter to only Packs whose parent workspace is one of the given IDs."
+              },
+              {
+                "name": "excludePublicPacks",
+                "value": "",
+                "type": "query",
+                "description": "Only get Packs shared with users/workspaces, not publicly."
+              },
+              {
+                "name": "excludeWorkspaceAcls",
+                "value": "",
+                "type": "query",
+                "description": "Do not include Packs that are only shared with workspaces."
+              },
+              {
+                "name": "excludeIndividualAcls",
+                "value": "",
+                "type": "query",
+                "description": "Do not include Packs that are only shared with the user individually."
+              },
+              {
+                "name": "packEntrypoint",
+                "value": "",
+                "type": "query",
+                "description": "Entrypoint for which this pack call is being made. Used to filter non relevant packs"
+              },
+              {
+                "name": "certifiedAgentsOnly",
+                "value": "",
+                "type": "query",
+                "description": "Only include Packs that are certified for agent use. Depending on server configuration, may also include Packs that the user is an admin of.\n"
+              },
+              {
+                "name": "packCategories",
+                "value": "",
+                "type": "query",
+                "description": "Filter Packs by one or more category types."
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "Specify a sort order for the returned Pack listings returned."
+              },
+              {
+                "name": "orderBy",
+                "value": "",
+                "type": "query",
+                "description": "Deprecated: use sortBy instead."
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Direction to sort results in."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "installContext",
+                "value": "workspace",
+                "type": "query",
+                "description": "Type of installation context for which Pack information is being requested."
+              }
+            ]
+          },
+          "docs": "Get listings of public Packs and Packs created by you.\n"
+        },
+        {
+          "info": {
+            "name": "Get detailed listing information for a Pack.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId/listing",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "workspaceId",
+                "value": "ws-1Ab234",
+                "type": "query",
+                "description": "ID of the target workspace (if applicable) for checking installation privileges."
+              },
+              {
+                "name": "docId",
+                "value": "fleHfrkw3L",
+                "type": "query",
+                "description": "ID of the target document for checking installation privileges"
+              },
+              {
+                "name": "ingestionId",
+                "value": "uuid-uuid-uuid-uuid",
+                "type": "query",
+                "description": "ID of the target ingestion for checking limit settings"
+              },
+              {
+                "name": "installContext",
+                "value": "workspace",
+                "type": "query",
+                "description": "Type of installation context for which Pack information is being requested."
+              },
+              {
+                "name": "releaseChannel",
+                "value": "LIVE",
+                "type": "query",
+                "description": "Release channel for which Pack information is being requested."
+              }
+            ]
+          },
+          "docs": "Get detailed listing information for a Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve the logs of a Pack.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId/docs/:docId/logs",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "logTypes",
+                "value": "fetcher,custom",
+                "type": "query",
+                "description": "Only return logs of the given types."
+              },
+              {
+                "name": "beforeTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs before the given time (non-inclusive).\n"
+              },
+              {
+                "name": "afterTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs after the given time (non-inclusive).\n"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Specifies if the logs will be returned in time desc or asc. Default is desc.\n"
+              },
+              {
+                "name": "q",
+                "value": "context.doc_id:\"fleHfrkw3L\" AND event.action:\"FormulaRequest\"",
+                "type": "query",
+                "description": "A search query that follows Lucene syntax.\n"
+              },
+              {
+                "name": "requestIds",
+                "value": "416faabf,4127faag",
+                "type": "query",
+                "description": "Only return logs matching provided request IDs."
+              }
+            ]
+          },
+          "docs": "Retrieve the logs of a Pack for debugging purpose.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve the logs of a Ingestion.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId/tenantId/:tenantId/rootIngestionId/:rootIngestionId/logs",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "tenantId",
+                "value": "org-LxmbD9y2EU",
+                "type": "path",
+                "description": "ID of the tenant."
+              },
+              {
+                "name": "rootIngestionId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "path",
+                "description": "ID of the root ingestion."
+              },
+              {
+                "name": "logTypes",
+                "value": "fetcher,custom",
+                "type": "query",
+                "description": "Only return logs of the given types."
+              },
+              {
+                "name": "ingestionExecutionId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "query",
+                "description": "ID of the ingestion execution."
+              },
+              {
+                "name": "beforeTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs before the given time (non-inclusive).\n"
+              },
+              {
+                "name": "afterTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs after the given time (non-inclusive).\n"
+              },
+              {
+                "name": "ingestionStatus",
+                "value": "",
+                "type": "query",
+                "description": "Only fetch logs with the given ingestion status. This only works in combination with the onlyExecutionCompletions parameter.\n"
+              },
+              {
+                "name": "onlyExecutionCompletions",
+                "value": "",
+                "type": "query",
+                "description": "Only fetch logs that represent the completion of a child execution."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Specifies if the logs will be returned in time desc or asc. Default is desc.\n"
+              },
+              {
+                "name": "q",
+                "value": "context.doc_id:\"fleHfrkw3L\" AND event.action:\"FormulaRequest\"",
+                "type": "query",
+                "description": "A search query that follows Lucene syntax.\n"
+              },
+              {
+                "name": "requestIds",
+                "value": "416faabf,4127faag",
+                "type": "query",
+                "description": "Only return logs matching provided request IDs."
+              }
+            ]
+          },
+          "docs": "Retrieve the logs of a Ingestion for debugging purpose."
+        },
+        {
+          "info": {
+            "name": "Retrieve the grouped logs of a Pack.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId/docs/:docId/groupedLogs",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "beforeTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs before the given time (non-inclusive).\n"
+              },
+              {
+                "name": "afterTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs after the given time (non-inclusive).\n"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Specifies if the logs will be returned in time desc or asc. Default is desc.\n"
+              },
+              {
+                "name": "q",
+                "value": "context.doc_id:\"fleHfrkw3L\" AND event.action:\"FormulaRequest\"",
+                "type": "query",
+                "description": "A search query that follows Lucene syntax.\n"
+              }
+            ]
+          },
+          "docs": "Retrieve the grouped logs of a Pack for debugging purpose.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve the grouped logs of a Pack for a specific ingestionExecutionId.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId/tenantId/:tenantId/rootIngestionId/:rootIngestionId/groupedLogs",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "tenantId",
+                "value": "org-LxmbD9y2EU",
+                "type": "path",
+                "description": "ID of the tenant."
+              },
+              {
+                "name": "rootIngestionId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "path",
+                "description": "ID of the root ingestion."
+              },
+              {
+                "name": "ingestionExecutionId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "query",
+                "description": "ID of the ingestion execution."
+              },
+              {
+                "name": "beforeTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs before the given time (non-inclusive).\n"
+              },
+              {
+                "name": "afterTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs after the given time (non-inclusive).\n"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Specifies if the logs will be returned in time desc or asc. Default is desc.\n"
+              },
+              {
+                "name": "q",
+                "value": "context.doc_id:\"fleHfrkw3L\" AND event.action:\"FormulaRequest\"",
+                "type": "query",
+                "description": "A search query that follows Lucene syntax.\n"
+              }
+            ]
+          },
+          "docs": "Retrieve the grouped logs of a Pack for debugging purpose.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve a list of ingestion batch executions for the given root ingestion id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId/tenantId/:tenantId/rootIngestionId/:rootIngestionId/ingestionBatchExecutions",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "tenantId",
+                "value": "org-LxmbD9y2EU",
+                "type": "path",
+                "description": "ID of the tenant."
+              },
+              {
+                "name": "rootIngestionId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "path",
+                "description": "ID of the root ingestion."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "datasource",
+                "value": "",
+                "type": "query",
+                "description": "Only show batch executions for this datasource (sync table)."
+              },
+              {
+                "name": "executionType",
+                "value": "",
+                "type": "query",
+                "description": "Only show batch executions with this execution type."
+              },
+              {
+                "name": "includeDeletedIngestions",
+                "value": "",
+                "type": "query",
+                "description": "Include deleted ingestion executions in the response"
+              },
+              {
+                "name": "ingestionExecutionId",
+                "value": "",
+                "type": "query",
+                "description": "Only retrieve this single batch execution."
+              },
+              {
+                "name": "ingestionId",
+                "value": "",
+                "type": "query",
+                "description": "Only show batch executions for this sync table ingestion."
+              },
+              {
+                "name": "ingestionStatus",
+                "value": "",
+                "type": "query",
+                "description": "Only show batch executions with this status."
+              }
+            ]
+          },
+          "docs": "Retrieve the ingestion batch executions of a root ingestion for debugging purpose.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve a list of parent items for the given ingestion batch execution id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId/tenantId/:tenantId/rootIngestionId/:rootIngestionId/ingestionBatchExecutions/:ingestionExecutionId/parentItems",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "tenantId",
+                "value": "org-LxmbD9y2EU",
+                "type": "path",
+                "description": "ID of the tenant."
+              },
+              {
+                "name": "rootIngestionId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "path",
+                "description": "ID of the root ingestion."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "ingestionExecutionId",
+                "value": "",
+                "type": "path",
+                "description": "Only show parent items for this ingestion batch execution."
+              },
+              {
+                "name": "ingestionId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the sync table ingestion. Enables faster lookup."
+              },
+              {
+                "name": "ingestionStatus",
+                "value": "",
+                "type": "query",
+                "description": "Only show parent items with this status."
+              }
+            ]
+          },
+          "docs": "Retrieve the parent items of a ingestion batch execution for debugging purpose.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve the information for a specific log.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId/tenantId/:tenantId/rootIngestionId/:rootIngestionId/logs/:logId",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              },
+              {
+                "name": "tenantId",
+                "value": "org-LxmbD9y2EU",
+                "type": "path",
+                "description": "ID of the tenant."
+              },
+              {
+                "name": "rootIngestionId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "path",
+                "description": "ID of the root ingestion."
+              },
+              {
+                "name": "logId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the log to retrieve.\n"
+              },
+              {
+                "name": "detailsKey",
+                "value": "",
+                "type": "query",
+                "description": "The key of the details to retrieve.\n"
+              }
+            ]
+          },
+          "docs": "Retrieve the ingestion execution ids of a root ingestion for debugging purpose.\n"
+        },
+        {
+          "info": {
+            "name": "List featured docs for a Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/packs/:packId/featuredDocs",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ]
+          },
+          "docs": "Returns a list of featured doc ids for a Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Update featured docs for a Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://coda.io/apis/v1/packs/:packId/featuredDocs",
+            "params": [
+              {
+                "name": "packId",
+                "value": "123",
+                "type": "path",
+                "description": "ID of a Pack"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or replace the featured docs for a Pack.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve the chat sessions of an agent instance.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/go/tenants/:tenantId/agentInstances/:agentInstanceId/agentSessionIds",
+            "params": [
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "tenantId",
+                "value": "org-LxmbD9y2EU",
+                "type": "path",
+                "description": "ID of the tenant."
+              },
+              {
+                "name": "agentInstanceId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "path",
+                "description": "ID of the agent instance."
+              },
+              {
+                "name": "agentSessionId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "query",
+                "description": "ID of the agent chat session."
+              },
+              {
+                "name": "logTypes",
+                "value": "fetcher,custom",
+                "type": "query",
+                "description": "Only return logs of the given types."
+              },
+              {
+                "name": "beforeTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs before the given time (non-inclusive).\n"
+              },
+              {
+                "name": "afterTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs after the given time (non-inclusive).\n"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Specifies if the logs will be returned in time desc or asc. Default is desc.\n"
+              },
+              {
+                "name": "q",
+                "value": "trace.id:\"a4e293c4-4a85-45a4-b2ba-7f305cba2703\" AND event.action:\"FormulaRequest\"",
+                "type": "query",
+                "description": "A search query that follows Lucene syntax.\n"
+              },
+              {
+                "name": "requestIds",
+                "value": "416faabf,4127faag",
+                "type": "query",
+                "description": "Only return logs matching provided request IDs."
+              }
+            ]
+          },
+          "docs": "Retrieve the chat sessions of an agent instance for debugging purpose."
+        },
+        {
+          "info": {
+            "name": "Retrieve the logs of an agent instance.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/go/tenants/:tenantId/agentInstances/:agentInstanceId/logs",
+            "params": [
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "tenantId",
+                "value": "org-LxmbD9y2EU",
+                "type": "path",
+                "description": "ID of the tenant."
+              },
+              {
+                "name": "agentInstanceId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "path",
+                "description": "ID of the agent instance."
+              },
+              {
+                "name": "logTypes",
+                "value": "fetcher,custom",
+                "type": "query",
+                "description": "Only return logs of the given types."
+              },
+              {
+                "name": "agentSessionId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "query",
+                "description": "ID of the agent chat session."
+              },
+              {
+                "name": "beforeTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs before the given time (non-inclusive).\n"
+              },
+              {
+                "name": "afterTimestamp",
+                "value": "2018-04-11T00:18:57.946Z",
+                "type": "query",
+                "description": "Only return logs after the given time (non-inclusive).\n"
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Specifies if the logs will be returned in time desc or asc. Default is desc.\n"
+              },
+              {
+                "name": "q",
+                "value": "trace.id:\"a4e293c4-4a85-45a4-b2ba-7f305cba2703\" AND event.action:\"FormulaRequest\"",
+                "type": "query",
+                "description": "A search query that follows Lucene syntax.\n"
+              },
+              {
+                "name": "requestIds",
+                "value": "416faabf,4127faag",
+                "type": "query",
+                "description": "Only return logs matching provided request IDs."
+              }
+            ]
+          },
+          "docs": "Retrieve the logs of an agent instance for debugging purpose."
+        },
+        {
+          "info": {
+            "name": "Retrieve the information for a specific log.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/go/tenants/:tenantId/agentInstances/:agentInstanceId/logs/:logId",
+            "params": [
+              {
+                "name": "tenantId",
+                "value": "org-LxmbD9y2EU",
+                "type": "path",
+                "description": "ID of the tenant."
+              },
+              {
+                "name": "agentInstanceId",
+                "value": "a4e293c4-4a85-45a4-b2ba-7f305cba2703",
+                "type": "path",
+                "description": "ID of the agent instance."
+              },
+              {
+                "name": "logId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the log to retrieve.\n"
+              },
+              {
+                "name": "detailsKey",
+                "value": "",
+                "type": "query",
+                "description": "The key of the details to retrieve.\n"
+              }
+            ]
+          },
+          "docs": "Retrieve the log details of given logId.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Go Links",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add a go link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/organizations/:organizationId/goLinks",
+            "params": [
+              {
+                "name": "organizationId",
+                "value": "org-LxmbD9y2EU",
+                "type": "path",
+                "description": "ID of the organization."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds a new go link for the organization."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
