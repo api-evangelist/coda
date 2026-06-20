@@ -6,7 +6,7 @@ description: >-
   Coda is an all-in-one doc platform combining documents, spreadsheets, and apps. The Coda API exposes docs, pages,
   tables, rows, columns, controls, formulas, automations, packs, permissions, and analytics for programmatic
   integration.
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
   - Productivity
   - Docs
@@ -22,7 +22,7 @@ apis:
     tags:
       - Docs
       - Documents
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://coda.io/developers/apis/v1
     baseURL: https://coda.io/apis/v1
     properties:
@@ -38,7 +38,7 @@ apis:
     tags:
       - Folders
       - Workspaces
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://coda.io/developers/apis/v1
     baseURL: https://coda.io/apis/v1
     properties:
@@ -52,7 +52,7 @@ apis:
     tags:
       - Pages
       - Content
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://coda.io/developers/apis/v1
     baseURL: https://coda.io/apis/v1
     properties:
@@ -66,7 +66,7 @@ apis:
     tags:
       - Tables
       - Database
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://coda.io/developers/apis/v1
     baseURL: https://coda.io/apis/v1
     properties:
@@ -80,7 +80,7 @@ apis:
     tags:
       - Columns
       - Schema
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://coda.io/developers/apis/v1
     baseURL: https://coda.io/apis/v1
     properties:
@@ -95,7 +95,7 @@ apis:
       - Rows
       - Records
       - CRUD
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://coda.io/developers/apis/v1
     baseURL: https://coda.io/apis/v1
     properties:
@@ -111,7 +111,7 @@ apis:
     tags:
       - Formulas
       - Compute
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://coda.io/developers/apis/v1
     baseURL: https://coda.io/apis/v1
     properties:
@@ -125,7 +125,7 @@ apis:
     tags:
       - Controls
       - UI
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://coda.io/developers/apis/v1
     baseURL: https://coda.io/apis/v1
     properties:
@@ -140,7 +140,7 @@ apis:
       - Automations
       - Webhooks
       - Triggers
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://coda.io/developers/apis/v1
     baseURL: https://coda.io/apis/v1
     properties:
@@ -157,7 +157,7 @@ apis:
       - Permissions
       - Sharing
       - ACL
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://coda.io/developers/apis/v1
     baseURL: https://coda.io/apis/v1
     properties:
@@ -171,7 +171,7 @@ apis:
     tags:
       - Publishing
       - Public Docs
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://coda.io/developers/apis/v1
     baseURL: https://coda.io/apis/v1
     properties:
@@ -185,7 +185,7 @@ apis:
     tags:
       - Account
       - User
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://coda.io/developers/apis/v1
     baseURL: https://coda.io/apis/v1
     properties:
@@ -199,7 +199,7 @@ apis:
     tags:
       - Analytics
       - Usage
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://coda.io/developers/apis/v1
     baseURL: https://coda.io/apis/v1
     properties:
@@ -214,7 +214,7 @@ apis:
       - Packs
       - Extensions
       - SDK
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://coda.io/packs/build/latest/
     baseURL: https://coda.io/apis/v1
     properties:
