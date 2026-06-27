@@ -221,7 +221,7 @@ apis:
       - url: https://coda.io/packs/build/latest/
         type: Documentation
       - url: https://github.com/coda/packs-sdk
-        type: SDK
+        type: SDKs
       - url: openapi/coda-openapi.json
         type: OpenAPI
     description: >-
