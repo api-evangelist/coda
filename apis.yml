@@ -228,6 +228,14 @@ apis:
       Build and publish Coda Packs — TypeScript-based extensions that add custom formulas, sync tables, action buttons,
       and OAuth-authenticated integrations to Coda docs.
 common:
+  - type: TrustCenter
+    url: security/coda-trust-center.yml
+  - type: VulnerabilityDisclosure
+    url: security/coda-vulnerability-disclosure.yml
+  - type: DomainSecurity
+    url: security/coda-domain-security.yml
+  - type: Authentication
+    url: authentication/coda-authentication.yml
   - type: LinkedIn
     url: https://www.linkedin.com/company/codainc
   - type: Website
@@ -244,6 +252,8 @@ common:
     url: rate-limits/coda-rate-limits.yml
   - type: FinOps
     url: finops/coda-finops.yml
+  - type: Blog
+    url: https://coda.io/blog
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com

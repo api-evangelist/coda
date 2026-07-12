@@ -1,0 +1,23 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/coda-openapi.json
+summary:
+  types:
+  - http
+schemes:
+- name: Bearer
+  type: http
+  scheme: bearer
+  bearerFormat: UUID
+  description: |-
+    The Coda API can be accessed using an API token, which can be obtained from [*My account*](https://coda.io/account)
+    in Coda. This token should be specified by setting a header as follows.
+
+    ```Authorization: Bearer <api_token>```
+
+    Keep your token safe, as anyone who gets access to it can access your account. Once a token is created
+    it cannot be viewed or modified, so don't lose it.
+
+    If you're logge
+  sources:
+  - openapi/coda-openapi.json
