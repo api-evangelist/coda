@@ -1,0 +1,1356 @@
+openapi: 3.0.0
+info:
+  version: 1.5.0
+  title: Coda Account Analytics API
+  license:
+    name: Coda Developer Terms
+    url: https://coda.io/trust/developer
+  description: "# Introduction\n\nThe Coda API is a RESTful API that lets you programmatically interact with Coda docs:\n\n * List and search Coda docs\n * Create new docs and copy existing ones\n * Share and publish docs\n * Discover pages, tables, formulas, and controls\n * Read, insert, upsert, update, and delete rows\n\nIf you plan to integrate Coda with an AI tool, you may also want to consider using the\n[Coda MCP server](https://coda.io/resources/guides/getting_started_with_coda_mcp). It's optimized for LLM usage\npatterns and often exposes more granular methods for accessing and modifying data.\n\n# Getting Started\n\nOur [Getting Started Guide](https://coda.io/@oleg/getting-started-guide-coda-api) helps you learn the\nbasic of working with the API and shows a few ways you can use it. Check it out, and learn how to:\n\n- Read data from Coda tables and write back to them\n- Build a one-way sync from one Coda doc to another\n- Automate reminders\n- Sync your Google Calendar to Coda\n\n# Changes to the API\n\nAs we update and release newer versions of the API, we reserve the right to remove\nolder APIs and functionality with a 3-month deprecation notice. We will post about such changes as well as announce\nnew features in the [Developers Central](https://community.coda.io/c/developers-central) section of our Community,\nand update the [API updates](https://coda.io/api-updates) doc.\n\n# Using the API\n\nCoda's REST API is designed to be straightforward to use. You can use the language and platform of your choice to\nmake requests. To get a feel for the API, you can also use a tool like [Postman](https://www.getpostman.com/) or\n[Insomnia](https://insomnia.rest/).\n\n## API Endpoint\n\nThis API uses a base path of `https://coda.io/apis/v1`.\n\n## Resource IDs and Links\n\nEach resource instance retrieved via the API has the following fields:\n\n  - `id`: The resource's immutable ID, which can be used to refer to it within its context\n  - `type`: The type of resource, useful for identifying it in a heterogenous collection of results\n  - `href`: A fully qualified URI that can be used to refer to and get the latest details on the resource\n\nMost resources can be queried by their name or ID. We recommend sticking with IDs where possible, as names are\nfragile and prone to being changed by your doc's users.\n\n### List Endpoints\n\nEndpoints supporting listing of resources have the following fields:\n\n  - `items`: An array containing the listed resources, limited by the `limit` or `pageToken` query parameters\n  - `nextPageLink`: If more results are available, an API link to the next page of results\n  - `nextPageToken`: If more results are available, a page token that can be passed into the `pageToken` query parameter\n\n**The maximum page size may change at any time, and may be different for different endpoints.** Please do not rely on it\nfor any behavior of your application. If you pass a `limit` parameter that is larger than our maximum allowed limit,\nwe will only return as many results as our maximum limit. You should look for the presence of the `nextPageToken` on the\nresponse to see if there are more results available, rather than relying on a result set that matches your provided limit.\n\nTo fetch a subsequent page of results, pass the `pageToken` parameter. Set this parameter to the value given to you as the `nextPageToken`\nin a page response. If no value is provided, there are no more results available. You only need to pass the `pageToken` to get\nthe next page of results, you don't need to pass any of the parameters from your original request, as they are all\nimplied by the `pageToken`. Any other parameters provided alongside a `pageToken` will be ignored.\n\n### Doc IDs\n\nWhile most object IDs will have to be discovered via the API, you may find yourself frequently wanting to get the\nID of a specific Coda doc.\n\nHere's a handy tool that will extract it for you. (See if you can find the pattern!)\n\n<form>\n  <fieldset style=\"margin: 0px 25px 25px 25px; display: inline;\">\n    <legend>Doc ID Extractor</legend>\n    <input type=\"text\" id=\"de_docUrl\" placeholder=\"Paste in a Coda doc URL\"\n           style=\"width: 250px; padding: 8px; margin-right: 20px;\" />\n    <span>\n      Your doc ID is:&nbsp;&nbsp;&nbsp;\n      <input id=\"de_docId\" readonly=\"true\"\n             style=\"width: 150px; padding: 8px; font-family: monospace; border: 1px dashed gray;\" />\n  </fieldset>\n</form>\n\n## Rate Limiting\n\nThe Coda API sets a reasonable limit on the number of requests that can be made per minute. Once this limit is\nreached, calls to the API will start returning errors with an HTTP status code of 429.\n\nThese are the current rate limits. They are subject to change at any time without notice. For robustness,\nall API scripts should check for HTTP 429 Too Many Requests errors and back off and retry the request.\nLimits apply per-user across all endpoints that share the same limit and across all docs.\n\nReading data (with the exceptions below): {{READ_RATE_LIMIT}}\n<br/>\nWriting data (POST/PUT/PATCH): {{WRITE_RATE_LIMIT}}\n<br/>\nWriting doc content data (POST/PUT/PATCH): {{WRITE_DOC_CONTENT_RATE_LIMIT}}\n<br/>\nListing docs: {{LIST_DOCS_RATE_LIMIT}}\n<br/>\nReading analytics: {{ANALYTICS_RATE_LIMIT}}\n\n## Consistency\n\nWhile edits made in Coda are shared with other collaborators in real-time, it can take a few seconds for them to\nbecome available via the API. You may also notice that changes made via the API, such as updating a row, are not\nimmediate. These endpoints all return an HTTP 202 status code, instead of a standard 200, indicating that the\nedit has been accepted and queued for processing. This generally takes a few seconds, and the edit may fail if\ninvalid. Each such edit will return a `requestId` in the response, and you can pass this `requestId` to the\n[`#getMutationStatus`](#operation/getMutationStatus) endpoint to find out if it has been applied.\n\nSimilarly, when you get doc data from the API (rows, pages, columns, etc), the data you receive comes from\nthe most recent \"snapshot\" of the doc, which might be slightly stale relative to the data you observe in\nyour browser. If you want to ensure that the data you receive is up to date and are ok getting an error if not,\nyou can pass this header in your request: `X-Coda-Doc-Version: latest`. If the API's view of the doc is\nnot up to date, the API will return an HTTP 400 response.\n\n## Volatile Formulas\n\nCoda exposes a number of \"volatile\" formulas, as as `Today()`, `Now()`, and `User()`. When used in a live Coda\ndoc, these formulas affect what's visible in realtime, tailored to the current user.\n\nSuch formulas behave differently with the API. Time-based values may only be current to the last edit made to the\ndoc. User-based values may be blank or invalid.\n\n## Free and Paid Workspaces\n\nWe make the Coda API available to all of our users free of charge, in both free and paid workspaces. However, API\nusage is subject to the role of the user associated with the API token in the workspace applicable to each API\nrequest. What this means is:\n\n- For the [`#createDoc`](#operation/createDoc) endpoint specifically, the owner of the API token must be a Doc\n  Maker (or Admin) in the workspace. If the \"Any member can create docs\" option in enabled in the workspace\n  settings, they can be an Editor and will get auto-promoted to Doc Maker upon using this endpoint. Lastly, if in\n  addition, the API key owner matches the \"Auto-join email domains\" setting, they will be auto-added to the\n  workspace and promoted to Doc Maker upon using this endpoint\n\nThis behavior applies to the API as well as any integrations that may use it, such as Zapier.\n\n## Examples\n\nTo help you get started, this documentation provides code examples in Python, Unix shell, and Google Apps Script.\nThese examples are based on a simple doc that looks something like this:\n\n![](https://cdn.coda.io/external/img/api_example_doc.png)\n\n### Python examples\n\nThese examples use Python 3.6+. If you don't already have the `requests` module, use `pip` or `easy_install` to\nget it.\n\n### Shell examples\n\nThe shell examples are intended to be run in a Unix shell. If you're on Windows, you will need to install\n[WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10).\n\nThese examples use the standard cURL utility to pull from the API, and then process it with `jq` to extract and\nformat example output. If you don't already have it, you can either [install it](https://stedolan.github.io/jq/)\nor run the command without it to see the raw JSON output.\n\n### Google Apps Script examples\n\n![](https://cdn.coda.io/external/img/api_gas.png)\n\n[Google Apps Script](https://script.google.com/) makes it easy to write code in a JavaScript-like syntax and\neasily access many Google products with built-in libraries. You can set up your scripts to run periodically,\nwhich makes it a good environment for writing tools without maintaining your own server.\n\nCoda provides a library for Google Apps Script. To use it, go into `Resources -> Libraries...` and enter the\nfollowing library ID: `15IQuWOk8MqT50FDWomh57UqWGH23gjsWVWYFms3ton6L-UHmefYHS9Vl`. If you want to see the\nlibrary's source code, it's available\n[here](https://script.google.com/d/15IQuWOk8MqT50FDWomh57UqWGH23gjsWVWYFms3ton6L-UHmefYHS9Vl/edit).\n\nGoogle provides autocomplete for API functions as well as generated docs. You can access these docs via the\nLibraries dialog by clicking on the library name. Required parameters that would be included in the URL path are\npositional arguments in each of these functions, followed by the request body, if applicable. All remaining\nparameters can be specified in the options object.\n\n## OpenAPI/Swagger Spec\n\nIn an effort to standardize our API and make it accessible, we offer an OpenAPI 3.0 specification:\n\n- [OpenAPI 3.0 spec - YAML](https://coda.io/apis/v1/openapi.yaml)\n- [OpenAPI 3.0 spec - JSON](https://coda.io/apis/v1/openapi.json)\n\n#### Postman collection\n\nTo get started with prototyping the API quickly in Postman, you can use one of links above to import the Coda API\ninto a collection. You'll then need to set the [appropriate header](#section/Authentication) and environment\nvariables.\n\n## Client libraries\n\nWe do not currently support client libraries apart from Google Apps Script. To work with the Coda API, you can\neither use standard network libraries for your language, or use the appropriate Swagger Generator tool to\nauto-generate Coda API client libraries for your language of choice. We do not provide any guarantees that these\nautogenerated libraries are compatible with our API (e.g., some libraries may not work with Bearer\nauthentication).\n\n### OpenAPI 3.0\n\n[Swagger Generator 3](https://generator3.swagger.io/) (that link takes you to the docs for the generator API) can\ngenerate client libraries for [these languages](https://generator3.swagger.io/v2/clients). It's relatively new\nand thus only has support for a limited set of languages at this time.\n\n### Third-party client libraries\n\nSome members of our amazing community have written libraries to work with our API. These aren't officially\nsupported by Coda, but are listed here for convenience. (Please let us know if you've written a library and would\nlike to have it included here.)\n\n- [PHP](https://github.com/danielstieber/CodaPHP) by Daniel Stieber\n- [Node-RED](https://github.com/serene-water/node-red-contrib-coda-io) by Mori Sugimoto\n- [NodeJS](https://www.npmjs.com/package/coda-js) by Parker McMullin\n- [Ruby](https://rubygems.org/gems/coda_docs/) by Carlos Muñoz at Getro\n- [Python](https://github.com/Blasterai/codaio) by Mikhail Beliansky\n- [Go](https://github.com/artsafin/coda-schema-generator) by Artur Safin\n"
+  termsOfService: https://coda.io/trust/tos
+  contact:
+    name: API Support
+    url: https://coda.io
+    email: help+api@coda.io
+  x-logo:
+    url: https://cdn.coda.io/external/img/apilogo.png
+    backgroundColor: transparent
+    altText: Coda API
+    href: '#'
+servers:
+- url: https://coda.io/apis/v1
+  description: Coda API (v1)
+security:
+- Bearer: []
+tags:
+- name: Analytics
+  description: This API offers analytics data for your docs and Packs over time.
+paths:
+  /analytics/docs:
+    get:
+      summary: List doc analytics
+      description: 'Returns analytics data for available docs per day.
+
+        '
+      operationId: listDocAnalytics
+      tags:
+      - Analytics
+      parameters:
+      - $ref: '#/components/parameters/docIds'
+      - $ref: '#/components/parameters/workspaceIdInQuery'
+      - $ref: '#/components/parameters/query'
+      - $ref: '#/components/parameters/isPublished'
+      - $ref: '#/components/parameters/sinceDate'
+      - $ref: '#/components/parameters/untilDate'
+      - $ref: '#/components/parameters/scale'
+      - $ref: '#/components/parameters/pageToken'
+      - $ref: '#/components/parameters/docAnalyticsOrderBy'
+      - $ref: '#/components/parameters/direction'
+      - name: limit
+        description: Maximum number of results to return in this query.
+        in: query
+        example: 10
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 5000
+          default: 1000
+      responses:
+        '200':
+          description: List of Coda doc analytics.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocAnalyticsCollection'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+      x-codeSamples:
+      - label: Python 3.13
+        lang: python
+        source: "import requests\n\nheaders = {'Authorization': 'Bearer <your API token>'}\nuri = 'https://coda.io/apis/v1/analytics/docs'\nparams = {\n  'limit': 10,\n}\nres = requests.get(uri, headers=headers, params=params).json()\n\nprint(f'First doc is: {res[\"items\"][0][\"doc\"][\"title\"]}')\n# => First doc is: New Document\n"
+      - label: Shell
+        lang: shell
+        source: "curl -s -H 'Authorization: Bearer <your API token>' \\\n  'https://coda.io/apis/v1/analytics/docs' |\n  jq .items[0].doc.title\n# => \"New Document\"\n"
+  /analytics/docs/{docId}/pages:
+    get:
+      summary: List page analytics
+      description: 'Returns analytics data for a given doc within the day.
+
+        This method will return a 401 if the given doc is not in an Enterprise workspace.
+
+        '
+      operationId: listPageAnalytics
+      tags:
+      - Analytics
+      parameters:
+      - $ref: '#/components/parameters/docId'
+      - $ref: '#/components/parameters/sinceDate'
+      - $ref: '#/components/parameters/untilDate'
+      - $ref: '#/components/parameters/pageToken'
+      - name: limit
+        description: Maximum number of results to return in this query.
+        in: query
+        example: 10
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 5000
+          default: 1000
+      responses:
+        '200':
+          description: List of page analytics for the given Coda doc.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageAnalyticsCollection'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+      x-codeSamples:
+      - label: Python 3.13
+        lang: python
+        source: "import requests\n\nheaders = {'Authorization': 'Bearer <your API token>'}\nuri = 'https://coda.io/apis/v1/analytics/docs/abcdefghi/pages'\nparams = {\n  'limit': 10,\n}\nres = requests.get(uri, headers=headers, params=params).json()\n\nprint(f'First page is: {res[\"items\"][0][\"page\"][\"name\"]}')\n# => First page is: My Page\n"
+      - label: Shell
+        lang: shell
+        source: "curl -s -H 'Authorization: Bearer <your API token>' \\\n  'https://coda.io/apis/v1/analytics/docs/abcdefghi/pages' |\n  jq .items[0].page.name\n# => \"My Page\"\n"
+  /analytics/docs/summary:
+    get:
+      summary: Get doc analytics summary
+      description: 'Returns summarized analytics data for available docs.
+
+        '
+      operationId: listDocAnalyticsSummary
+      tags:
+      - Analytics
+      parameters:
+      - $ref: '#/components/parameters/isPublished'
+      - $ref: '#/components/parameters/sinceDate'
+      - $ref: '#/components/parameters/untilDate'
+      - $ref: '#/components/parameters/workspaceIdInQuery'
+      responses:
+        '200':
+          description: Response of Coda doc summary analytics.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocAnalyticsSummary'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /analytics/packs:
+    get:
+      summary: List Pack analytics
+      description: 'Returns analytics data for Packs the user can edit.
+
+        '
+      operationId: listPackAnalytics
+      tags:
+      - Analytics
+      parameters:
+      - $ref: '#/components/parameters/packIds'
+      - $ref: '#/components/parameters/workspaceIdInQuery'
+      - $ref: '#/components/parameters/query'
+      - $ref: '#/components/parameters/sinceDate'
+      - $ref: '#/components/parameters/untilDate'
+      - $ref: '#/components/parameters/scale'
+      - $ref: '#/components/parameters/pageToken'
+      - $ref: '#/components/parameters/packAnalyticsOrderBy'
+      - $ref: '#/components/parameters/direction'
+      - $ref: '#/components/parameters/isPublishedNoDefault'
+      - name: limit
+        description: Maximum number of results to return in this query.
+        in: query
+        example: 10
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 5000
+          default: 1000
+      responses:
+        '200':
+          description: Response of Coda Pack analytics.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackAnalyticsCollection'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+      x-codeSamples:
+      - label: Python 3.13
+        lang: python
+        source: "import requests\n\nheaders = {'Authorization': 'Bearer <your API token>'}\nuri = 'https://coda.io/apis/v1/analytics/packs'\nparams = {\n  'limit': 10,\n}\nres = requests.get(uri, headers=headers, params=params).json()\n\nprint(f'First Pack is: {res[\"items\"][0][\"pack\"][\"name\"]}')\n# => First Pack is: New Pack\n"
+      - label: Shell
+        lang: shell
+        source: "curl -s -H 'Authorization: Bearer <your API token>' \\\n  'https://coda.io/apis/v1/analytics/packs' |\n  jq .items[0].pack.name\n# => \"New Pack\"\n"
+  /analytics/packs/summary:
+    get:
+      summary: Get Pack analytics summary
+      description: 'Returns summarized analytics data for Packs the user can edit.
+
+        '
+      operationId: listPackAnalyticsSummary
+      tags:
+      - Analytics
+      parameters:
+      - $ref: '#/components/parameters/packIds'
+      - $ref: '#/components/parameters/workspaceIdInQuery'
+      - $ref: '#/components/parameters/isPublishedNoDefault'
+      - $ref: '#/components/parameters/sinceDate'
+      - $ref: '#/components/parameters/untilDate'
+      responses:
+        '200':
+          description: Response of Coda Pack summary analytics.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackAnalyticsSummary'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /analytics/packs/{packId}/formulas:
+    get:
+      summary: List Pack formula analytics
+      description: 'Returns analytics data for Pack formulas.
+
+        '
+      operationId: listPackFormulaAnalytics
+      tags:
+      - Analytics
+      parameters:
+      - name: packFormulaNames
+        description: A list of Pack formula names (case-sensitive) for which to retrieve analytics.
+        in: query
+        explode: false
+        example: SquareRoot,CubeRoot
+        schema:
+          type: array
+          items:
+            type: string
+      - name: packFormulaTypes
+        description: A list of Pack formula types corresponding to the `packFormulaNames`. If specified, this must have the same length as `packFormulaNames`.
+        in: query
+        explode: false
+        example: action,formula
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackFormulaType'
+      - $ref: '#/components/parameters/packId'
+      - $ref: '#/components/parameters/sinceDate'
+      - $ref: '#/components/parameters/untilDate'
+      - $ref: '#/components/parameters/scale'
+      - $ref: '#/components/parameters/pageToken'
+      - $ref: '#/components/parameters/packFormulaAnalyticsOrderBy'
+      - $ref: '#/components/parameters/direction'
+      - name: limit
+        description: Maximum number of results to return in this query.
+        in: query
+        example: 10
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 5000
+          default: 1000
+      responses:
+        '200':
+          description: Response of Coda Pack formula analytics.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackFormulaAnalyticsCollection'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /analytics/updated:
+    get:
+      summary: Get analytics last updated day
+      description: 'Returns days based on Pacific Standard Time when analytics were last updated.
+
+        '
+      operationId: getAnalyticsLastUpdated
+      tags:
+      - Analytics
+      responses:
+        '200':
+          description: Response of analytics last updated days.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsLastUpdatedResponse'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+components:
+  schemas:
+    PackAnalyticsCollection:
+      x-schema-name: PackAnalyticsCollection
+      description: List of analytics for Coda Packs over a date range.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackAnalyticsItem'
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://coda.io/apis/v1/analytics/packs?pageToken=xyz
+    PackFormulaType:
+      x-schema-name: PackFormulaType
+      type: string
+      enum:
+      - action
+      - formula
+      - sync
+      - metadata
+      x-tsEnumNames:
+      - Action
+      - Formula
+      - Sync
+      - Metadata
+    PackFormulaAnalyticsMetrics:
+      x-schema-name: PackFormulaAnalyticsMetrics
+      description: Analytics metrics for a Coda Pack formula.
+      type: object
+      required:
+      - date
+      - formulaInvocations
+      - errors
+      - docsActivelyUsing
+      - docsActivelyUsing7Day
+      - docsActivelyUsing30Day
+      - docsActivelyUsing90Day
+      - docsActivelyUsingAllTime
+      - workspacesActivelyUsing
+      - workspacesActivelyUsing7Day
+      - workspacesActivelyUsing30Day
+      - workspacesActivelyUsing90Day
+      - workspacesActivelyUsingAllTime
+      additionalProperties: false
+      properties:
+        date:
+          type: string
+          format: date
+          description: Date of the analytics data.
+          example: '2020-09-02'
+        formulaInvocations:
+          type: integer
+          description: Number of times this formula has been invoked.
+          example: 123
+        errors:
+          type: integer
+          description: Number of errors from invocations.
+          example: 5
+        medianLatencyMs:
+          type: integer
+          description: Median latency of an invocation in milliseconds. Only present for daily metrics.
+          example: 500
+        medianResponseSizeBytes:
+          type: integer
+          description: Median response size in bytes. Only present for daily metrics.
+          example: 300
+        docsActivelyUsing:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack in the past day.
+          example: 50
+        docsActivelyUsing7Day:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack in the past 7 days.
+          example: 100
+        docsActivelyUsing30Day:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack in the past 30 days.
+          example: 200
+        docsActivelyUsing90Day:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack in the past 90 days.
+          example: 300
+        docsActivelyUsingAllTime:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack ever.
+          example: 500
+        workspacesActivelyUsing:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack in the past day.
+          example: 10
+        workspacesActivelyUsing7Day:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack in the past 7 days.
+          example: 15
+        workspacesActivelyUsing30Day:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack in the past 30 days.
+          example: 20
+        workspacesActivelyUsing90Day:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack in the past 90 days.
+          example: 30
+        workspacesActivelyUsingAllTime:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack ever.
+          example: 50
+        workspacesActivelyTrialing:
+          type: integer
+          description: Number of unique workspaces that are currently involved in a trial.
+        workspacesActivelyTrialing7Day:
+          type: integer
+          description: Number of unique workspaces that have been involved in a trial in the last 7 days.
+        workspacesActivelyTrialing30Day:
+          type: integer
+          description: Number of unique workspaces that have been involved in a trial in the last 30 days.
+        workspacesActivelyTrialing90Day:
+          type: integer
+          description: Number of unique workspaces that have been involved in a trial in the last 90 days.
+        workspacesActivelyTrialingAllTime:
+          type: integer
+          description: Number of unique workspaces that have been involved in a trial ever.
+        workspacesNewlySubscribed:
+          type: integer
+          description: Number of unique workspaces that have recently subscribed to the Pack.
+        workspacesWithActiveSubscriptions:
+          type: integer
+          description: Number of unique workspaces that are currently subscribed to the Pack.
+        workspacesWithSuccessfulTrials:
+          type: integer
+          description: Number of unique workspaces that subscribed after undertaking a Pack trial.
+        revenueUsd:
+          type: string
+          description: Amount of revenue (in USD) that the Pack has produced.
+    DocAnalyticsMetrics:
+      x-schema-name: DocAnalyticsMetrics
+      description: Analytics metrics for a Coda Doc.
+      type: object
+      required:
+      - date
+      - views
+      - copies
+      - likes
+      - sessionsMobile
+      - sessionsDesktop
+      - sessionsOther
+      - totalSessions
+      - aiCreditsChat,
+      - aiCreditsBlock,
+      - aiCreditsColumn,
+      - aiCreditsAssistant,
+      - aiCreditsReviewer,
+      - aiCredits,
+      additionalProperties: false
+      properties:
+        date:
+          type: string
+          format: date
+          description: Date of the analytics data.
+          example: '2020-09-02'
+        views:
+          type: integer
+          description: Number of times the doc was viewed.
+          example: 980
+        copies:
+          type: integer
+          description: Number of times the doc was copied.
+          example: 24
+        likes:
+          type: integer
+          description: Number of times the doc was liked.
+          example: 342
+        sessionsMobile:
+          type: integer
+          description: Number of unique visitors to this doc from a mobile device.
+          example: 530
+        sessionsDesktop:
+          type: integer
+          description: Number of unique visitors to this doc from a desktop device.
+          example: 212
+        sessionsOther:
+          type: integer
+          description: Number of unique visitors to this doc from an unknown device type.
+          example: 10
+        totalSessions:
+          type: integer
+          description: Sum of the total sessions from any device.
+          example: 1000
+        aiCreditsChat:
+          type: integer
+          description: Number of credits used for AI chat.
+          example: 10
+        aiCreditsBlock:
+          type: integer
+          description: Number of credits used for AI block.
+          example: 10
+        aiCreditsColumn:
+          type: integer
+          description: Number of credits used for AI column.
+          example: 10
+        aiCreditsAssistant:
+          type: integer
+          description: Number of credits used for AI assistant.
+          example: 10
+        aiCreditsReviewer:
+          type: integer
+          description: Number of credits used for AI reviewer.
+          example: 10
+        aiCredits:
+          type: integer
+          description: Total number of AI credits used.
+          example: 50
+    DocAnalyticsSummary:
+      x-schema-name: DocAnalyticsSummary
+      description: Summarized metrics for Coda docs.
+      type: object
+      required:
+      - totalSessions
+      additionalProperties: false
+      properties:
+        totalSessions:
+          type: integer
+          description: Total number of sessions across all docs.
+          example: 1337
+    PackAnalyticsDetails:
+      x-schema-name: PackAnalyticsDetails
+      description: Metadata about a Pack relevant to analytics.
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - name
+      - createdAt
+      properties:
+        id:
+          type: number
+          description: ID of the Pack.
+          example: 1003
+        name:
+          type: string
+          description: The name of the Pack.
+          example: Cool Geometry Formulas
+        logoUrl:
+          type: string
+          format: url
+          description: The link to the logo of the Pack.
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation time of the Pack.
+          example: '2022-04-11T00:18:57.946Z'
+    DocAnalyticsItem:
+      x-schema-name: DocAnalyticsItem
+      description: Analytics data for a Coda doc.
+      type: object
+      required:
+      - doc
+      - metrics
+      additionalProperties: false
+      properties:
+        doc:
+          $ref: '#/components/schemas/DocAnalyticsDetails'
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocAnalyticsMetrics'
+    DocAnalyticsCollection:
+      x-schema-name: DocAnalyticsCollection
+      description: List of analytics for Coda docs over a date range.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocAnalyticsItem'
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://coda.io/apis/v1/analytics/docs?pageToken=xyz
+    PackFormulaIdentifier:
+      x-schema-name: PackFormulaIdentifier
+      type: object
+      required:
+      - name
+      - type
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: The Pack formula name.
+          example: SquareRoot
+        type:
+          $ref: '#/components/schemas/PackFormulaType'
+    PackFormulaAnalyticsCollection:
+      x-schema-name: PackFormulaAnalyticsCollection
+      description: A collection of analytics for Coda Packs formulas over a date range.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackFormulaAnalyticsItem'
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://coda.io/apis/v1/analytics/packs/:packId/formulas?pageToken=xyz
+    nextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
+    PageAnalyticsItem:
+      x-schema-name: PageAnalyticsItem
+      description: Analytics data for a page within a Coda doc.
+      type: object
+      required:
+      - page
+      - metrics
+      additionalProperties: false
+      properties:
+        page:
+          $ref: '#/components/schemas/PageAnalyticsDetails'
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/PageAnalyticsMetrics'
+    PackAnalyticsMetrics:
+      x-schema-name: PackAnalyticsMetrics
+      description: Analytics metrics for a Coda Pack.
+      type: object
+      additionalProperties: false
+      required:
+      - date
+      - docInstalls
+      - workspaceInstalls
+      - numFormulaInvocations
+      - numActionInvocations
+      - numSyncInvocations
+      - numMetadataInvocations
+      - docsActivelyUsing
+      - docsActivelyUsing7Day
+      - docsActivelyUsing30Day
+      - docsActivelyUsing90Day
+      - docsActivelyUsingAllTime
+      - workspacesActivelyUsing
+      - workspacesActivelyUsing7Day
+      - workspacesActivelyUsing30Day
+      - workspacesActivelyUsing90Day
+      - workspacesActivelyUsingAllTime
+      - workspacesActivelyTrialing
+      - workspacesActivelyTrialing7Day
+      - workspacesActivelyTrialing30Day
+      - workspacesActivelyTrialing90Day
+      - workspacesActivelyTrialingAllTime
+      - workspacesNewlySubscribed
+      - workspacesWithActiveSubscriptions
+      - workspacesWithSuccessfulTrials
+      - revenueUsd
+      properties:
+        date:
+          type: string
+          format: date
+          description: Date of the analytics data.
+          example: '2020-09-02'
+        docInstalls:
+          type: integer
+          description: Number of unique documents that have installed this Pack.
+          example: 100
+        workspaceInstalls:
+          type: integer
+          description: Number of unique workspaces that have installed this Pack.
+          example: 10
+        numFormulaInvocations:
+          type: integer
+          description: Number of times regular formulas have been called.
+          example: 100
+        numActionInvocations:
+          type: integer
+          description: Number of times action formulas have been called.
+          example: 100
+        numSyncInvocations:
+          type: integer
+          description: Number of times sync table formulas have been called.
+          example: 100
+        numMetadataInvocations:
+          type: integer
+          description: Number of times metadata formulas have been called.
+          example: 100
+        docsActivelyUsing:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack in the past day.
+          example: 50
+        docsActivelyUsing7Day:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack in the past 7 days.
+          example: 100
+        docsActivelyUsing30Day:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack in the past 30 days.
+          example: 200
+        docsActivelyUsing90Day:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack in the past 90 days.
+          example: 300
+        docsActivelyUsingAllTime:
+          type: integer
+          description: Number of unique docs that have invoked a formula from this Pack ever.
+          example: 500
+        workspacesActivelyUsing:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack in the past day.
+          example: 10
+        workspacesActivelyUsing7Day:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack in the past 7 days.
+          example: 15
+        workspacesActivelyUsing30Day:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack in the past 30 days.
+          example: 20
+        workspacesActivelyUsing90Day:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack in the past 90 days.
+          example: 30
+        workspacesActivelyUsingAllTime:
+          type: integer
+          description: Number of unique workspaces that have invoked a formula from this Pack ever.
+          example: 50
+        workspacesActivelyTrialing:
+          type: integer
+          description: Number of unique workspaces that are currently involved in a trial.
+        workspacesActivelyTrialing7Day:
+          type: integer
+          description: Number of unique workspaces that have been involved in a trial in the last 7 days.
+        workspacesActivelyTrialing30Day:
+          type: integer
+          description: Number of unique workspaces that have been involved in a trial in the last 30 days.
+        workspacesActivelyTrialing90Day:
+          type: integer
+          description: Number of unique workspaces that have been involved in a trial in the last 90 days.
+        workspacesActivelyTrialingAllTime:
+          type: integer
+          description: Number of unique workspaces that have been involved in a trial ever.
+        workspacesNewlySubscribed:
+          type: integer
+          description: Number of unique workspaces that have recently subscribed to the Pack.
+        workspacesWithActiveSubscriptions:
+          type: integer
+          description: Number of unique workspaces that are currently subscribed to the Pack.
+        workspacesWithSuccessfulTrials:
+          type: integer
+          description: Number of unique workspaces that subscribed after undertaking a Pack trial.
+        revenueUsd:
+          type: string
+          description: Amount of revenue (in USD) that the Pack has produced.
+    PackAnalyticsSummary:
+      x-schema-name: PackAnalyticsSummary
+      description: Summary analytics for Packs.
+      type: object
+      required:
+      - totalDocInstalls
+      - totalWorkspaceInstalls
+      - totalInvocations
+      additionalProperties: false
+      properties:
+        totalDocInstalls:
+          type: integer
+          description: The number of times this Pack was installed in docs.
+        totalWorkspaceInstalls:
+          type: integer
+          description: The number of times this Pack was installed in workspaces.
+        totalInvocations:
+          type: integer
+          description: The number of times formulas in this Pack were invoked.
+    Icon:
+      x-schema-name: icon
+      description: Info about the icon.
+      type: object
+      required:
+      - name
+      - type
+      - browserLink
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: Name of the icon.
+        type:
+          type: string
+          description: MIME type of the icon
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to an icon.
+          example: https://cdn.coda.io/icons/png/color/icon-32.png
+    SortDirection:
+      x-schema-name: SortDirection
+      description: Direction of a sort for a table or view.
+      type: string
+      enum:
+      - ascending
+      - descending
+      x-tsEnumNames:
+      - Ascending
+      - Descending
+    DocAnalyticsDetails:
+      allOf:
+      - $ref: '#/components/schemas/DocReference'
+      - type: object
+        description: Metadata about a doc relevant to analytics.
+        required:
+        - title
+        - createdAt
+        additionalProperties: false
+        properties:
+          title:
+            type: string
+            description: The name of the doc.
+            example: Cool Geometry Formulas
+          icon:
+            $ref: '#/components/schemas/Icon'
+            example: https://coda.io/d/_dAbCDeFGH
+          createdAt:
+            type: string
+            format: date-time
+            description: Creation time of the doc.
+            example: '2022-04-11T00:18:57.946Z'
+          publishedAt:
+            type: string
+            format: date-time
+            description: Published time of the doc.
+            example: '2022-04-12T00:18:57.946Z'
+    PackAnalyticsOrderBy:
+      x-schema-name: PackAnalyticsOrderBy
+      description: Determines how the Pack analytics returned are sorted.
+      type: string
+      enum:
+      - date
+      - packId
+      - name
+      - createdAt
+      - docInstalls
+      - workspaceInstalls
+      - numFormulaInvocations
+      - numActionInvocations
+      - numSyncInvocations
+      - numMetadataInvocations
+      - docsActivelyUsing
+      - docsActivelyUsing7Day
+      - docsActivelyUsing30Day
+      - docsActivelyUsing90Day
+      - docsActivelyUsingAllTime
+      - workspacesActivelyUsing
+      - workspacesActivelyUsing7Day
+      - workspacesActivelyUsing30Day
+      - workspacesActivelyUsing90Day
+      - workspacesActivelyUsingAllTime
+      - workspacesWithActiveSubscriptions
+      - workspacesWithSuccessfulTrials
+      - revenueUsd
+      x-tsEnumNames:
+      - AnalyticsDate
+      - PackId
+      - Name
+      - CreatedAt
+      - DocInstalls
+      - WorkspaceInstalls
+      - NumFormulaInvocations
+      - NumActionInvocations
+      - NumSyncInvocations
+      - NumMetadataInvocations
+      - DocsActivelyUsing
+      - DocsActivelyUsing7Day
+      - DocsActivelyUsing30Day
+      - DocsActivelyUsing90Day
+      - DocsActivelyUsingAllTime
+      - WorkspacesActivelyUsing
+      - WorkspacesActivelyUsing7Day
+      - WorkspacesActivelyUsing30Day
+      - WorkspacesActivelyUsing90Day
+      - WorkspacesActivelyUsingAllTime
+      - WorkspacesWithActiveSubscriptions
+      - WorkspacesWithSuccessfulTrials
+      - RevenueUsd
+    PageAnalyticsDetails:
+      x-schema-name: PageAnalyticsDetails
+      description: Metadata about a page relevant to analytics.
+      required:
+      - id
+      - name
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the page.
+          example: section-IjkLmnO
+        name:
+          type: string
+          description: Name of the page.
+          example: Launch Status
+        icon:
+          $ref: '#/components/schemas/Icon'
+          example: https://coda.io/d/_dAbCDeFGH
+    PackFormulaAnalyticsItem:
+      x-schema-name: PackFormulaAnalyticsItem
+      description: Analytics data for a Coda Pack formula.
+      type: object
+      required:
+      - formula
+      - metrics
+      additionalProperties: false
+      properties:
+        formula:
+          $ref: '#/components/schemas/PackFormulaIdentifier'
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackFormulaAnalyticsMetrics'
+    nextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    AnalyticsLastUpdatedResponse:
+      x-schema-name: AnalyticsLastUpdatedResponse
+      description: Response representing the last day analytics were updated.
+      type: object
+      required:
+      - docAnalyticsLastUpdated
+      - packAnalyticsLastUpdated
+      - packFormulaAnalyticsLastUpdated
+      additionalProperties: false
+      properties:
+        docAnalyticsLastUpdated:
+          type: string
+          format: date
+          description: Date that doc analytics were last updated.
+          example: '2022-05-01'
+        packAnalyticsLastUpdated:
+          type: string
+          format: date
+          description: Date that Pack analytics were last updated.
+          example: '2022-05-01'
+        packFormulaAnalyticsLastUpdated:
+          type: string
+          format: date
+          description: Date that Pack formula analytics were last updated.
+          example: '2022-05-01'
+    PackAnalyticsItem:
+      x-schema-name: PackAnalyticsItem
+      description: Analytics data for a Coda Pack.
+      type: object
+      required:
+      - pack
+      - metrics
+      additionalProperties: false
+      properties:
+        pack:
+          $ref: '#/components/schemas/PackAnalyticsDetails'
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackAnalyticsMetrics'
+    PageAnalyticsCollection:
+      x-schema-name: PageAnalyticsCollection
+      description: List of analytics for pages within a Coda doc over a date range.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PageAnalyticsItem'
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://coda.io/apis/v1/analytics/docs/DOC_ID/pages?pageToken=xyz
+    DocReference:
+      x-schema-name: DocReference
+      description: Reference to a Coda doc.
+      type: object
+      required:
+      - id
+      - type
+      - browserLink
+      - href
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the Coda doc.
+          example: AbCDeFGH
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - doc
+          x-tsType: Type.Doc
+        href:
+          type: string
+          format: url
+          description: API link to the Coda doc.
+          example: https://coda.io/apis/v1/docs/AbCDeFGH
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to the Coda doc.
+          example: https://coda.io/d/_dAbCDeFGH
+    DocAnalyticsOrderBy:
+      x-schema-name: DocAnalyticsOrderBy
+      description: Determines how the Doc analytics returned are sorted.
+      type: string
+      enum:
+      - date
+      - docId
+      - title
+      - createdAt
+      - publishedAt
+      - likes
+      - copies
+      - views
+      - sessionsDesktop
+      - sessionsMobile
+      - sessionsOther
+      - totalSessions
+      - aiCreditsChat
+      - aiCreditsBlock
+      - aiCreditsColumn
+      - aiCreditsAssistant
+      - aiCreditsReviewer
+      - aiCredits
+      x-tsEnumNames:
+      - AnalyticsDate
+      - DocId
+      - Title
+      - CreatedAt
+      - PublishedAt
+      - Likes
+      - Copies
+      - Views
+      - SessionsDesktop
+      - SessionsMobile
+      - SessionsOther
+      - TotalSessions
+      - AiCreditsChat
+      - AiCreditsBlock
+      - AiCreditsColumn
+      - AiCreditsAssistant
+      - AiCreditsReviewer
+      - AiCredits
+    PageAnalyticsMetrics:
+      x-schema-name: PageAnalyticsMetrics
+      description: Analytics metrics for a page within a Coda doc.
+      type: object
+      required:
+      - date
+      - views
+      - sessions
+      - users
+      - averageSecondsViewed
+      - medianSecondsViewed
+      - tabs
+      additionalProperties: false
+      properties:
+        date:
+          type: string
+          format: date
+          description: Date of the analytics data.
+          example: '2022-06-03'
+        views:
+          type: integer
+          description: Number of times the page was viewed within the given day.
+          example: 980
+        sessions:
+          type: integer
+          description: Number of unique browsers that viewed the page on the given day.
+          example: 24
+        users:
+          type: integer
+          description: Number of unique Coda users that viewed the page on the given day.
+          example: 42
+        averageSecondsViewed:
+          type: integer
+          description: Average number of seconds that the page was viewed on the given day.
+          example: 42
+        medianSecondsViewed:
+          type: integer
+          description: Median number of seconds that the page was viewed on the given day.
+          example: 42
+        tabs:
+          type: integer
+          description: Number of unique tabs that opened the doc on the given day.
+          example: 10
+    AnalyticsScale:
+      x-schema-name: AnalyticsScale
+      description: Quantization period over which to view analytics.
+      type: string
+      enum:
+      - daily
+      - cumulative
+      x-tsEnumNames:
+      - Daily
+      - Cumulative
+    PackFormulaAnalyticsOrderBy:
+      x-schema-name: PackFormulaAnalyticsOrderBy
+      description: Determines how the Pack formula analytics returned are sorted.
+      type: string
+      enum:
+      - date
+      - formulaName
+      - formulaType
+      - formulaInvocations
+      - medianLatencyMs
+      - medianResponseSizeBytes
+      - errors
+      - docsActivelyUsing
+      - docsActivelyUsing7Day
+      - docsActivelyUsing30Day
+      - docsActivelyUsing90Day
+      - docsActivelyUsingAllTime
+      - workspacesActivelyUsing
+      - workspacesActivelyUsing7Day
+      - workspacesActivelyUsing30Day
+      - workspacesActivelyUsing90Day
+      - workspacesActivelyUsingAllTime
+      x-tsEnumNames:
+      - AnalyticsDate
+      - FormulaName
+      - FormulaType
+      - FormulaInvocations
+      - MedianLatencyMs
+      - MedianResponseSizeBytes
+      - Errors
+      - DocsActivelyUsing
+      - DocsActivelyUsing7Day
+      - DocsActivelyUsing30Day
+      - DocsActivelyUsing90Day
+      - DocsActivelyUsingAllTime
+      - WorkspacesActivelyUsing
+      - WorkspacesActivelyUsing7Day
+      - WorkspacesActivelyUsing30Day
+      - WorkspacesActivelyUsing90Day
+      - WorkspacesActivelyUsingAllTime
+  parameters:
+    docAnalyticsOrderBy:
+      name: orderBy
+      in: query
+      description: Use this parameter to order the doc analytics returned.
+      schema:
+        $ref: '#/components/schemas/DocAnalyticsOrderBy'
+    direction:
+      name: direction
+      description: Direction to sort results in.
+      in: query
+      schema:
+        $ref: '#/components/schemas/SortDirection'
+    isPublishedNoDefault:
+      name: isPublished
+      description: 'Limit results to only published items. If false or unspecified, returns all items including published ones.
+
+        '
+      in: query
+      schema:
+        type: boolean
+        x-no-default: true
+    docId:
+      name: docId
+      description: ID of the doc.
+      in: path
+      required: true
+      example: AbCDeFGH
+      schema:
+        type: string
+    docIds:
+      name: docIds
+      description: List of docIds to fetch.
+      in: query
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+    packFormulaAnalyticsOrderBy:
+      name: orderBy
+      in: query
+      description: Use this parameter to order the Pack formula analytics returned.
+      schema:
+        $ref: '#/components/schemas/PackFormulaAnalyticsOrderBy'
+    packId:
+      name: packId
+      description: ID of a Pack
+      in: path
+      required: true
+      example: 123
+      schema:
+        type: integer
+        minimum: 1
+    sinceDate:
+      name: sinceDate
+      description: Limit results to activity on or after this date.
+      in: query
+      example: '2020-08-01'
+      schema:
+        type: string
+        format: date
+    workspaceIdInQuery:
+      name: workspaceId
+      description: ID of the workspace.
+      in: query
+      required: false
+      example: ws-1Ab234
+      schema:
+        type: string
+    query:
+      name: query
+      description: Search term used to filter down results.
+      in: query
+      example: Supercalifragilisticexpialidocious
+      schema:
+        type: string
+    untilDate:
+      name: untilDate
+      description: Limit results to activity on or before this date.
+      in: query
+      example: '2020-08-05'
+      schema:
+        type: string
+        format: date
+    packIds:
+      name: packIds
+      description: Which Pack IDs to fetch.
+      in: query
+      explode: false
+      schema:
+        type: array
+        items:
+          type: integer
+    scale:
+      name: scale
+      description: Quantization period over which to view analytics. Defaults to daily.
+      in: query
+      example: daily
+      schema:
+        $ref: '#/components/schemas/AnalyticsScale'
+    isPublished:
+      name: isPublished
+      description: Limit results to only published items.
+      in: query
+      schema:
+        type: boolean
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
+    packAnalyticsOrderBy:
+      name: orderBy
+      in: query
+      description: Use this parameter to order the Pack analytics returned.
+      schema:
+        $ref: '#/components/schemas/PackAnalyticsOrderBy'
+  responses:
+    TooManyRequestsError:
+      description: The client has sent too many requests.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 429
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Too Many Requests
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Too Many Requests
+    UnauthorizedError:
+      description: The API token is invalid or has expired.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 401
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Unauthorized
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Unauthorized
+  securitySchemes:
+    Bearer:
+      description: "The Coda API can be accessed using an API token, which can be obtained from [*My account*](https://coda.io/account)\nin Coda. This token should be specified by setting a header as follows.\n\n```Authorization: Bearer <api_token>```\n\nKeep your token safe, as anyone who gets access to it can access your account. Once a token is created\nit cannot be viewed or modified, so don't lose it.\n\nIf you're logged into Coda, you can also query the API directly using your browser. Note that only GET\nendpoints are supported; for anything else, you'll have to use Bearer authentication.\n\n### Restricting token authorization\n\nBy default, bearer tokens created for the Coda API can perform any action that the user who created the token\ncan perform. However, Coda API bearer tokens can also be created with restrictions. These restrictions\ncan limit what objects can be operated on and the types of operations that can be performed.\n\n#### Operation types\n\nThe table below describes the types of authorization restrictions that can be placed on a Coda API token.\n<table>\n  <tr><th>Restriction</th><th>Description</th><th>Allowed HTTP Methods</th></tr>\n  <tr>\n    <td>Read access</td>\n    <td>Allows access to API methods that read the state of an object</td>\n    <td>GET</td>\n  </tr>\n  <tr>\n    <td>Write access</td>\n    <td>Allows access to API methods that write the state of an object</td>\n    <td>POST, PUT, DELETE</td>\n  </tr>\n  <tr>\n    <td>Read and write access</td>\n    <td>Allows access to all methods for an object</td>\n    <td>All</td>\n  </tr>\n</table>\n\n#### Object types\n\nCoda API tokens can be restricted to the following types of objects.\n\n* Documents: Restricts access to only allow API calls for `/docs/${DOC_ID}`\n* Tables: Restricts access to only allow API calls for `/docs/${DOC_ID}/tables/${TABLE_ID}`\n\n#### Special cases\n\nThere are a few special case methods that violate the above restrictions.\n\n* `/whoami`: This method can be called by all Coda API tokens.\n* `/resolveBrowserLink`: This method can be called by all Coda API tokens, but will only return a result\nif the token has access (read or write) to the object referenced by the URL.\n\n#### Feedback\n\nThis feature is under development and we'd love to hear your feedback and bug reports. Please\nvisit us at the [Developers Central](https://connect.superhuman.com/c/developers-central) forum within\nthe Coda Community.\n"
+      type: http
+      scheme: bearer
+      bearerFormat: UUID
+x-tagGroups:
+- name: Folders
+  tags:
+  - Folders
+- name: Docs
+  tags:
+  - Docs
+  - Permissions
+  - Publishing
+- name: Doc Structure
+  tags:
+  - Pages
+  - Automations
+- name: Tables and Views
+  tags:
+  - Tables
+  - Columns
+  - Rows
+- name: Formulas & Controls
+  tags:
+  - Formulas
+  - Controls
+- name: Miscellaneous
+  tags:
+  - Account
+  - Analytics
+  - Miscellaneous
