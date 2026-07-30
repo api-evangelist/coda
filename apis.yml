@@ -6,7 +6,20 @@ description: >-
   Coda is an all-in-one doc platform combining documents, spreadsheets, and apps. The Coda API exposes docs, pages,
   tables, rows, columns, controls, formulas, automations, packs, permissions, and analytics for programmatic
   integration.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/coda.png
 tags:
   - Productivity
   - Docs
@@ -17,216 +30,355 @@ created: '2026-05-08'
 modified: '2026-05-30'
 specificationVersion: '0.19'
 apis:
-  - aid: coda:coda-docs-api
-    name: Coda Docs API
-    tags:
-      - Docs
-      - Documents
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://coda.io/developers/apis/v1
-    baseURL: https://coda.io/apis/v1
-    properties:
-      - url: https://coda.io/developers/apis/v1
-        type: Documentation
-      - url: openapi/coda-openapi.json
-        type: OpenAPI
-    description: >-
-      List, create, copy, share, and manage Coda documents. Provides the top-level container for pages, tables, and
-      other elements within a workspace.
-  - aid: coda:coda-folders-api
-    name: Coda Folders API
-    tags:
-      - Folders
-      - Workspaces
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://coda.io/developers/apis/v1
-    baseURL: https://coda.io/apis/v1
-    properties:
-      - url: https://coda.io/developers/apis/v1
-        type: Documentation
-      - url: openapi/coda-openapi.json
-        type: OpenAPI
-    description: Organize and retrieve folders that contain Coda docs within a workspace.
-  - aid: coda:coda-pages-api
-    name: Coda Pages API
-    tags:
-      - Pages
-      - Content
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://coda.io/developers/apis/v1
-    baseURL: https://coda.io/apis/v1
-    properties:
-      - url: https://coda.io/developers/apis/v1
-        type: Documentation
-      - url: openapi/coda-openapi.json
-        type: OpenAPI
-    description: Manage document structure and page content. Create, update, and retrieve hierarchical pages within a Coda doc.
-  - aid: coda:coda-tables-api
-    name: Coda Tables API
-    tags:
-      - Tables
-      - Database
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://coda.io/developers/apis/v1
-    baseURL: https://coda.io/apis/v1
-    properties:
-      - url: https://coda.io/developers/apis/v1
-        type: Documentation
-      - url: openapi/coda-openapi.json
-        type: OpenAPI
-    description: Access table resources within docs. List, retrieve, and inspect tables and their schema.
-  - aid: coda:coda-columns-api
-    name: Coda Columns API
-    tags:
-      - Columns
-      - Schema
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://coda.io/developers/apis/v1
-    baseURL: https://coda.io/apis/v1
-    properties:
-      - url: https://coda.io/developers/apis/v1
-        type: Documentation
-      - url: openapi/coda-openapi.json
-        type: OpenAPI
-    description: Retrieve column definitions, types, and metadata for tables in a Coda doc.
-  - aid: coda:coda-rows-api
-    name: Coda Rows API
-    tags:
-      - Rows
-      - Records
-      - CRUD
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://coda.io/developers/apis/v1
-    baseURL: https://coda.io/apis/v1
-    properties:
-      - url: https://coda.io/developers/apis/v1
-        type: Documentation
-      - url: openapi/coda-openapi.json
-        type: OpenAPI
-    description: >-
-      Read, insert, upsert, update, and delete table rows. Primary CRUD surface for table data; supports filtering,
-      sorting, and column-key references.
-  - aid: coda:coda-formulas-api
-    name: Coda Formulas API
-    tags:
-      - Formulas
-      - Compute
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://coda.io/developers/apis/v1
-    baseURL: https://coda.io/apis/v1
-    properties:
-      - url: https://coda.io/developers/apis/v1
-        type: Documentation
-      - url: openapi/coda-openapi.json
-        type: OpenAPI
-    description: Access named formula definitions and evaluate them within a doc.
-  - aid: coda:coda-controls-api
-    name: Coda Controls API
-    tags:
-      - Controls
-      - UI
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://coda.io/developers/apis/v1
-    baseURL: https://coda.io/apis/v1
-    properties:
-      - url: https://coda.io/developers/apis/v1
-        type: Documentation
-      - url: openapi/coda-openapi.json
-        type: OpenAPI
-    description: Read and update interactive controls embedded in a Coda doc (sliders, dropdowns, checkboxes, buttons).
-  - aid: coda:coda-automations-api
-    name: Coda Automations API
-    tags:
-      - Automations
-      - Webhooks
-      - Triggers
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://coda.io/developers/apis/v1
-    baseURL: https://coda.io/apis/v1
-    properties:
-      - url: https://coda.io/developers/apis/v1
-        type: Documentation
-      - url: openapi/coda-openapi.json
-        type: OpenAPI
-      - url: asyncapi/coda-automations-asyncapi.yml
-        type: AsyncAPI
-    description: Trigger automation rules and inspect automation execution within a Coda doc.
-  - aid: coda:coda-permissions-api
-    name: Coda Permissions API
-    tags:
-      - Permissions
-      - Sharing
-      - ACL
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://coda.io/developers/apis/v1
-    baseURL: https://coda.io/apis/v1
-    properties:
-      - url: https://coda.io/developers/apis/v1
-        type: Documentation
-      - url: openapi/coda-openapi.json
-        type: OpenAPI
-    description: Manage doc-level sharing, ACLs, and access controls. Add, modify, or revoke user/group permissions.
-  - aid: coda:coda-publishing-api
-    name: Coda Publishing API
-    tags:
-      - Publishing
-      - Public Docs
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://coda.io/developers/apis/v1
-    baseURL: https://coda.io/apis/v1
-    properties:
-      - url: https://coda.io/developers/apis/v1
-        type: Documentation
-      - url: openapi/coda-openapi.json
-        type: OpenAPI
-    description: Publish and unpublish Coda docs to the public web, including category and discoverability metadata.
-  - aid: coda:coda-account-api
-    name: Coda Account API
-    tags:
-      - Account
-      - User
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://coda.io/developers/apis/v1
-    baseURL: https://coda.io/apis/v1
-    properties:
-      - url: https://coda.io/developers/apis/v1
-        type: Documentation
-      - url: openapi/coda-openapi.json
-        type: OpenAPI
-    description: Retrieve information about the authenticated user (whoami).
-  - aid: coda:coda-analytics-api
-    name: Coda Analytics API
-    tags:
-      - Analytics
-      - Usage
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://coda.io/developers/apis/v1
-    baseURL: https://coda.io/apis/v1
-    properties:
-      - url: https://coda.io/developers/apis/v1
-        type: Documentation
-      - url: openapi/coda-openapi.json
-        type: OpenAPI
-    description: Access usage analytics for docs, pages, and Packs across a workspace.
-  - aid: coda:coda-packs-api
-    name: Coda Packs SDK
-    tags:
-      - Packs
-      - Extensions
-      - SDK
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://coda.io/packs/build/latest/
-    baseURL: https://coda.io/apis/v1
-    properties:
-      - url: https://coda.io/packs/build/latest/
-        type: Documentation
-      - url: https://github.com/coda/packs-sdk
-        type: SDKs
-      - url: openapi/coda-openapi.json
-        type: OpenAPI
-    description: >-
-      Build and publish Coda Packs — TypeScript-based extensions that add custom formulas, sync tables, action buttons,
-      and OAuth-authenticated integrations to Coda docs.
+- aid: coda:coda-account-api
+  name: Coda Account API
+  description: >-
+    At this time, the API exposes some limited information about your account. However, `/whoami` is a
+    good endpoint to hit to verify that you're hitting the API correctly and that your token is working
+    as expected.
+  humanURL: https://coda.io/developers/apis/v1
+  baseURL: https://coda.io/apis/v1
+  tags:
+  - Account
+  properties:
+  - type: OpenAPI
+    url: openapi/coda-account-api-openapi.yml
+  - type: Documentation
+    url: https://coda.io/developers/apis/v1
+  - type: AsyncAPI
+    url: asyncapi/coda-automations-asyncapi.yml
+  - type: Documentation
+    url: https://coda.io/packs/build/latest/
+  - type: SDKs
+    url: https://github.com/coda/packs-sdk
+- aid: coda:coda-analytics-api
+  name: Coda Analytics API
+  description: This API offers analytics data for your docs and Packs over time.
+  humanURL: https://coda.io/developers/apis/v1
+  baseURL: https://coda.io/apis/v1
+  tags:
+  - Analytics
+  properties:
+  - type: OpenAPI
+    url: openapi/coda-analytics-api-openapi.yml
+  - type: Documentation
+    url: https://coda.io/developers/apis/v1
+  - type: AsyncAPI
+    url: asyncapi/coda-automations-asyncapi.yml
+  - type: Documentation
+    url: https://coda.io/packs/build/latest/
+  - type: SDKs
+    url: https://github.com/coda/packs-sdk
+- aid: coda:coda-automations-api
+  name: Coda Automations API
+  description: This API allows you to trigger automations.
+  humanURL: https://coda.io/developers/apis/v1
+  baseURL: https://coda.io/apis/v1
+  tags:
+  - Automations
+  properties:
+  - type: OpenAPI
+    url: openapi/coda-automations-api-openapi.yml
+  - type: Documentation
+    url: https://coda.io/developers/apis/v1
+  - type: AsyncAPI
+    url: asyncapi/coda-automations-asyncapi.yml
+  - type: Documentation
+    url: https://coda.io/packs/build/latest/
+  - type: SDKs
+    url: https://github.com/coda/packs-sdk
+- aid: coda:coda-columns-api
+  name: Coda Columns API
+  description: >-
+    While columns in Coda have user-friendly names, they also have immutable IDs that are used when reading
+    and writing rows. These endpoints let you query the columns in a table and get basic information about
+    them.
+  humanURL: https://coda.io/developers/apis/v1
+  baseURL: https://coda.io/apis/v1
+  tags:
+  - Columns
+  properties:
+  - type: OpenAPI
+    url: openapi/coda-columns-api-openapi.yml
+  - type: Documentation
+    url: https://coda.io/developers/apis/v1
+  - type: AsyncAPI
+    url: asyncapi/coda-automations-asyncapi.yml
+  - type: Documentation
+    url: https://coda.io/packs/build/latest/
+  - type: SDKs
+    url: https://github.com/coda/packs-sdk
+- aid: coda:coda-controls-api
+  name: Coda Controls API
+  description: >-
+    Controls provide a user-friendly way to input a value that can affect other parts of the doc. This
+    API lets you list controls and get their current values.
+  humanURL: https://coda.io/developers/apis/v1
+  baseURL: https://coda.io/apis/v1
+  tags:
+  - Controls
+  properties:
+  - type: OpenAPI
+    url: openapi/coda-controls-api-openapi.yml
+  - type: Documentation
+    url: https://coda.io/developers/apis/v1
+  - type: AsyncAPI
+    url: asyncapi/coda-automations-asyncapi.yml
+  - type: Documentation
+    url: https://coda.io/packs/build/latest/
+  - type: SDKs
+    url: https://github.com/coda/packs-sdk
+- aid: coda:coda-customdocdomains-api
+  name: Coda CustomDocDomains API
+  description: The CustomDocDomains API from Coda — 3 operation(s) for customdocdomains.
+  humanURL: https://coda.io/developers/apis/v1
+  baseURL: https://coda.io/apis/v1
+  tags:
+  - CustomDocDomains
+  properties:
+  - type: OpenAPI
+    url: openapi/coda-customdocdomains-api-openapi.yml
+  - type: Documentation
+    url: https://coda.io/developers/apis/v1
+  - type: AsyncAPI
+    url: asyncapi/coda-automations-asyncapi.yml
+  - type: Documentation
+    url: https://coda.io/packs/build/latest/
+  - type: SDKs
+    url: https://github.com/coda/packs-sdk
+- aid: coda:coda-docs-api
+  name: Coda Docs API
+  description: >-
+    Coda docs are foundational, top-level collaborative projects that contain pages. The API lets you
+    list and search your docs to obtain basic metadata like titles and ownership information.
+  humanURL: https://coda.io/developers/apis/v1
+  baseURL: https://coda.io/apis/v1
+  tags:
+  - Docs
+  properties:
+  - type: OpenAPI
+    url: openapi/coda-docs-api-openapi.yml
+  - type: Documentation
+    url: https://coda.io/developers/apis/v1
+  - type: AsyncAPI
+    url: asyncapi/coda-automations-asyncapi.yml
+  - type: Documentation
+    url: https://coda.io/packs/build/latest/
+  - type: SDKs
+    url: https://github.com/coda/packs-sdk
+- aid: coda:coda-folders-api
+  name: Coda Folders API
+  description: >-
+    Folders help you organize your docs within workspaces. This API lets you list, create, update, and
+    delete folders.
+  humanURL: https://coda.io/developers/apis/v1
+  baseURL: https://coda.io/apis/v1
+  tags:
+  - Folders
+  properties:
+  - type: OpenAPI
+    url: openapi/coda-folders-api-openapi.yml
+  - type: Documentation
+    url: https://coda.io/developers/apis/v1
+  - type: AsyncAPI
+    url: asyncapi/coda-automations-asyncapi.yml
+  - type: Documentation
+    url: https://coda.io/packs/build/latest/
+  - type: SDKs
+    url: https://github.com/coda/packs-sdk
+- aid: coda:coda-formulas-api
+  name: Coda Formulas API
+  description: >-
+    Formulas can be great for performing one-off computations, or used with tables and other formulas
+    to compute a single value. With this API, you can discover formulas in a doc and obtain computed results.
+  humanURL: https://coda.io/developers/apis/v1
+  baseURL: https://coda.io/apis/v1
+  tags:
+  - Formulas
+  properties:
+  - type: OpenAPI
+    url: openapi/coda-formulas-api-openapi.yml
+  - type: Documentation
+    url: https://coda.io/developers/apis/v1
+  - type: AsyncAPI
+    url: asyncapi/coda-automations-asyncapi.yml
+  - type: Documentation
+    url: https://coda.io/packs/build/latest/
+  - type: SDKs
+    url: https://github.com/coda/packs-sdk
+- aid: coda:coda-go-links-api
+  name: Coda Go Links API
+  description: The Go Links API from Coda — 1 operation(s) for go links.
+  humanURL: https://coda.io/developers/apis/v1
+  baseURL: https://coda.io/apis/v1
+  tags:
+  - Go Links
+  properties:
+  - type: OpenAPI
+    url: openapi/coda-go-links-api-openapi.yml
+  - type: Documentation
+    url: https://coda.io/developers/apis/v1
+  - type: AsyncAPI
+    url: asyncapi/coda-automations-asyncapi.yml
+  - type: Documentation
+    url: https://coda.io/packs/build/latest/
+  - type: SDKs
+    url: https://github.com/coda/packs-sdk
+- aid: coda:coda-miscellaneous-api
+  name: Coda Miscellaneous API
+  description: >-
+    These endpoints wouldn't fit anywhere else, but you may find them useful when working with Coda.
+  humanURL: https://coda.io/developers/apis/v1
+  baseURL: https://coda.io/apis/v1
+  tags:
+  - Miscellaneous
+  properties:
+  - type: OpenAPI
+    url: openapi/coda-miscellaneous-api-openapi.yml
+  - type: Documentation
+    url: https://coda.io/developers/apis/v1
+  - type: AsyncAPI
+    url: asyncapi/coda-automations-asyncapi.yml
+  - type: Documentation
+    url: https://coda.io/packs/build/latest/
+  - type: SDKs
+    url: https://github.com/coda/packs-sdk
+- aid: coda:coda-packs-api
+  name: Coda Packs API
+  description: >-
+    This API allows you to manage Packs that you have developed as well as list publicly available Coda
+    packs.
+  humanURL: https://coda.io/developers/apis/v1
+  baseURL: https://coda.io/apis/v1
+  tags:
+  - Packs
+  properties:
+  - type: OpenAPI
+    url: openapi/coda-packs-api-openapi.yml
+  - type: Documentation
+    url: https://coda.io/developers/apis/v1
+  - type: AsyncAPI
+    url: asyncapi/coda-automations-asyncapi.yml
+  - type: Documentation
+    url: https://coda.io/packs/build/latest/
+  - type: SDKs
+    url: https://github.com/coda/packs-sdk
+- aid: coda:coda-pages-api
+  name: Coda Pages API
+  description: >-
+    Pages in Coda offer canvases containing rich text, tables, controls, and other objects. At this time,
+    this API lets you list and access pages in a doc.
+  humanURL: https://coda.io/developers/apis/v1
+  baseURL: https://coda.io/apis/v1
+  tags:
+  - Pages
+  properties:
+  - type: OpenAPI
+    url: openapi/coda-pages-api-openapi.yml
+  - type: Documentation
+    url: https://coda.io/developers/apis/v1
+  - type: AsyncAPI
+    url: asyncapi/coda-automations-asyncapi.yml
+  - type: Documentation
+    url: https://coda.io/packs/build/latest/
+  - type: SDKs
+    url: https://github.com/coda/packs-sdk
+- aid: coda:coda-permissions-api
+  name: Coda Permissions API
+  description: This API lets you manage sharing and permissions for your docs.
+  humanURL: https://coda.io/developers/apis/v1
+  baseURL: https://coda.io/apis/v1
+  tags:
+  - Permissions
+  properties:
+  - type: OpenAPI
+    url: openapi/coda-permissions-api-openapi.yml
+  - type: Documentation
+    url: https://coda.io/developers/apis/v1
+  - type: AsyncAPI
+    url: asyncapi/coda-automations-asyncapi.yml
+  - type: Documentation
+    url: https://coda.io/packs/build/latest/
+  - type: SDKs
+    url: https://github.com/coda/packs-sdk
+- aid: coda:coda-publishing-api
+  name: Coda Publishing API
+  description: >-
+    Coda docs can be published publicly and associated with categories to help the world discover them.
+    This API lets you manage the publishing settings of your docs.
+  humanURL: https://coda.io/developers/apis/v1
+  baseURL: https://coda.io/apis/v1
+  tags:
+  - Publishing
+  properties:
+  - type: OpenAPI
+    url: openapi/coda-publishing-api-openapi.yml
+  - type: Documentation
+    url: https://coda.io/developers/apis/v1
+  - type: AsyncAPI
+    url: asyncapi/coda-automations-asyncapi.yml
+  - type: Documentation
+    url: https://coda.io/packs/build/latest/
+  - type: SDKs
+    url: https://github.com/coda/packs-sdk
+- aid: coda:coda-rows-api
+  name: Coda Rows API
+  description: >-
+    You'll likely use this part of the API the most. These endpoints let you retrieve row data from tables
+    in Coda as well as create, upsert, update, and delete them. Most of these endpoints work for both
+    base tables and views, but for inserting/upsering rows, you must use a base table.
+  humanURL: https://coda.io/developers/apis/v1
+  baseURL: https://coda.io/apis/v1
+  tags:
+  - Rows
+  properties:
+  - type: OpenAPI
+    url: openapi/coda-rows-api-openapi.yml
+  - type: Documentation
+    url: https://coda.io/developers/apis/v1
+  - type: AsyncAPI
+    url: asyncapi/coda-automations-asyncapi.yml
+  - type: Documentation
+    url: https://coda.io/packs/build/latest/
+  - type: SDKs
+    url: https://github.com/coda/packs-sdk
+- aid: coda:coda-tables-api
+  name: Coda Tables API
+  description: The Tables API from Coda — 2 operation(s) for tables.
+  humanURL: https://coda.io/developers/apis/v1
+  baseURL: https://coda.io/apis/v1
+  tags:
+  - Tables
+  properties:
+  - type: OpenAPI
+    url: openapi/coda-tables-api-openapi.yml
+  - type: Documentation
+    url: https://coda.io/developers/apis/v1
+  - type: AsyncAPI
+    url: asyncapi/coda-automations-asyncapi.yml
+  - type: Documentation
+    url: https://coda.io/packs/build/latest/
+  - type: SDKs
+    url: https://github.com/coda/packs-sdk
+- aid: coda:coda-workspaces-api
+  name: Coda Workspaces API
+  description: >-
+    This API allows you to manage your workspace's membership and get analytics on membership over time.
+  humanURL: https://coda.io/developers/apis/v1
+  baseURL: https://coda.io/apis/v1
+  tags:
+  - Workspaces
+  properties:
+  - type: OpenAPI
+    url: openapi/coda-workspaces-api-openapi.yml
+  - type: Documentation
+    url: https://coda.io/developers/apis/v1
+  - type: AsyncAPI
+    url: asyncapi/coda-automations-asyncapi.yml
+  - type: Documentation
+    url: https://coda.io/packs/build/latest/
+  - type: SDKs
+    url: https://github.com/coda/packs-sdk
 common:
   - type: AgenticAccess
     url: agentic-access/coda-agentic-access.yml
