@@ -1,0 +1,1833 @@
+{
+  "item": [
+    {
+      "id": "10f2b9d7-4e74-4408-b8d9-627effb031dd",
+      "name": "Folders",
+      "description": {
+        "content": "Folders help you organize your docs within workspaces. This API lets you list, create, update, and delete folders.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2a57295d-6e8b-4ff3-8ebe-70aa280fbd69",
+          "name": "List folders",
+          "request": {
+            "name": "List folders",
+            "description": {
+              "content": "Returns a list of folders the user has access to.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "folders"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "workspaceId",
+                  "value": "<string>",
+                  "description": "Show only folders belonging to the given workspace."
+                },
+                {
+                  "disabled": false,
+                  "key": "isStarred",
+                  "value": "<boolean>",
+                  "description": "If true, returns folders that are starred. If false, returns folders that are not starred. If not specified, returns all folders."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25",
+                  "description": "Maximum number of results to return in this query."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>",
+                  "description": "An opaque token used to fetch the next page of results."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "47d802fe-4f16-4fb9-9671-c98ce728b548",
+              "name": "List of folders.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "workspaceId",
+                      "value": "ws-1Ab234"
+                    },
+                    {
+                      "key": "isStarred",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"fl-1Ab234\",\n      \"type\": \"folder\",\n      \"name\": \"Projects\",\n      \"browserLink\": \"https://coda.io/folders/fl-1Ab234\",\n      \"workspace\": {\n        \"id\": \"ws-1Ab234\",\n        \"type\": \"workspace\",\n        \"browserLink\": \"https://coda.io/docs?workspaceId=ws-1Ab234\",\n        \"organizationId\": \"org-2Bc456\",\n        \"name\": \"My workspace\"\n      },\n      \"description\": \"A collection of project docs.\",\n      \"icon\": {\n        \"name\": \"string\",\n        \"type\": \"string\",\n        \"browserLink\": \"https://cdn.coda.io/icons/png/color/icon-32.png\"\n      },\n      \"createdAt\": \"2018-04-11T00:18:57.946Z\",\n      \"canEdit\": true\n    },\n    {\n      \"id\": \"fl-1Ab234\",\n      \"type\": \"folder\",\n      \"name\": \"Projects\",\n      \"browserLink\": \"https://coda.io/folders/fl-1Ab234\",\n      \"workspace\": {\n        \"id\": \"ws-1Ab234\",\n        \"type\": \"workspace\",\n        \"browserLink\": \"https://coda.io/docs?workspaceId=ws-1Ab234\",\n        \"organizationId\": \"org-2Bc456\",\n        \"name\": \"My workspace\"\n      },\n      \"description\": \"A collection of project docs.\",\n      \"icon\": {\n        \"name\": \"string\",\n        \"type\": \"string\",\n        \"browserLink\": \"https://cdn.coda.io/icons/png/color/icon-32.png\"\n      },\n      \"createdAt\": \"2018-04-11T00:18:57.946Z\",\n      \"canEdit\": true\n    }\n  ],\n  \"href\": \"https://coda.io/apis/v1/folders?workspaceId=ws-1Ab234\",\n  \"nextPageToken\": \"eyJsaW1pd\",\n  \"nextPageLink\": \"https://coda.io/apis/v1/folders?pageToken=xyz\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "89f2626e-26e5-4aad-b918-f7a787b7123f",
+              "name": "The request parameters did not conform to expectations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "workspaceId",
+                      "value": "ws-1Ab234"
+                    },
+                    {
+                      "key": "isStarred",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 400,\n  \"statusMessage\": \"Bad Request\",\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f2a26d68-7f6e-4d43-a5e5-11a229009c44",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "workspaceId",
+                      "value": "ws-1Ab234"
+                    },
+                    {
+                      "key": "isStarred",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f38f8b8a-3e56-4341-830c-cb806f8e0cd3",
+              "name": "The API token does not grant access to this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "workspaceId",
+                      "value": "ws-1Ab234"
+                    },
+                    {
+                      "key": "isStarred",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 403,\n  \"statusMessage\": \"Forbidden\",\n  \"message\": \"Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6a67a1ff-3ac6-49de-90c3-479cf401cbf5",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "workspaceId",
+                      "value": "ws-1Ab234"
+                    },
+                    {
+                      "key": "isStarred",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9403f4e0-c86c-4ab7-8722-8947d139eca0",
+          "name": "Create folder",
+          "request": {
+            "name": "Create folder",
+            "description": {
+              "content": "Creates a new folder.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "folders"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"workspaceId\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e9811868-588d-410d-a43a-3d7c2ea38c7c",
+              "name": "The created folder.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Projects\",\n  \"workspaceId\": \"ws-1Ab234\",\n  \"description\": \"A collection of project docs.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fl-1Ab234\",\n  \"type\": \"folder\",\n  \"name\": \"Projects\",\n  \"browserLink\": \"https://coda.io/folders/fl-1Ab234\",\n  \"workspace\": {\n    \"id\": \"ws-1Ab234\",\n    \"type\": \"workspace\",\n    \"browserLink\": \"https://coda.io/docs?workspaceId=ws-1Ab234\",\n    \"organizationId\": \"org-2Bc456\",\n    \"name\": \"My workspace\"\n  },\n  \"description\": \"A collection of project docs.\",\n  \"icon\": {\n    \"name\": \"string\",\n    \"type\": \"string\",\n    \"browserLink\": \"https://cdn.coda.io/icons/png/color/icon-32.png\"\n  },\n  \"createdAt\": \"2018-04-11T00:18:57.946Z\",\n  \"canEdit\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7a7234cf-7fee-491a-b5c9-bc5e00d90cf7",
+              "name": "The request parameters did not conform to expectations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Projects\",\n  \"workspaceId\": \"ws-1Ab234\",\n  \"description\": \"A collection of project docs.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 400,\n  \"statusMessage\": \"Bad Request\",\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eec9d0d8-45c2-4bdb-af8a-f9c968e96a7c",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Projects\",\n  \"workspaceId\": \"ws-1Ab234\",\n  \"description\": \"A collection of project docs.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1ef91313-53ed-4bb7-8aef-6dd5ef23e817",
+              "name": "The API token does not grant access to this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Projects\",\n  \"workspaceId\": \"ws-1Ab234\",\n  \"description\": \"A collection of project docs.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 403,\n  \"statusMessage\": \"Forbidden\",\n  \"message\": \"Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d992840b-077e-4e40-b6d2-b4967554e27e",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Projects\",\n  \"workspaceId\": \"ws-1Ab234\",\n  \"description\": \"A collection of project docs.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f6ba3d02-9e54-466e-8961-112fbd656e58",
+          "name": "Get folder",
+          "request": {
+            "name": "Get folder",
+            "description": {
+              "content": "Returns the requested folder.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "folders",
+                ":folderId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "folderId",
+                  "description": "(Required) ID of the folder."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "14b74ba3-15e7-42be-8181-0b1e09ce20a2",
+              "name": "The requested Coda folder.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders",
+                    ":folderId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "folderId",
+                      "description": "(Required) ID of the folder."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fl-1Ab234\",\n  \"type\": \"folder\",\n  \"name\": \"Projects\",\n  \"browserLink\": \"https://coda.io/folders/fl-1Ab234\",\n  \"workspace\": {\n    \"id\": \"ws-1Ab234\",\n    \"type\": \"workspace\",\n    \"browserLink\": \"https://coda.io/docs?workspaceId=ws-1Ab234\",\n    \"organizationId\": \"org-2Bc456\",\n    \"name\": \"My workspace\"\n  },\n  \"description\": \"A collection of project docs.\",\n  \"icon\": {\n    \"name\": \"string\",\n    \"type\": \"string\",\n    \"browserLink\": \"https://cdn.coda.io/icons/png/color/icon-32.png\"\n  },\n  \"createdAt\": \"2018-04-11T00:18:57.946Z\",\n  \"canEdit\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a4fb8ab5-b471-47b0-a439-a04b1e60012d",
+              "name": "The request parameters did not conform to expectations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders",
+                    ":folderId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "folderId",
+                      "description": "(Required) ID of the folder."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 400,\n  \"statusMessage\": \"Bad Request\",\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "516e9758-ef0d-400b-9d63-565dd588278d",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders",
+                    ":folderId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "folderId",
+                      "description": "(Required) ID of the folder."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "470c764a-4bd8-4aab-a656-027f58ab9d32",
+              "name": "The API token does not grant access to this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders",
+                    ":folderId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "folderId",
+                      "description": "(Required) ID of the folder."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 403,\n  \"statusMessage\": \"Forbidden\",\n  \"message\": \"Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6fd6b159-6225-4b9f-b5d0-200c8f50482a",
+              "name": "The resource could not be located with the current API token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders",
+                    ":folderId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "folderId",
+                      "description": "(Required) ID of the folder."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"statusMessage\": \"Not Found\",\n  \"message\": \"Not Found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c4b0e200-4271-4b7e-a5ab-f98e509ef9ad",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders",
+                    ":folderId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "folderId",
+                      "description": "(Required) ID of the folder."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "45ec6fda-478c-43f6-b12c-e5b8132ff38a",
+          "name": "Update folder",
+          "request": {
+            "name": "Update folder",
+            "description": {
+              "content": "Updates metadata for a folder.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "folders",
+                ":folderId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "folderId",
+                  "description": "(Required) ID of the folder."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a4f80b64-893a-4a4c-a01b-257d074ce9c7",
+              "name": "The updated folder.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders",
+                    ":folderId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "folderId",
+                      "description": "(Required) ID of the folder."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Projects\",\n  \"description\": \"A collection of project docs.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fl-1Ab234\",\n  \"type\": \"folder\",\n  \"name\": \"Projects\",\n  \"browserLink\": \"https://coda.io/folders/fl-1Ab234\",\n  \"workspace\": {\n    \"id\": \"ws-1Ab234\",\n    \"type\": \"workspace\",\n    \"browserLink\": \"https://coda.io/docs?workspaceId=ws-1Ab234\",\n    \"organizationId\": \"org-2Bc456\",\n    \"name\": \"My workspace\"\n  },\n  \"description\": \"A collection of project docs.\",\n  \"icon\": {\n    \"name\": \"string\",\n    \"type\": \"string\",\n    \"browserLink\": \"https://cdn.coda.io/icons/png/color/icon-32.png\"\n  },\n  \"createdAt\": \"2018-04-11T00:18:57.946Z\",\n  \"canEdit\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d1dede26-a0aa-4029-a063-5cc3fae95bc0",
+              "name": "The request parameters did not conform to expectations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders",
+                    ":folderId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "folderId",
+                      "description": "(Required) ID of the folder."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Projects\",\n  \"description\": \"A collection of project docs.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 400,\n  \"statusMessage\": \"Bad Request\",\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3ef8a1db-2d1a-4a7f-acba-eaf4c57fd892",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders",
+                    ":folderId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "folderId",
+                      "description": "(Required) ID of the folder."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Projects\",\n  \"description\": \"A collection of project docs.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b4a92e39-8b1c-44b9-8f3d-326923f74ae3",
+              "name": "The API token does not grant access to this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders",
+                    ":folderId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "folderId",
+                      "description": "(Required) ID of the folder."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Projects\",\n  \"description\": \"A collection of project docs.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 403,\n  \"statusMessage\": \"Forbidden\",\n  \"message\": \"Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0b8cc7c1-f4cd-4f2e-a00b-6baa8451edd9",
+              "name": "The resource could not be located with the current API token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders",
+                    ":folderId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "folderId",
+                      "description": "(Required) ID of the folder."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Projects\",\n  \"description\": \"A collection of project docs.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"statusMessage\": \"Not Found\",\n  \"message\": \"Not Found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fd3059f5-da04-473d-8682-59e0b815b8fd",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders",
+                    ":folderId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "folderId",
+                      "description": "(Required) ID of the folder."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Projects\",\n  \"description\": \"A collection of project docs.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e5005310-646d-401b-ba69-8c34018a6790",
+          "name": "Delete folder",
+          "request": {
+            "name": "Delete folder",
+            "description": {
+              "content": "Deletes a folder. The folder must be empty (contain no docs).\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "folders",
+                ":folderId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "folderId",
+                  "description": "(Required) ID of the folder."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "31bc784d-bb03-4212-80eb-bf611bce8b1c",
+              "name": "Folder was successfully deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders",
+                    ":folderId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "folderId",
+                      "description": "(Required) ID of the folder."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "da67cff8-dd55-4f76-890d-6e38ebac2b68",
+              "name": "The request parameters did not conform to expectations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders",
+                    ":folderId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "folderId",
+                      "description": "(Required) ID of the folder."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 400,\n  \"statusMessage\": \"Bad Request\",\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dfd46b1d-44e2-4380-872b-e0833868e2e5",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders",
+                    ":folderId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "folderId",
+                      "description": "(Required) ID of the folder."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f5c673ea-74af-4a18-82c1-b6875e214f77",
+              "name": "The API token does not grant access to this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders",
+                    ":folderId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "folderId",
+                      "description": "(Required) ID of the folder."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 403,\n  \"statusMessage\": \"Forbidden\",\n  \"message\": \"Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "107fcf12-6e0a-47d8-a0d4-2642e4daef4a",
+              "name": "The resource could not be located with the current API token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders",
+                    ":folderId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "folderId",
+                      "description": "(Required) ID of the folder."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"statusMessage\": \"Not Found\",\n  \"message\": \"Not Found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0e6ddbc3-9347-46f3-b641-5a3409f7003f",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "folders",
+                    ":folderId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "folderId",
+                      "description": "(Required) ID of the folder."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://coda.io/apis/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "35d09289-dd77-49f0-bac6-e5ef44ab4d4f",
+    "name": "Coda Account Folders API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nThe Coda API is a RESTful API that lets you programmatically interact with Coda docs:\n\n * List and search Coda docs\n * Create new docs and copy existing ones\n * Share and publish docs\n * Discover pages, tables, formulas, and controls\n * Read, insert, upsert, update, and delete rows\n\nIf you plan to integrate Coda with an AI tool, you may also want to consider using the\n[Coda MCP server](https://coda.io/resources/guides/getting_started_with_coda_mcp). It's optimized for LLM usage\npatterns and often exposes more granular methods for accessing and modifying data.\n\n# Getting Started\n\nOur [Getting Started Guide](https://coda.io/@oleg/getting-started-guide-coda-api) helps you learn the\nbasic of working with the API and shows a few ways you can use it. Check it out, and learn how to:\n\n- Read data from Coda tables and write back to them\n- Build a one-way sync from one Coda doc to another\n- Automate reminders\n- Sync your Google Calendar to Coda\n\n# Changes to the API\n\nAs we update and release newer versions of the API, we reserve the right to remove\nolder APIs and functionality with a 3-month deprecation notice. We will post about such changes as well as announce\nnew features in the [Developers Central](https://community.coda.io/c/developers-central) section of our Community,\nand update the [API updates](https://coda.io/api-updates) doc.\n\n# Using the API\n\nCoda's REST API is designed to be straightforward to use. You can use the language and platform of your choice to\nmake requests. To get a feel for the API, you can also use a tool like [Postman](https://www.getpostman.com/) or\n[Insomnia](https://insomnia.rest/).\n\n## API Endpoint\n\nThis API uses a base path of `https://coda.io/apis/v1`.\n\n## Resource IDs and Links\n\nEach resource instance retrieved via the API has the following fields:\n\n  - `id`: The resource's immutable ID, which can be used to refer to it within its context\n  - `type`: The type of resource, useful for identifying it in a heterogenous collection of results\n  - `href`: A fully qualified URI that can be used to refer to and get the latest details on the resource\n\nMost resources can be queried by their name or ID. We recommend sticking with IDs where possible, as names are\nfragile and prone to being changed by your doc's users.\n\n### List Endpoints\n\nEndpoints supporting listing of resources have the following fields:\n\n  - `items`: An array containing the listed resources, limited by the `limit` or `pageToken` query parameters\n  - `nextPageLink`: If more results are available, an API link to the next page of results\n  - `nextPageToken`: If more results are available, a page token that can be passed into the `pageToken` query parameter\n\n**The maximum page size may change at any time, and may be different for different endpoints.** Please do not rely on it\nfor any behavior of your application. If you pass a `limit` parameter that is larger than our maximum allowed limit,\nwe will only return as many results as our maximum limit. You should look for the presence of the `nextPageToken` on the\nresponse to see if there are more results available, rather than relying on a result set that matches your provided limit.\n\nTo fetch a subsequent page of results, pass the `pageToken` parameter. Set this parameter to the value given to you as the `nextPageToken`\nin a page response. If no value is provided, there are no more results available. You only need to pass the `pageToken` to get\nthe next page of results, you don't need to pass any of the parameters from your original request, as they are all\nimplied by the `pageToken`. Any other parameters provided alongside a `pageToken` will be ignored.\n\n### Doc IDs\n\nWhile most object IDs will have to be discovered via the API, you may find yourself frequently wanting to get the\nID of a specific Coda doc.\n\nHere's a handy tool that will extract it for you. (See if you can find the pattern!)\n\n<form>\n  <fieldset style=\"margin: 0px 25px 25px 25px; display: inline;\">\n    <legend>Doc ID Extractor</legend>\n    <input type=\"text\" id=\"de_docUrl\" placeholder=\"Paste in a Coda doc URL\"\n           style=\"width: 250px; padding: 8px; margin-right: 20px;\" />\n    <span>\n      Your doc ID is:&nbsp;&nbsp;&nbsp;\n      <input id=\"de_docId\" readonly=\"true\"\n             style=\"width: 150px; padding: 8px; font-family: monospace; border: 1px dashed gray;\" />\n  </fieldset>\n</form>\n\n## Rate Limiting\n\nThe Coda API sets a reasonable limit on the number of requests that can be made per minute. Once this limit is\nreached, calls to the API will start returning errors with an HTTP status code of 429.\n\nThese are the current rate limits. They are subject to change at any time without notice. For robustness,\nall API scripts should check for HTTP 429 Too Many Requests errors and back off and retry the request.\nLimits apply per-user across all endpoints that share the same limit and across all docs.\n\nReading data (with the exceptions below): {{READ_RATE_LIMIT}}\n<br/>\nWriting data (POST/PUT/PATCH): {{WRITE_RATE_LIMIT}}\n<br/>\nWriting doc content data (POST/PUT/PATCH): {{WRITE_DOC_CONTENT_RATE_LIMIT}}\n<br/>\nListing docs: {{LIST_DOCS_RATE_LIMIT}}\n<br/>\nReading analytics: {{ANALYTICS_RATE_LIMIT}}\n\n## Consistency\n\nWhile edits made in Coda are shared with other collaborators in real-time, it can take a few seconds for them to\nbecome available via the API. You may also notice that changes made via the API, such as updating a row, are not\nimmediate. These endpoints all return an HTTP 202 status code, instead of a standard 200, indicating that the\nedit has been accepted and queued for processing. This generally takes a few seconds, and the edit may fail if\ninvalid. Each such edit will return a `requestId` in the response, and you can pass this `requestId` to the\n[`#getMutationStatus`](#operation/getMutationStatus) endpoint to find out if it has been applied.\n\nSimilarly, when you get doc data from the API (rows, pages, columns, etc), the data you receive comes from\nthe most recent \"snapshot\" of the doc, which might be slightly stale relative to the data you observe in\nyour browser. If you want to ensure that the data you receive is up to date and are ok getting an error if not,\nyou can pass this header in your request: `X-Coda-Doc-Version: latest`. If the API's view of the doc is\nnot up to date, the API will return an HTTP 400 response.\n\n## Volatile Formulas\n\nCoda exposes a number of \"volatile\" formulas, as as `Today()`, `Now()`, and `User()`. When used in a live Coda\ndoc, these formulas affect what's visible in realtime, tailored to the current user.\n\nSuch formulas behave differently with the API. Time-based values may only be current to the last edit made to the\ndoc. User-based values may be blank or invalid.\n\n## Free and Paid Workspaces\n\nWe make the Coda API available to all of our users free of charge, in both free and paid workspaces. However, API\nusage is subject to the role of the user associated with the API token in the workspace applicable to each API\nrequest. What this means is:\n\n- For the [`#createDoc`](#operation/createDoc) endpoint specifically, the owner of the API token must be a Doc\n  Maker (or Admin) in the workspace. If the \"Any member can create docs\" option in enabled in the workspace\n  settings, they can be an Editor and will get auto-promoted to Doc Maker upon using this endpoint. Lastly, if in\n  addition, the API key owner matches the \"Auto-join email domains\" setting, they will be auto-added to the\n  workspace and promoted to Doc Maker upon using this endpoint\n\nThis behavior applies to the API as well as any integrations that may use it, such as Zapier.\n\n## Examples\n\nTo help you get started, this documentation provides code examples in Python, Unix shell, and Google Apps Script.\nThese examples are based on a simple doc that looks something like this:\n\n![](https://cdn.coda.io/external/img/api_example_doc.png)\n\n### Python examples\n\nThese examples use Python 3.6+. If you don't already have the `requests` module, use `pip` or `easy_install` to\nget it.\n\n### Shell examples\n\nThe shell examples are intended to be run in a Unix shell. If you're on Windows, you will need to install\n[WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10).\n\nThese examples use the standard cURL utility to pull from the API, and then process it with `jq` to extract and\nformat example output. If you don't already have it, you can either [install it](https://stedolan.github.io/jq/)\nor run the command without it to see the raw JSON output.\n\n### Google Apps Script examples\n\n![](https://cdn.coda.io/external/img/api_gas.png)\n\n[Google Apps Script](https://script.google.com/) makes it easy to write code in a JavaScript-like syntax and\neasily access many Google products with built-in libraries. You can set up your scripts to run periodically,\nwhich makes it a good environment for writing tools without maintaining your own server.\n\nCoda provides a library for Google Apps Script. To use it, go into `Resources -> Libraries...` and enter the\nfollowing library ID: `15IQuWOk8MqT50FDWomh57UqWGH23gjsWVWYFms3ton6L-UHmefYHS9Vl`. If you want to see the\nlibrary's source code, it's available\n[here](https://script.google.com/d/15IQuWOk8MqT50FDWomh57UqWGH23gjsWVWYFms3ton6L-UHmefYHS9Vl/edit).\n\nGoogle provides autocomplete for API functions as well as generated docs. You can access these docs via the\nLibraries dialog by clicking on the library name. Required parameters that would be included in the URL path are\npositional arguments in each of these functions, followed by the request body, if applicable. All remaining\nparameters can be specified in the options object.\n\n## OpenAPI/Swagger Spec\n\nIn an effort to standardize our API and make it accessible, we offer an OpenAPI 3.0 specification:\n\n- [OpenAPI 3.0 spec - YAML](https://coda.io/apis/v1/openapi.yaml)\n- [OpenAPI 3.0 spec - JSON](https://coda.io/apis/v1/openapi.json)\n\n#### Postman collection\n\nTo get started with prototyping the API quickly in Postman, you can use one of links above to import the Coda API\ninto a collection. You'll then need to set the [appropriate header](#section/Authentication) and environment\nvariables.\n\n## Client libraries\n\nWe do not currently support client libraries apart from Google Apps Script. To work with the Coda API, you can\neither use standard network libraries for your language, or use the appropriate Swagger Generator tool to\nauto-generate Coda API client libraries for your language of choice. We do not provide any guarantees that these\nautogenerated libraries are compatible with our API (e.g., some libraries may not work with Bearer\nauthentication).\n\n### OpenAPI 3.0\n\n[Swagger Generator 3](https://generator3.swagger.io/) (that link takes you to the docs for the generator API) can\ngenerate client libraries for [these languages](https://generator3.swagger.io/v2/clients). It's relatively new\nand thus only has support for a limited set of languages at this time.\n\n### Third-party client libraries\n\nSome members of our amazing community have written libraries to work with our API. These aren't officially\nsupported by Coda, but are listed here for convenience. (Please let us know if you've written a library and would\nlike to have it included here.)\n\n- [PHP](https://github.com/danielstieber/CodaPHP) by Daniel Stieber\n- [Node-RED](https://github.com/serene-water/node-red-contrib-coda-io) by Mori Sugimoto\n- [NodeJS](https://www.npmjs.com/package/coda-js) by Parker McMullin\n- [Ruby](https://rubygems.org/gems/coda_docs/) by Carlos Muñoz at Getro\n- [Python](https://github.com/Blasterai/codaio) by Mikhail Beliansky\n- [Go](https://github.com/artsafin/coda-schema-generator) by Artur Safin\n\n\nContact Support:\n Name: API Support\n Email: help+api@coda.io",
+      "type": "text/plain"
+    }
+  }
+}

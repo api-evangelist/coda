@@ -1,0 +1,3732 @@
+{
+  "item": [
+    {
+      "id": "cf39c318-5215-421b-9e16-b942e4c950b0",
+      "name": "Rows",
+      "description": {
+        "content": "You'll likely use this part of the API the most. These endpoints let you retrieve row data from tables in Coda as well as create, upsert, update, and delete them. Most of these endpoints work for both base tables and views, but for inserting/upsering rows, you must use a base table.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "44dcd5f8-74b3-41b8-a43d-ebecca120026",
+          "name": "List table rows",
+          "request": {
+            "name": "List table rows",
+            "description": {
+              "content": "Returns a list of rows in a table.\n### Value results\nThe `valueFormat` parameter dictates in what format the API should return values for individual cells.\n* `simple` (default): Returns cell values as the following JSON values: `string`, `number`, or `boolean`. Array values (like multiselects) are returned as comma-delimited strings.\n* `simpleWithArrays`: Singleton values are returned as `simple`. Array values are returned as JSON arrays and the values within are `simple` values (including nested arrays).\n* `rich`: If applicable, returns many values with further encoding, allowing API users to have lossless access to data in Coda.\n  * For `text` values, returns data in Markdown syntax. If the text field is simple text (e.g. has no formatting),\n  the field will be fully escaped with triple-ticks. E.g\n  `\n  ```This is plain text```\n  `\n  * For `currency`, `lookup`, `image`, `person` and `hyperlink` values, the value will be encoded in [JSON-LD](https://json-ld.org/) format.\n\n```\n  // Currency\n  {\n    \"@context\": \"http://schema.org\",\n    \"@type\": \"MonetaryAmount\",\n    \"currency\": \"USD\",\n    \"amount\": 42.42\n  }\n\n  // Lookup\n  {\n    \"@context\": \"http://schema.org\",\n    \"@type\": \"StructuredValue\",\n    \"additionalType\": \"row\",\n    \"name\": \"Row Name\",\n    \"rowId\": \"i-123456789\",\n    \"tableId\": \"grid-123456789\",\n    \"tableUrl\": \"https://coda.io/d/_d123456789/grid-123456789\",\n    \"url\": \"https://coda.io/d/_d123456789/grid-123456789#_r42\",\n  }\n\n  // Hyperlink\n  {\n    \"@context\": \"http://schema.org\",\n    \"@type\": \"WebPage\",\n    \"name\": \"Coda\",\n    \"url\": \"https://coda.io\"\n  }\n\n  // Image\n  {\n    \"@context\": \"http://schema.org\",\n    \"@type\": \"ImageObject\",\n    \"name\": \"Coda logo\",\n    \"url\": \"https://coda.io/logo.jpg\"\n  }\n\n  // People\n  {\n    \"@context\": \"http://schema.org\",\n    \"@type\": \"Person\",\n    \"name\": \"Art Vandalay\",\n    \"email\": \"art@vandalayindustries.com\"\n  }\n```\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "docs",
+                ":docId",
+                "tables",
+                ":tableIdOrName",
+                "rows"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "<string>",
+                  "description": "Query used to filter returned rows, specified as `<column_id_or_name>:<value>`. If you'd like to use a column name instead of an ID, you must quote it (e.g., `\"My Column\":123`). Also note that `value` is a JSON value; if you'd like to use a string, you must surround it in quotes (e.g., `\"groceries\"`).\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "sortBy",
+                  "value": "<string>",
+                  "description": "Specifies the sort order of the rows returned. If left unspecified, rows are returned by creation time ascending. \"UpdatedAt\" sort ordering is the order of rows based upon when they were last updated. This does not include updates to calculated values. \"Natural\" sort ordering is the order that the rows appear in the table view in the application. This ordering is only meaningfully defined for rows that are visible (unfiltered). Because of this, using this sort order will imply visibleOnly=true, that is, to only return visible rows. If you pass sortBy=natural and visibleOnly=false explicitly, this will result in a Bad Request error as this condition cannot be satisfied.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "useColumnNames",
+                  "value": "<boolean>",
+                  "description": "Use column names instead of column IDs in the returned output. This is generally discouraged as it is fragile. If columns are renamed, code using original names may throw errors.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "valueFormat",
+                  "value": "<string>",
+                  "description": "The format that cell values are returned as."
+                },
+                {
+                  "disabled": false,
+                  "key": "visibleOnly",
+                  "value": "<boolean>",
+                  "description": "If true, returns only visible rows and columns for the table."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25",
+                  "description": "Maximum number of results to return in this query."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>",
+                  "description": "An opaque token used to fetch the next page of results."
+                },
+                {
+                  "disabled": false,
+                  "key": "syncToken",
+                  "value": "<string>",
+                  "description": "An opaque token returned from a previous call that can be used to return results that are relevant to the query since the call where the syncToken was generated.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "docId",
+                  "description": "(Required) ID of the doc."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "tableIdOrName",
+                  "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "815b29f4-6da1-42bd-9151-5f625db36ef6",
+              "name": "List of rows in the table.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "c-tuVwxYz:\"Apple\""
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "useColumnNames",
+                      "value": "true"
+                    },
+                    {
+                      "key": "valueFormat",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "visibleOnly",
+                      "value": "true"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    },
+                    {
+                      "key": "syncToken",
+                      "value": "eyJsaW1pd"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"i-tuVwxYz\",\n      \"type\": \"row\",\n      \"href\": \"https://coda.io/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/rows/i-RstUv-W\",\n      \"name\": \"Apple\",\n      \"index\": 7,\n      \"browserLink\": \"https://coda.io/d/_dAbCDeFGH#Teams-and-Tasks_tpqRst-U/_rui-tuVwxYz\",\n      \"createdAt\": \"2018-04-11T00:18:57.946Z\",\n      \"updatedAt\": \"2018-04-11T00:18:57.946Z\",\n      \"values\": {\n        \"c-tuVwxYz\": \"Apple\",\n        \"c-bCdeFgh\": [\n          \"$12.34\",\n          \"$56.78\"\n        ]\n      }\n    },\n    {\n      \"id\": \"i-tuVwxYz\",\n      \"type\": \"row\",\n      \"href\": \"https://coda.io/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/rows/i-RstUv-W\",\n      \"name\": \"Apple\",\n      \"index\": 7,\n      \"browserLink\": \"https://coda.io/d/_dAbCDeFGH#Teams-and-Tasks_tpqRst-U/_rui-tuVwxYz\",\n      \"createdAt\": \"2018-04-11T00:18:57.946Z\",\n      \"updatedAt\": \"2018-04-11T00:18:57.946Z\",\n      \"values\": {\n        \"c-tuVwxYz\": \"Apple\",\n        \"c-bCdeFgh\": [\n          \"$12.34\",\n          \"$56.78\"\n        ]\n      }\n    }\n  ],\n  \"href\": \"https://coda.io/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/rows?limit=20\",\n  \"nextPageToken\": \"eyJsaW1pd\",\n  \"nextPageLink\": \"https://coda.io/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/rows?pageToken=eyJsaW1pd\",\n  \"nextSyncToken\": \"eyJsaW1pd\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "db8fd081-193a-4c91-9d54-fac0b7a3d7cc",
+              "name": "The request parameters did not conform to expectations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "c-tuVwxYz:\"Apple\""
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "useColumnNames",
+                      "value": "true"
+                    },
+                    {
+                      "key": "valueFormat",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "visibleOnly",
+                      "value": "true"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    },
+                    {
+                      "key": "syncToken",
+                      "value": "eyJsaW1pd"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 400,\n  \"statusMessage\": \"Bad Request\",\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0be5bc61-ffef-40b1-9abc-8b415c6f1891",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "c-tuVwxYz:\"Apple\""
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "useColumnNames",
+                      "value": "true"
+                    },
+                    {
+                      "key": "valueFormat",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "visibleOnly",
+                      "value": "true"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    },
+                    {
+                      "key": "syncToken",
+                      "value": "eyJsaW1pd"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "65d76199-bb10-4b71-ab59-4e5d6be23936",
+              "name": "The API token does not grant access to this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "c-tuVwxYz:\"Apple\""
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "useColumnNames",
+                      "value": "true"
+                    },
+                    {
+                      "key": "valueFormat",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "visibleOnly",
+                      "value": "true"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    },
+                    {
+                      "key": "syncToken",
+                      "value": "eyJsaW1pd"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 403,\n  \"statusMessage\": \"Forbidden\",\n  \"message\": \"Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f36d7fd0-e700-4d27-b34e-b5fdbfdc81fc",
+              "name": "The resource could not be located with the current API token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "c-tuVwxYz:\"Apple\""
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "useColumnNames",
+                      "value": "true"
+                    },
+                    {
+                      "key": "valueFormat",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "visibleOnly",
+                      "value": "true"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    },
+                    {
+                      "key": "syncToken",
+                      "value": "eyJsaW1pd"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"statusMessage\": \"Not Found\",\n  \"message\": \"Not Found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ab0fc3eb-cfe4-4914-9b5c-f3305bf5d0be",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "c-tuVwxYz:\"Apple\""
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "useColumnNames",
+                      "value": "true"
+                    },
+                    {
+                      "key": "valueFormat",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "visibleOnly",
+                      "value": "true"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    },
+                    {
+                      "key": "syncToken",
+                      "value": "eyJsaW1pd"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "172e3d4f-e3b7-472d-acb1-e2fe092791c1",
+          "name": "Insert/upsert rows",
+          "request": {
+            "name": "Insert/upsert rows",
+            "description": {
+              "content": "Inserts rows into a table, optionally updating existing rows if any upsert key columns are provided. This endpoint will always return a 202, so long as the doc and table exist and are accessible (and the update is structurally valid). Row inserts/upserts are generally processed within several seconds. Note: this endpoint only works for base tables, not views.\nWhen upserting, if multiple rows match the specified key column(s), they will all be updated with the specified value.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "docs",
+                ":docId",
+                "tables",
+                ":tableIdOrName",
+                "rows"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "disableParsing",
+                  "value": "<boolean>",
+                  "description": "If true, the API will not attempt to parse the data in any way."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "docId",
+                  "description": "(Required) ID of the doc."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "tableIdOrName",
+                  "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rows\": [\n    {\n      \"cells\": [\n        {\n          \"column\": \"<string>\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"column\": \"<string>\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    {\n      \"cells\": [\n        {\n          \"column\": \"<string>\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"column\": \"<string>\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    }\n  ],\n  \"keyColumns\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "20926e6e-41a5-4076-90e0-157a194b64e6",
+              "name": "A result indicating that the upsert was queued for processing.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "disableParsing",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rows\": [\n    {\n      \"cells\": [\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    {\n      \"cells\": [\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    }\n  ],\n  \"keyColumns\": [\n    \"c-bCdeFgh\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"requestId\": \"abc-123-def-456\",\n  \"addedRowIds\": [\n    \"i-bCdeFgh\",\n    \"i-CdEfgHi\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "607f12d8-72cd-4c92-91f9-cda8246aedc0",
+              "name": "The request parameters did not conform to expectations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "disableParsing",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rows\": [\n    {\n      \"cells\": [\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    {\n      \"cells\": [\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    }\n  ],\n  \"keyColumns\": [\n    \"c-bCdeFgh\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 400,\n  \"statusMessage\": \"Bad Request\",\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8d16e0aa-1dad-4b0c-9990-e8c2b240b489",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "disableParsing",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rows\": [\n    {\n      \"cells\": [\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    {\n      \"cells\": [\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    }\n  ],\n  \"keyColumns\": [\n    \"c-bCdeFgh\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bc90feb0-2d14-433c-845b-d5de1b8bb28c",
+              "name": "The API token does not grant access to this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "disableParsing",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rows\": [\n    {\n      \"cells\": [\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    {\n      \"cells\": [\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    }\n  ],\n  \"keyColumns\": [\n    \"c-bCdeFgh\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 403,\n  \"statusMessage\": \"Forbidden\",\n  \"message\": \"Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d2b71325-339a-4e80-a5b6-c5fd59007d59",
+              "name": "The resource could not be located with the current API token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "disableParsing",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rows\": [\n    {\n      \"cells\": [\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    {\n      \"cells\": [\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    }\n  ],\n  \"keyColumns\": [\n    \"c-bCdeFgh\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"statusMessage\": \"Not Found\",\n  \"message\": \"Not Found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ac4c137d-0e7d-495a-a18a-9459132d8503",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "disableParsing",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rows\": [\n    {\n      \"cells\": [\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    {\n      \"cells\": [\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"column\": \"c-tuVwxYz\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    }\n  ],\n  \"keyColumns\": [\n    \"c-bCdeFgh\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9822f2d5-7ed5-43bc-9768-b8ea84c81451",
+          "name": "Delete multiple rows",
+          "request": {
+            "name": "Delete multiple rows",
+            "description": {
+              "content": "Deletes the specified rows from the table or view. This endpoint will always return a 202. Row deletions are generally processed within several seconds.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "docs",
+                ":docId",
+                "tables",
+                ":tableIdOrName",
+                "rows"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "docId",
+                  "description": "(Required) ID of the doc."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "tableIdOrName",
+                  "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rowIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9c073bd9-5b95-49a8-896d-f5a341ff8c8a",
+              "name": "A result indicating that the delete was queued for processing.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rowIds\": [\n    \"i-bCdeFgh\",\n    \"i-CdEfgHi\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"requestId\": \"abc-123-def-456\",\n  \"rowIds\": [\n    \"i-bCdeFgh\",\n    \"i-CdEfgHi\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "39f582ea-f6ff-4300-b125-0211c56ffc8f",
+              "name": "The request parameters did not conform to expectations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rowIds\": [\n    \"i-bCdeFgh\",\n    \"i-CdEfgHi\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 400,\n  \"statusMessage\": \"Bad Request\",\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5ca87180-73de-4d80-939a-2105bf9fa802",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rowIds\": [\n    \"i-bCdeFgh\",\n    \"i-CdEfgHi\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "29cca6d9-1e6b-44d3-87c5-90f3d4ee5674",
+              "name": "The API token does not grant access to this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rowIds\": [\n    \"i-bCdeFgh\",\n    \"i-CdEfgHi\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 403,\n  \"statusMessage\": \"Forbidden\",\n  \"message\": \"Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "839b2628-f249-4537-a011-8d2be8209021",
+              "name": "The resource could not be located with the current API token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rowIds\": [\n    \"i-bCdeFgh\",\n    \"i-CdEfgHi\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"statusMessage\": \"Not Found\",\n  \"message\": \"Not Found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "969d918e-2fad-4f7f-b8ab-dce4db9d8acd",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rowIds\": [\n    \"i-bCdeFgh\",\n    \"i-CdEfgHi\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cd34a378-390d-457b-8f3f-f6b97489f191",
+          "name": "Get a row",
+          "request": {
+            "name": "Get a row",
+            "description": {
+              "content": "Returns details about a row in a table.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "docs",
+                ":docId",
+                "tables",
+                ":tableIdOrName",
+                "rows",
+                ":rowIdOrName"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "useColumnNames",
+                  "value": "<boolean>",
+                  "description": "Use column names instead of column IDs in the returned output. This is generally discouraged as it is fragile. If columns are renamed, code using original names may throw errors.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "valueFormat",
+                  "value": "<string>",
+                  "description": "The format that cell values are returned as."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "docId",
+                  "description": "(Required) ID of the doc."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "tableIdOrName",
+                  "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "rowIdOrName",
+                  "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "da9e5c08-9460-457b-ad34-bcd91d77637a",
+              "name": "Info about a row. If this row was retrieved by name, only one matching row will be returned, with no guarantees as to which one it is.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows",
+                    ":rowIdOrName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "useColumnNames",
+                      "value": "true"
+                    },
+                    {
+                      "key": "valueFormat",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rowIdOrName",
+                      "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"i-tuVwxYz\",\n  \"type\": \"row\",\n  \"href\": \"https://coda.io/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/rows/i-RstUv-W\",\n  \"name\": \"Apple\",\n  \"index\": 7,\n  \"browserLink\": \"https://coda.io/d/_dAbCDeFGH#Teams-and-Tasks_tpqRst-U/_rui-tuVwxYz\",\n  \"createdAt\": \"2018-04-11T00:18:57.946Z\",\n  \"updatedAt\": \"2018-04-11T00:18:57.946Z\",\n  \"values\": {\n    \"key_0\": \"$12.34\",\n    \"key_1\": \"$12.34\",\n    \"key_2\": \"$12.34\"\n  },\n  \"parent\": {\n    \"id\": \"grid-pqRst-U\",\n    \"type\": \"table\",\n    \"tableType\": \"table\",\n    \"browserLink\": \"https://coda.io/d/_dAbCDeFGH/#Teams-and-Tasks_tpqRst-U\",\n    \"href\": \"https://coda.io/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U\",\n    \"name\": \"Tasks\",\n    \"parent\": {\n      \"id\": \"canvas-IjkLmnO\",\n      \"type\": \"page\",\n      \"browserLink\": \"https://coda.io/d/_dAbCDeFGH/Launch-Status_sumnO\",\n      \"href\": \"https://coda.io/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO\",\n      \"name\": \"Launch Status\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4f27aef4-d947-4e86-a5d8-53a0770166fa",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows",
+                    ":rowIdOrName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "useColumnNames",
+                      "value": "true"
+                    },
+                    {
+                      "key": "valueFormat",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rowIdOrName",
+                      "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bbb5f560-9300-40fc-8d22-4e9e6673a8db",
+              "name": "The API token does not grant access to this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows",
+                    ":rowIdOrName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "useColumnNames",
+                      "value": "true"
+                    },
+                    {
+                      "key": "valueFormat",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rowIdOrName",
+                      "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 403,\n  \"statusMessage\": \"Forbidden\",\n  \"message\": \"Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "519b3bed-a2e5-49f9-8782-21b95275d35d",
+              "name": "The resource could not be located with the current API token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows",
+                    ":rowIdOrName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "useColumnNames",
+                      "value": "true"
+                    },
+                    {
+                      "key": "valueFormat",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rowIdOrName",
+                      "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"statusMessage\": \"Not Found\",\n  \"message\": \"Not Found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bd9b7069-c332-40f8-bfb1-a7c9c85ec662",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows",
+                    ":rowIdOrName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "useColumnNames",
+                      "value": "true"
+                    },
+                    {
+                      "key": "valueFormat",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rowIdOrName",
+                      "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4cf97682-ef8b-4bd1-93c2-aae1be0f65b7",
+          "name": "Update row",
+          "request": {
+            "name": "Update row",
+            "description": {
+              "content": "Updates the specified row in the table. This endpoint will always return a 202, so long as the row exists and is accessible (and the update is structurally valid). Row updates are generally processed within several seconds. When updating using a name as opposed to an ID, an arbitrary row will be affected.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "docs",
+                ":docId",
+                "tables",
+                ":tableIdOrName",
+                "rows",
+                ":rowIdOrName"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "disableParsing",
+                  "value": "<boolean>",
+                  "description": "If true, the API will not attempt to parse the data in any way."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "docId",
+                  "description": "(Required) ID of the doc."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "tableIdOrName",
+                  "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "rowIdOrName",
+                  "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"row\": {\n    \"cells\": [\n      {\n        \"column\": \"<string>\",\n        \"value\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"column\": \"<string>\",\n        \"value\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0b9902aa-a20c-4b6d-81ed-427cdc428b70",
+              "name": "A result indicating that the update was queued for processing.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows",
+                    ":rowIdOrName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "disableParsing",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rowIdOrName",
+                      "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"row\": {\n    \"cells\": [\n      {\n        \"column\": \"c-tuVwxYz\",\n        \"value\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"column\": \"c-tuVwxYz\",\n        \"value\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"i-tuVwxYz\",\n  \"requestId\": \"abc-123-def-456\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1cd85fe9-b0b4-48df-bca8-ac4d91893a6c",
+              "name": "The request parameters did not conform to expectations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows",
+                    ":rowIdOrName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "disableParsing",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rowIdOrName",
+                      "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"row\": {\n    \"cells\": [\n      {\n        \"column\": \"c-tuVwxYz\",\n        \"value\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"column\": \"c-tuVwxYz\",\n        \"value\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 400,\n  \"statusMessage\": \"Bad Request\",\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8f8bfc16-c6a9-4e8f-aaf1-b012bfed8242",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows",
+                    ":rowIdOrName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "disableParsing",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rowIdOrName",
+                      "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"row\": {\n    \"cells\": [\n      {\n        \"column\": \"c-tuVwxYz\",\n        \"value\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"column\": \"c-tuVwxYz\",\n        \"value\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "908f1a86-73ea-423a-be3c-1474add5177f",
+              "name": "The API token does not grant access to this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows",
+                    ":rowIdOrName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "disableParsing",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rowIdOrName",
+                      "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"row\": {\n    \"cells\": [\n      {\n        \"column\": \"c-tuVwxYz\",\n        \"value\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"column\": \"c-tuVwxYz\",\n        \"value\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 403,\n  \"statusMessage\": \"Forbidden\",\n  \"message\": \"Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fbff87e7-6cc8-4b1e-be3d-d604ffd7f180",
+              "name": "The resource could not be located with the current API token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows",
+                    ":rowIdOrName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "disableParsing",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rowIdOrName",
+                      "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"row\": {\n    \"cells\": [\n      {\n        \"column\": \"c-tuVwxYz\",\n        \"value\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"column\": \"c-tuVwxYz\",\n        \"value\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"statusMessage\": \"Not Found\",\n  \"message\": \"Not Found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4b442659-679f-4c7c-9900-b6c40c4367a2",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows",
+                    ":rowIdOrName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "disableParsing",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rowIdOrName",
+                      "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"row\": {\n    \"cells\": [\n      {\n        \"column\": \"c-tuVwxYz\",\n        \"value\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"column\": \"c-tuVwxYz\",\n        \"value\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fc1f662b-ec08-48b1-9f3e-4a0cd73f10e6",
+          "name": "Delete row",
+          "request": {
+            "name": "Delete row",
+            "description": {
+              "content": "Deletes the specified row from the table or view. This endpoint will always return a 202, so long as the row exists and is accessible (and the update is structurally valid). Row deletions are generally processed within several seconds. When deleting using a name as opposed to an ID, an arbitrary row will be removed.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "docs",
+                ":docId",
+                "tables",
+                ":tableIdOrName",
+                "rows",
+                ":rowIdOrName"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "docId",
+                  "description": "(Required) ID of the doc."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "tableIdOrName",
+                  "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "rowIdOrName",
+                  "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f54f8d64-b141-4319-b872-9322bd8d3126",
+              "name": "A result indicating that the deletion was queued for processing.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows",
+                    ":rowIdOrName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rowIdOrName",
+                      "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"i-tuVwxYz\",\n  \"requestId\": \"abc-123-def-456\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f7b5183a-0f3f-460d-9d21-daa71c6d7372",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows",
+                    ":rowIdOrName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rowIdOrName",
+                      "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "37eec449-5459-4184-aa55-6028503c2cd0",
+              "name": "The API token does not grant access to this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows",
+                    ":rowIdOrName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rowIdOrName",
+                      "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 403,\n  \"statusMessage\": \"Forbidden\",\n  \"message\": \"Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2a9b1e2a-5c1b-4489-a31d-b766f7b4eb12",
+              "name": "The resource could not be located with the current API token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows",
+                    ":rowIdOrName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rowIdOrName",
+                      "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"statusMessage\": \"Not Found\",\n  \"message\": \"Not Found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8d276f20-6aa2-4b00-a8a2-e76c7d13eb4d",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows",
+                    ":rowIdOrName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rowIdOrName",
+                      "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "28062193-4df5-4b1c-9aae-37b996ba9e93",
+          "name": "Push a button",
+          "request": {
+            "name": "Push a button",
+            "description": {
+              "content": "Pushes a button on a row in a table.\nAuthorization note: This action is available to API tokens that are authorized to write to the table. However, the underlying button can perform any action on the document, including writing to other tables and performing Pack actions.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "docs",
+                ":docId",
+                "tables",
+                ":tableIdOrName",
+                "rows",
+                ":rowIdOrName",
+                "buttons",
+                ":columnIdOrName"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "docId",
+                  "description": "(Required) ID of the doc."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "tableIdOrName",
+                  "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "rowIdOrName",
+                  "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "columnIdOrName",
+                  "description": "(Required) ID or name of the column. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "93529dc6-eb24-471c-9af6-a792c2f7409e",
+              "name": "A result indicating that the push button action was queued for processing.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows",
+                    ":rowIdOrName",
+                    "buttons",
+                    ":columnIdOrName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rowIdOrName",
+                      "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "columnIdOrName",
+                      "description": "(Required) ID or name of the column. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"columnId\": \"i-tuVwxYz\",\n  \"requestId\": \"abc-123-def-456\",\n  \"rowId\": \"i-tuVwxYz\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3b2c008c-91ab-4023-9c8c-c716fda8ddb7",
+              "name": "The request parameters did not conform to expectations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows",
+                    ":rowIdOrName",
+                    "buttons",
+                    ":columnIdOrName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rowIdOrName",
+                      "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "columnIdOrName",
+                      "description": "(Required) ID or name of the column. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 400,\n  \"statusMessage\": \"Bad Request\",\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6843e059-967a-4de7-ae28-f071f369208a",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows",
+                    ":rowIdOrName",
+                    "buttons",
+                    ":columnIdOrName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rowIdOrName",
+                      "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "columnIdOrName",
+                      "description": "(Required) ID or name of the column. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7964b4e2-8453-4449-b6c3-a5331fdc0ba6",
+              "name": "The API token does not grant access to this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows",
+                    ":rowIdOrName",
+                    "buttons",
+                    ":columnIdOrName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rowIdOrName",
+                      "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "columnIdOrName",
+                      "description": "(Required) ID or name of the column. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 403,\n  \"statusMessage\": \"Forbidden\",\n  \"message\": \"Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3d0c8d5b-89ed-4ea3-99ce-61500b94f7eb",
+              "name": "The resource could not be located with the current API token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows",
+                    ":rowIdOrName",
+                    "buttons",
+                    ":columnIdOrName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rowIdOrName",
+                      "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "columnIdOrName",
+                      "description": "(Required) ID or name of the column. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"statusMessage\": \"Not Found\",\n  \"message\": \"Not Found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ce5d8780-bca2-4bb8-b9d5-08b47ef1a239",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "tables",
+                    ":tableIdOrName",
+                    "rows",
+                    ":rowIdOrName",
+                    "buttons",
+                    ":columnIdOrName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tableIdOrName",
+                      "description": "(Required) ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rowIdOrName",
+                      "description": "(Required) ID or name of the row. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If there are multiple rows with the same value in the identifying column, an arbitrary one will be selected.\n"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "columnIdOrName",
+                      "description": "(Required) ID or name of the column. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://coda.io/apis/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "84461e21-a547-4f37-b715-48a0d67506d7",
+    "name": "Coda Account Rows API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nThe Coda API is a RESTful API that lets you programmatically interact with Coda docs:\n\n * List and search Coda docs\n * Create new docs and copy existing ones\n * Share and publish docs\n * Discover pages, tables, formulas, and controls\n * Read, insert, upsert, update, and delete rows\n\nIf you plan to integrate Coda with an AI tool, you may also want to consider using the\n[Coda MCP server](https://coda.io/resources/guides/getting_started_with_coda_mcp). It's optimized for LLM usage\npatterns and often exposes more granular methods for accessing and modifying data.\n\n# Getting Started\n\nOur [Getting Started Guide](https://coda.io/@oleg/getting-started-guide-coda-api) helps you learn the\nbasic of working with the API and shows a few ways you can use it. Check it out, and learn how to:\n\n- Read data from Coda tables and write back to them\n- Build a one-way sync from one Coda doc to another\n- Automate reminders\n- Sync your Google Calendar to Coda\n\n# Changes to the API\n\nAs we update and release newer versions of the API, we reserve the right to remove\nolder APIs and functionality with a 3-month deprecation notice. We will post about such changes as well as announce\nnew features in the [Developers Central](https://community.coda.io/c/developers-central) section of our Community,\nand update the [API updates](https://coda.io/api-updates) doc.\n\n# Using the API\n\nCoda's REST API is designed to be straightforward to use. You can use the language and platform of your choice to\nmake requests. To get a feel for the API, you can also use a tool like [Postman](https://www.getpostman.com/) or\n[Insomnia](https://insomnia.rest/).\n\n## API Endpoint\n\nThis API uses a base path of `https://coda.io/apis/v1`.\n\n## Resource IDs and Links\n\nEach resource instance retrieved via the API has the following fields:\n\n  - `id`: The resource's immutable ID, which can be used to refer to it within its context\n  - `type`: The type of resource, useful for identifying it in a heterogenous collection of results\n  - `href`: A fully qualified URI that can be used to refer to and get the latest details on the resource\n\nMost resources can be queried by their name or ID. We recommend sticking with IDs where possible, as names are\nfragile and prone to being changed by your doc's users.\n\n### List Endpoints\n\nEndpoints supporting listing of resources have the following fields:\n\n  - `items`: An array containing the listed resources, limited by the `limit` or `pageToken` query parameters\n  - `nextPageLink`: If more results are available, an API link to the next page of results\n  - `nextPageToken`: If more results are available, a page token that can be passed into the `pageToken` query parameter\n\n**The maximum page size may change at any time, and may be different for different endpoints.** Please do not rely on it\nfor any behavior of your application. If you pass a `limit` parameter that is larger than our maximum allowed limit,\nwe will only return as many results as our maximum limit. You should look for the presence of the `nextPageToken` on the\nresponse to see if there are more results available, rather than relying on a result set that matches your provided limit.\n\nTo fetch a subsequent page of results, pass the `pageToken` parameter. Set this parameter to the value given to you as the `nextPageToken`\nin a page response. If no value is provided, there are no more results available. You only need to pass the `pageToken` to get\nthe next page of results, you don't need to pass any of the parameters from your original request, as they are all\nimplied by the `pageToken`. Any other parameters provided alongside a `pageToken` will be ignored.\n\n### Doc IDs\n\nWhile most object IDs will have to be discovered via the API, you may find yourself frequently wanting to get the\nID of a specific Coda doc.\n\nHere's a handy tool that will extract it for you. (See if you can find the pattern!)\n\n<form>\n  <fieldset style=\"margin: 0px 25px 25px 25px; display: inline;\">\n    <legend>Doc ID Extractor</legend>\n    <input type=\"text\" id=\"de_docUrl\" placeholder=\"Paste in a Coda doc URL\"\n           style=\"width: 250px; padding: 8px; margin-right: 20px;\" />\n    <span>\n      Your doc ID is:&nbsp;&nbsp;&nbsp;\n      <input id=\"de_docId\" readonly=\"true\"\n             style=\"width: 150px; padding: 8px; font-family: monospace; border: 1px dashed gray;\" />\n  </fieldset>\n</form>\n\n## Rate Limiting\n\nThe Coda API sets a reasonable limit on the number of requests that can be made per minute. Once this limit is\nreached, calls to the API will start returning errors with an HTTP status code of 429.\n\nThese are the current rate limits. They are subject to change at any time without notice. For robustness,\nall API scripts should check for HTTP 429 Too Many Requests errors and back off and retry the request.\nLimits apply per-user across all endpoints that share the same limit and across all docs.\n\nReading data (with the exceptions below): {{READ_RATE_LIMIT}}\n<br/>\nWriting data (POST/PUT/PATCH): {{WRITE_RATE_LIMIT}}\n<br/>\nWriting doc content data (POST/PUT/PATCH): {{WRITE_DOC_CONTENT_RATE_LIMIT}}\n<br/>\nListing docs: {{LIST_DOCS_RATE_LIMIT}}\n<br/>\nReading analytics: {{ANALYTICS_RATE_LIMIT}}\n\n## Consistency\n\nWhile edits made in Coda are shared with other collaborators in real-time, it can take a few seconds for them to\nbecome available via the API. You may also notice that changes made via the API, such as updating a row, are not\nimmediate. These endpoints all return an HTTP 202 status code, instead of a standard 200, indicating that the\nedit has been accepted and queued for processing. This generally takes a few seconds, and the edit may fail if\ninvalid. Each such edit will return a `requestId` in the response, and you can pass this `requestId` to the\n[`#getMutationStatus`](#operation/getMutationStatus) endpoint to find out if it has been applied.\n\nSimilarly, when you get doc data from the API (rows, pages, columns, etc), the data you receive comes from\nthe most recent \"snapshot\" of the doc, which might be slightly stale relative to the data you observe in\nyour browser. If you want to ensure that the data you receive is up to date and are ok getting an error if not,\nyou can pass this header in your request: `X-Coda-Doc-Version: latest`. If the API's view of the doc is\nnot up to date, the API will return an HTTP 400 response.\n\n## Volatile Formulas\n\nCoda exposes a number of \"volatile\" formulas, as as `Today()`, `Now()`, and `User()`. When used in a live Coda\ndoc, these formulas affect what's visible in realtime, tailored to the current user.\n\nSuch formulas behave differently with the API. Time-based values may only be current to the last edit made to the\ndoc. User-based values may be blank or invalid.\n\n## Free and Paid Workspaces\n\nWe make the Coda API available to all of our users free of charge, in both free and paid workspaces. However, API\nusage is subject to the role of the user associated with the API token in the workspace applicable to each API\nrequest. What this means is:\n\n- For the [`#createDoc`](#operation/createDoc) endpoint specifically, the owner of the API token must be a Doc\n  Maker (or Admin) in the workspace. If the \"Any member can create docs\" option in enabled in the workspace\n  settings, they can be an Editor and will get auto-promoted to Doc Maker upon using this endpoint. Lastly, if in\n  addition, the API key owner matches the \"Auto-join email domains\" setting, they will be auto-added to the\n  workspace and promoted to Doc Maker upon using this endpoint\n\nThis behavior applies to the API as well as any integrations that may use it, such as Zapier.\n\n## Examples\n\nTo help you get started, this documentation provides code examples in Python, Unix shell, and Google Apps Script.\nThese examples are based on a simple doc that looks something like this:\n\n![](https://cdn.coda.io/external/img/api_example_doc.png)\n\n### Python examples\n\nThese examples use Python 3.6+. If you don't already have the `requests` module, use `pip` or `easy_install` to\nget it.\n\n### Shell examples\n\nThe shell examples are intended to be run in a Unix shell. If you're on Windows, you will need to install\n[WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10).\n\nThese examples use the standard cURL utility to pull from the API, and then process it with `jq` to extract and\nformat example output. If you don't already have it, you can either [install it](https://stedolan.github.io/jq/)\nor run the command without it to see the raw JSON output.\n\n### Google Apps Script examples\n\n![](https://cdn.coda.io/external/img/api_gas.png)\n\n[Google Apps Script](https://script.google.com/) makes it easy to write code in a JavaScript-like syntax and\neasily access many Google products with built-in libraries. You can set up your scripts to run periodically,\nwhich makes it a good environment for writing tools without maintaining your own server.\n\nCoda provides a library for Google Apps Script. To use it, go into `Resources -> Libraries...` and enter the\nfollowing library ID: `15IQuWOk8MqT50FDWomh57UqWGH23gjsWVWYFms3ton6L-UHmefYHS9Vl`. If you want to see the\nlibrary's source code, it's available\n[here](https://script.google.com/d/15IQuWOk8MqT50FDWomh57UqWGH23gjsWVWYFms3ton6L-UHmefYHS9Vl/edit).\n\nGoogle provides autocomplete for API functions as well as generated docs. You can access these docs via the\nLibraries dialog by clicking on the library name. Required parameters that would be included in the URL path are\npositional arguments in each of these functions, followed by the request body, if applicable. All remaining\nparameters can be specified in the options object.\n\n## OpenAPI/Swagger Spec\n\nIn an effort to standardize our API and make it accessible, we offer an OpenAPI 3.0 specification:\n\n- [OpenAPI 3.0 spec - YAML](https://coda.io/apis/v1/openapi.yaml)\n- [OpenAPI 3.0 spec - JSON](https://coda.io/apis/v1/openapi.json)\n\n#### Postman collection\n\nTo get started with prototyping the API quickly in Postman, you can use one of links above to import the Coda API\ninto a collection. You'll then need to set the [appropriate header](#section/Authentication) and environment\nvariables.\n\n## Client libraries\n\nWe do not currently support client libraries apart from Google Apps Script. To work with the Coda API, you can\neither use standard network libraries for your language, or use the appropriate Swagger Generator tool to\nauto-generate Coda API client libraries for your language of choice. We do not provide any guarantees that these\nautogenerated libraries are compatible with our API (e.g., some libraries may not work with Bearer\nauthentication).\n\n### OpenAPI 3.0\n\n[Swagger Generator 3](https://generator3.swagger.io/) (that link takes you to the docs for the generator API) can\ngenerate client libraries for [these languages](https://generator3.swagger.io/v2/clients). It's relatively new\nand thus only has support for a limited set of languages at this time.\n\n### Third-party client libraries\n\nSome members of our amazing community have written libraries to work with our API. These aren't officially\nsupported by Coda, but are listed here for convenience. (Please let us know if you've written a library and would\nlike to have it included here.)\n\n- [PHP](https://github.com/danielstieber/CodaPHP) by Daniel Stieber\n- [Node-RED](https://github.com/serene-water/node-red-contrib-coda-io) by Mori Sugimoto\n- [NodeJS](https://www.npmjs.com/package/coda-js) by Parker McMullin\n- [Ruby](https://rubygems.org/gems/coda_docs/) by Carlos Muñoz at Getro\n- [Python](https://github.com/Blasterai/codaio) by Mikhail Beliansky\n- [Go](https://github.com/artsafin/coda-schema-generator) by Artur Safin\n\n\nContact Support:\n Name: API Support\n Email: help+api@coda.io",
+      "type": "text/plain"
+    }
+  }
+}

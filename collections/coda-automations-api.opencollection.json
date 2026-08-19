@@ -1,0 +1,53 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Coda Account Automations API",
+    "version": "1.5.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Automations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Trigger automation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/docs/:docId/hooks/automation/:ruleId",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "ruleId",
+                "value": "grid-auto-b3Jmey6jBS",
+                "type": "path",
+                "description": "ID of the automation rule."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Triggers webhook-invoked automation"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

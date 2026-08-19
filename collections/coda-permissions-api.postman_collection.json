@@ -1,0 +1,2687 @@
+{
+  "item": [
+    {
+      "id": "6acb8d5c-5e13-4eb4-bfe4-3c9df890b6c8",
+      "name": "Permissions",
+      "description": {
+        "content": "This API lets you manage sharing and permissions for your docs.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3d146f66-6744-4c49-8a45-50c4bfb6fab1",
+          "name": "Get sharing metadata",
+          "request": {
+            "name": "Get sharing metadata",
+            "description": {
+              "content": "Returns metadata associated with sharing for this Coda doc.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "docs",
+                ":docId",
+                "acl",
+                "metadata"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "docId",
+                  "description": "(Required) ID of the doc."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cefe063f-c94b-40d8-8bd1-53988a4622b9",
+              "name": "Metadata associated with sharing permissions for a doc.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "metadata"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"canShare\": false,\n  \"canShareWithWorkspace\": false,\n  \"canShareWithOrg\": true,\n  \"canCopy\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cfc0830d-1865-4bb6-a6b0-0fad66a097c3",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "metadata"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dca30564-7cda-4699-98ef-f640c9fe0d7f",
+              "name": "The API token does not grant access to this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "metadata"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 403,\n  \"statusMessage\": \"Forbidden\",\n  \"message\": \"Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eef1a12e-b44f-49d5-8782-1ea00a2360d3",
+              "name": "The resource could not be located with the current API token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "metadata"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"statusMessage\": \"Not Found\",\n  \"message\": \"Not Found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e2ff6aa-bd4b-4b09-bf9b-919be973d4a8",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "metadata"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6fe1b115-a0bf-42a6-8d04-70ff5ce2a848",
+          "name": "List permissions",
+          "request": {
+            "name": "List permissions",
+            "description": {
+              "content": "Returns a list of permissions for this Coda doc.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "docs",
+                ":docId",
+                "acl",
+                "permissions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25",
+                  "description": "Maximum number of results to return in this query."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>",
+                  "description": "An opaque token used to fetch the next page of results."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "docId",
+                  "description": "(Required) ID of the doc."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6ad86454-71bb-4e6b-a706-ceba67f45a67",
+              "name": "List of permissions for a doc.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "permissions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"principal\": {\n        \"email\": \"example@domain.com\",\n        \"type\": \"email\"\n      },\n      \"id\": \"string\",\n      \"access\": \"none\"\n    },\n    {\n      \"principal\": {\n        \"email\": \"example@domain.com\",\n        \"type\": \"email\"\n      },\n      \"id\": \"string\",\n      \"access\": \"comment\"\n    }\n  ],\n  \"href\": \"https://coda.io/apis/v1/docs/AbCDeFGH/acl?limit=20\",\n  \"nextPageToken\": \"eyJsaW1pd\",\n  \"nextPageLink\": \"https://coda.io/apis/v1/docs/AbCDeFGH/acl?pageToken=eyJsaW1pd\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6a4395a4-fa00-4d49-9ec5-6e5e312c9a24",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "permissions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "55dc637b-db4e-4e6a-a816-5241ecf5742c",
+              "name": "The API token does not grant access to this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "permissions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 403,\n  \"statusMessage\": \"Forbidden\",\n  \"message\": \"Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "920b6ac9-3283-4bd4-9aa0-dce9018b303f",
+              "name": "The resource could not be located with the current API token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "permissions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"statusMessage\": \"Not Found\",\n  \"message\": \"Not Found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d1038246-6919-4163-a0d5-87bf71a803cf",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "permissions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "eyJsaW1pd"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cc2f0870-a05d-4e57-b7f4-f05c9fa7484d",
+          "name": "Add permission",
+          "request": {
+            "name": "Add permission",
+            "description": {
+              "content": "Adds a new permission to the doc.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "docs",
+                ":docId",
+                "acl",
+                "permissions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "docId",
+                  "description": "(Required) ID of the doc."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"access\": \"<string>\",\n  \"principal\": {\n    \"email\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"suppressEmail\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "af2cd0ac-00e3-4f36-abb1-7d29f4134226",
+              "name": "Confirmation that the request was applied.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "permissions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"access\": \"<string>\",\n  \"principal\": {\n    \"email\": \"example@domain.com\",\n    \"type\": \"<string>\"\n  },\n  \"suppressEmail\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bb703244-ef6a-4001-9eb8-842242e8b39c",
+              "name": "The request parameters did not conform to expectations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "permissions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"access\": \"<string>\",\n  \"principal\": {\n    \"email\": \"example@domain.com\",\n    \"type\": \"<string>\"\n  },\n  \"suppressEmail\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 400,\n  \"statusMessage\": \"Bad Request\",\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b06db397-9f20-4f3f-a79c-2c2248439763",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "permissions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"access\": \"<string>\",\n  \"principal\": {\n    \"email\": \"example@domain.com\",\n    \"type\": \"<string>\"\n  },\n  \"suppressEmail\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "469342be-f782-4455-97f9-9423552b6c79",
+              "name": "The API token does not grant access to this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "permissions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"access\": \"<string>\",\n  \"principal\": {\n    \"email\": \"example@domain.com\",\n    \"type\": \"<string>\"\n  },\n  \"suppressEmail\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 403,\n  \"statusMessage\": \"Forbidden\",\n  \"message\": \"Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e608ff73-8221-456d-8ed0-c510dd457e94",
+              "name": "The resource could not be located with the current API token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "permissions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"access\": \"<string>\",\n  \"principal\": {\n    \"email\": \"example@domain.com\",\n    \"type\": \"<string>\"\n  },\n  \"suppressEmail\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"statusMessage\": \"Not Found\",\n  \"message\": \"Not Found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6f382656-d896-4a15-8e84-3f578c6033cd",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "permissions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"access\": \"<string>\",\n  \"principal\": {\n    \"email\": \"example@domain.com\",\n    \"type\": \"<string>\"\n  },\n  \"suppressEmail\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9bb8041c-40b7-47ca-bdb7-8ec97e0011eb",
+          "name": "Delete permission",
+          "request": {
+            "name": "Delete permission",
+            "description": {
+              "content": "Deletes an existing permission.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "docs",
+                ":docId",
+                "acl",
+                "permissions",
+                ":permissionId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "docId",
+                  "description": "(Required) ID of the doc."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "permissionId",
+                  "description": "(Required) ID of a permission on a doc."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f6dfa02c-eaf5-45ac-afcf-d57b5fe02271",
+              "name": "Confirmation that the request was applied.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "permissions",
+                    ":permissionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "permissionId",
+                      "description": "(Required) ID of a permission on a doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "29b174f2-ca9b-465c-870d-4779d814f78d",
+              "name": "The request parameters did not conform to expectations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "permissions",
+                    ":permissionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "permissionId",
+                      "description": "(Required) ID of a permission on a doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 400,\n  \"statusMessage\": \"Bad Request\",\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "36d71013-e350-4c2e-bc87-b80afe61a5bb",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "permissions",
+                    ":permissionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "permissionId",
+                      "description": "(Required) ID of a permission on a doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4f20e256-532e-4d2c-a478-6f38ace79894",
+              "name": "The API token does not grant access to this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "permissions",
+                    ":permissionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "permissionId",
+                      "description": "(Required) ID of a permission on a doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 403,\n  \"statusMessage\": \"Forbidden\",\n  \"message\": \"Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "768bced9-f8a2-4a77-9b4a-b296cd89c158",
+              "name": "The resource could not be located with the current API token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "permissions",
+                    ":permissionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "permissionId",
+                      "description": "(Required) ID of a permission on a doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"statusMessage\": \"Not Found\",\n  \"message\": \"Not Found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7a61cece-6382-427e-a371-6679bae7dcec",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "permissions",
+                    ":permissionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "permissionId",
+                      "description": "(Required) ID of a permission on a doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "91b0f3db-499c-41f9-867a-7b7d9a0a84ab",
+          "name": "Search principals",
+          "request": {
+            "name": "Search principals",
+            "description": {
+              "content": "Searches for user and group principals matching the query that this doc can be shared with.\nAt most 20 results will be returned for both users and groups. If no query is given then no results are returned.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "docs",
+                ":docId",
+                "acl",
+                "principals",
+                "search"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "<string>",
+                  "description": "Search term used to filter down results."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "docId",
+                  "description": "(Required) ID of the doc."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5f66ae6c-b907-47a9-8d4b-79450d3788c4",
+              "name": "Search results for the given query.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "principals",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "Supercalifragilisticexpialidocious"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"users\": [\n    {\n      \"name\": \"John Doe\",\n      \"loginId\": \"user@example.com\",\n      \"type\": \"user\",\n      \"pictureLink\": \"https://cdn.coda.io/avatars/default_avatar.png\"\n    },\n    {\n      \"name\": \"John Doe\",\n      \"loginId\": \"user@example.com\",\n      \"type\": \"user\",\n      \"pictureLink\": \"https://cdn.coda.io/avatars/default_avatar.png\"\n    }\n  ],\n  \"groups\": [\n    {\n      \"groupId\": \"grp-6SM9xrKcqW\",\n      \"groupName\": \"Marketing team\",\n      \"type\": \"group\"\n    },\n    {\n      \"groupId\": \"grp-6SM9xrKcqW\",\n      \"groupName\": \"Marketing team\",\n      \"type\": \"group\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3792f51a-d645-472b-87a2-be79dc853c08",
+              "name": "The request parameters did not conform to expectations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "principals",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "Supercalifragilisticexpialidocious"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 400,\n  \"statusMessage\": \"Bad Request\",\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "70921ce6-5042-4caa-90c0-fcd8088fcd6d",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "principals",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "Supercalifragilisticexpialidocious"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a7049b2b-5e7e-4f16-8a22-0e367baa4634",
+              "name": "The API token does not grant access to this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "principals",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "Supercalifragilisticexpialidocious"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 403,\n  \"statusMessage\": \"Forbidden\",\n  \"message\": \"Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ce1e897b-ff80-45d7-a69d-1c59ccbe9796",
+              "name": "The resource could not be located with the current API token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "principals",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "Supercalifragilisticexpialidocious"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"statusMessage\": \"Not Found\",\n  \"message\": \"Not Found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1da5b459-e846-4b46-8478-2acc7161a0c6",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "principals",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "Supercalifragilisticexpialidocious"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "798eb113-ade5-4982-8810-1f34366c2d41",
+          "name": "Get ACL settings",
+          "request": {
+            "name": "Get ACL settings",
+            "description": {
+              "content": "Returns settings associated with ACLs for this Coda doc.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "docs",
+                ":docId",
+                "acl",
+                "settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "docId",
+                  "description": "(Required) ID of the doc."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c6f52ff0-54e5-4436-839c-bfb45c31bb7f",
+              "name": "Settings associated with access control for a doc.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"allowEditorsToChangePermissions\": false,\n  \"allowCopying\": false,\n  \"allowViewersToRequestEditing\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cd12e68b-5e69-46a5-b204-6dbda9caf435",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e729b3fd-afb5-40b2-abe4-4f9ab6992d28",
+              "name": "The API token does not grant access to this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 403,\n  \"statusMessage\": \"Forbidden\",\n  \"message\": \"Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "643407aa-7b95-4dbd-8c66-a979de985ba2",
+              "name": "The resource could not be located with the current API token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"statusMessage\": \"Not Found\",\n  \"message\": \"Not Found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "345f1e03-eaa0-4f9d-ae29-24dc640970d1",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7cf0a92a-8a15-4c08-8bf9-a5d36b33df73",
+          "name": "Update ACL settings",
+          "request": {
+            "name": "Update ACL settings",
+            "description": {
+              "content": "Update settings associated with ACLs for this Coda doc.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "docs",
+                ":docId",
+                "acl",
+                "settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "docId",
+                  "description": "(Required) ID of the doc."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"allowEditorsToChangePermissions\": \"<boolean>\",\n  \"allowCopying\": \"<boolean>\",\n  \"allowViewersToRequestEditing\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7d8ea913-7906-441b-b6fc-f5c325e92bb2",
+              "name": "Settings associated with access control for a doc.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"allowEditorsToChangePermissions\": \"<boolean>\",\n  \"allowCopying\": \"<boolean>\",\n  \"allowViewersToRequestEditing\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"allowEditorsToChangePermissions\": false,\n  \"allowCopying\": false,\n  \"allowViewersToRequestEditing\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fb203460-b91a-4264-b82b-8e6a1b275674",
+              "name": "The API token is invalid or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"allowEditorsToChangePermissions\": \"<boolean>\",\n  \"allowCopying\": \"<boolean>\",\n  \"allowViewersToRequestEditing\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"statusMessage\": \"Unauthorized\",\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c95cce73-5512-4f5e-9b9c-6c4bd7264850",
+              "name": "The API token does not grant access to this resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"allowEditorsToChangePermissions\": \"<boolean>\",\n  \"allowCopying\": \"<boolean>\",\n  \"allowViewersToRequestEditing\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 403,\n  \"statusMessage\": \"Forbidden\",\n  \"message\": \"Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7fb2e55e-721a-4f94-9564-c3bea8fa7c5b",
+              "name": "The resource could not be located with the current API token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"allowEditorsToChangePermissions\": \"<boolean>\",\n  \"allowCopying\": \"<boolean>\",\n  \"allowViewersToRequestEditing\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"statusMessage\": \"Not Found\",\n  \"message\": \"Not Found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "085706e7-5208-4361-a582-a5ef6d97915c",
+              "name": "The client has sent too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "docs",
+                    ":docId",
+                    "acl",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "docId",
+                      "description": "(Required) ID of the doc."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"allowEditorsToChangePermissions\": \"<boolean>\",\n  \"allowCopying\": \"<boolean>\",\n  \"allowViewersToRequestEditing\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"statusMessage\": \"Too Many Requests\",\n  \"message\": \"Too Many Requests\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://coda.io/apis/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "3538e7d9-85bd-426f-97d5-b524bbe318a9",
+    "name": "Coda Account Permissions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nThe Coda API is a RESTful API that lets you programmatically interact with Coda docs:\n\n * List and search Coda docs\n * Create new docs and copy existing ones\n * Share and publish docs\n * Discover pages, tables, formulas, and controls\n * Read, insert, upsert, update, and delete rows\n\nIf you plan to integrate Coda with an AI tool, you may also want to consider using the\n[Coda MCP server](https://coda.io/resources/guides/getting_started_with_coda_mcp). It's optimized for LLM usage\npatterns and often exposes more granular methods for accessing and modifying data.\n\n# Getting Started\n\nOur [Getting Started Guide](https://coda.io/@oleg/getting-started-guide-coda-api) helps you learn the\nbasic of working with the API and shows a few ways you can use it. Check it out, and learn how to:\n\n- Read data from Coda tables and write back to them\n- Build a one-way sync from one Coda doc to another\n- Automate reminders\n- Sync your Google Calendar to Coda\n\n# Changes to the API\n\nAs we update and release newer versions of the API, we reserve the right to remove\nolder APIs and functionality with a 3-month deprecation notice. We will post about such changes as well as announce\nnew features in the [Developers Central](https://community.coda.io/c/developers-central) section of our Community,\nand update the [API updates](https://coda.io/api-updates) doc.\n\n# Using the API\n\nCoda's REST API is designed to be straightforward to use. You can use the language and platform of your choice to\nmake requests. To get a feel for the API, you can also use a tool like [Postman](https://www.getpostman.com/) or\n[Insomnia](https://insomnia.rest/).\n\n## API Endpoint\n\nThis API uses a base path of `https://coda.io/apis/v1`.\n\n## Resource IDs and Links\n\nEach resource instance retrieved via the API has the following fields:\n\n  - `id`: The resource's immutable ID, which can be used to refer to it within its context\n  - `type`: The type of resource, useful for identifying it in a heterogenous collection of results\n  - `href`: A fully qualified URI that can be used to refer to and get the latest details on the resource\n\nMost resources can be queried by their name or ID. We recommend sticking with IDs where possible, as names are\nfragile and prone to being changed by your doc's users.\n\n### List Endpoints\n\nEndpoints supporting listing of resources have the following fields:\n\n  - `items`: An array containing the listed resources, limited by the `limit` or `pageToken` query parameters\n  - `nextPageLink`: If more results are available, an API link to the next page of results\n  - `nextPageToken`: If more results are available, a page token that can be passed into the `pageToken` query parameter\n\n**The maximum page size may change at any time, and may be different for different endpoints.** Please do not rely on it\nfor any behavior of your application. If you pass a `limit` parameter that is larger than our maximum allowed limit,\nwe will only return as many results as our maximum limit. You should look for the presence of the `nextPageToken` on the\nresponse to see if there are more results available, rather than relying on a result set that matches your provided limit.\n\nTo fetch a subsequent page of results, pass the `pageToken` parameter. Set this parameter to the value given to you as the `nextPageToken`\nin a page response. If no value is provided, there are no more results available. You only need to pass the `pageToken` to get\nthe next page of results, you don't need to pass any of the parameters from your original request, as they are all\nimplied by the `pageToken`. Any other parameters provided alongside a `pageToken` will be ignored.\n\n### Doc IDs\n\nWhile most object IDs will have to be discovered via the API, you may find yourself frequently wanting to get the\nID of a specific Coda doc.\n\nHere's a handy tool that will extract it for you. (See if you can find the pattern!)\n\n<form>\n  <fieldset style=\"margin: 0px 25px 25px 25px; display: inline;\">\n    <legend>Doc ID Extractor</legend>\n    <input type=\"text\" id=\"de_docUrl\" placeholder=\"Paste in a Coda doc URL\"\n           style=\"width: 250px; padding: 8px; margin-right: 20px;\" />\n    <span>\n      Your doc ID is:&nbsp;&nbsp;&nbsp;\n      <input id=\"de_docId\" readonly=\"true\"\n             style=\"width: 150px; padding: 8px; font-family: monospace; border: 1px dashed gray;\" />\n  </fieldset>\n</form>\n\n## Rate Limiting\n\nThe Coda API sets a reasonable limit on the number of requests that can be made per minute. Once this limit is\nreached, calls to the API will start returning errors with an HTTP status code of 429.\n\nThese are the current rate limits. They are subject to change at any time without notice. For robustness,\nall API scripts should check for HTTP 429 Too Many Requests errors and back off and retry the request.\nLimits apply per-user across all endpoints that share the same limit and across all docs.\n\nReading data (with the exceptions below): {{READ_RATE_LIMIT}}\n<br/>\nWriting data (POST/PUT/PATCH): {{WRITE_RATE_LIMIT}}\n<br/>\nWriting doc content data (POST/PUT/PATCH): {{WRITE_DOC_CONTENT_RATE_LIMIT}}\n<br/>\nListing docs: {{LIST_DOCS_RATE_LIMIT}}\n<br/>\nReading analytics: {{ANALYTICS_RATE_LIMIT}}\n\n## Consistency\n\nWhile edits made in Coda are shared with other collaborators in real-time, it can take a few seconds for them to\nbecome available via the API. You may also notice that changes made via the API, such as updating a row, are not\nimmediate. These endpoints all return an HTTP 202 status code, instead of a standard 200, indicating that the\nedit has been accepted and queued for processing. This generally takes a few seconds, and the edit may fail if\ninvalid. Each such edit will return a `requestId` in the response, and you can pass this `requestId` to the\n[`#getMutationStatus`](#operation/getMutationStatus) endpoint to find out if it has been applied.\n\nSimilarly, when you get doc data from the API (rows, pages, columns, etc), the data you receive comes from\nthe most recent \"snapshot\" of the doc, which might be slightly stale relative to the data you observe in\nyour browser. If you want to ensure that the data you receive is up to date and are ok getting an error if not,\nyou can pass this header in your request: `X-Coda-Doc-Version: latest`. If the API's view of the doc is\nnot up to date, the API will return an HTTP 400 response.\n\n## Volatile Formulas\n\nCoda exposes a number of \"volatile\" formulas, as as `Today()`, `Now()`, and `User()`. When used in a live Coda\ndoc, these formulas affect what's visible in realtime, tailored to the current user.\n\nSuch formulas behave differently with the API. Time-based values may only be current to the last edit made to the\ndoc. User-based values may be blank or invalid.\n\n## Free and Paid Workspaces\n\nWe make the Coda API available to all of our users free of charge, in both free and paid workspaces. However, API\nusage is subject to the role of the user associated with the API token in the workspace applicable to each API\nrequest. What this means is:\n\n- For the [`#createDoc`](#operation/createDoc) endpoint specifically, the owner of the API token must be a Doc\n  Maker (or Admin) in the workspace. If the \"Any member can create docs\" option in enabled in the workspace\n  settings, they can be an Editor and will get auto-promoted to Doc Maker upon using this endpoint. Lastly, if in\n  addition, the API key owner matches the \"Auto-join email domains\" setting, they will be auto-added to the\n  workspace and promoted to Doc Maker upon using this endpoint\n\nThis behavior applies to the API as well as any integrations that may use it, such as Zapier.\n\n## Examples\n\nTo help you get started, this documentation provides code examples in Python, Unix shell, and Google Apps Script.\nThese examples are based on a simple doc that looks something like this:\n\n![](https://cdn.coda.io/external/img/api_example_doc.png)\n\n### Python examples\n\nThese examples use Python 3.6+. If you don't already have the `requests` module, use `pip` or `easy_install` to\nget it.\n\n### Shell examples\n\nThe shell examples are intended to be run in a Unix shell. If you're on Windows, you will need to install\n[WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10).\n\nThese examples use the standard cURL utility to pull from the API, and then process it with `jq` to extract and\nformat example output. If you don't already have it, you can either [install it](https://stedolan.github.io/jq/)\nor run the command without it to see the raw JSON output.\n\n### Google Apps Script examples\n\n![](https://cdn.coda.io/external/img/api_gas.png)\n\n[Google Apps Script](https://script.google.com/) makes it easy to write code in a JavaScript-like syntax and\neasily access many Google products with built-in libraries. You can set up your scripts to run periodically,\nwhich makes it a good environment for writing tools without maintaining your own server.\n\nCoda provides a library for Google Apps Script. To use it, go into `Resources -> Libraries...` and enter the\nfollowing library ID: `15IQuWOk8MqT50FDWomh57UqWGH23gjsWVWYFms3ton6L-UHmefYHS9Vl`. If you want to see the\nlibrary's source code, it's available\n[here](https://script.google.com/d/15IQuWOk8MqT50FDWomh57UqWGH23gjsWVWYFms3ton6L-UHmefYHS9Vl/edit).\n\nGoogle provides autocomplete for API functions as well as generated docs. You can access these docs via the\nLibraries dialog by clicking on the library name. Required parameters that would be included in the URL path are\npositional arguments in each of these functions, followed by the request body, if applicable. All remaining\nparameters can be specified in the options object.\n\n## OpenAPI/Swagger Spec\n\nIn an effort to standardize our API and make it accessible, we offer an OpenAPI 3.0 specification:\n\n- [OpenAPI 3.0 spec - YAML](https://coda.io/apis/v1/openapi.yaml)\n- [OpenAPI 3.0 spec - JSON](https://coda.io/apis/v1/openapi.json)\n\n#### Postman collection\n\nTo get started with prototyping the API quickly in Postman, you can use one of links above to import the Coda API\ninto a collection. You'll then need to set the [appropriate header](#section/Authentication) and environment\nvariables.\n\n## Client libraries\n\nWe do not currently support client libraries apart from Google Apps Script. To work with the Coda API, you can\neither use standard network libraries for your language, or use the appropriate Swagger Generator tool to\nauto-generate Coda API client libraries for your language of choice. We do not provide any guarantees that these\nautogenerated libraries are compatible with our API (e.g., some libraries may not work with Bearer\nauthentication).\n\n### OpenAPI 3.0\n\n[Swagger Generator 3](https://generator3.swagger.io/) (that link takes you to the docs for the generator API) can\ngenerate client libraries for [these languages](https://generator3.swagger.io/v2/clients). It's relatively new\nand thus only has support for a limited set of languages at this time.\n\n### Third-party client libraries\n\nSome members of our amazing community have written libraries to work with our API. These aren't officially\nsupported by Coda, but are listed here for convenience. (Please let us know if you've written a library and would\nlike to have it included here.)\n\n- [PHP](https://github.com/danielstieber/CodaPHP) by Daniel Stieber\n- [Node-RED](https://github.com/serene-water/node-red-contrib-coda-io) by Mori Sugimoto\n- [NodeJS](https://www.npmjs.com/package/coda-js) by Parker McMullin\n- [Ruby](https://rubygems.org/gems/coda_docs/) by Carlos Muñoz at Getro\n- [Python](https://github.com/Blasterai/codaio) by Mikhail Beliansky\n- [Go](https://github.com/artsafin/coda-schema-generator) by Artur Safin\n\n\nContact Support:\n Name: API Support\n Email: help+api@coda.io",
+      "type": "text/plain"
+    }
+  }
+}

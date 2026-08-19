@@ -1,0 +1,289 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Coda Account Pages API",
+    "version": "1.5.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Pages",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List pages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId/pages",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of results to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of pages in a Coda doc."
+        },
+        {
+          "info": {
+            "name": "Create a page",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/docs/:docId/pages",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new page in a doc. Note that creating a page requires you to be a Doc Maker in the applicable workspace.\n"
+        },
+        {
+          "info": {
+            "name": "Get a page",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId/pages/:pageIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageIdOrName",
+                "value": "canvas-IjkLmnO",
+                "type": "path",
+                "description": "ID or name of the page. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.\n"
+              }
+            ]
+          },
+          "docs": "Returns details about a page."
+        },
+        {
+          "info": {
+            "name": "Update a page",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://coda.io/apis/v1/docs/:docId/pages/:pageIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageIdOrName",
+                "value": "canvas-IjkLmnO",
+                "type": "path",
+                "description": "ID or name of the page. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update properties for a page. Note that updating a page title or icon requires you to be a Doc Maker in the applicable workspace.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a page",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://coda.io/apis/v1/docs/:docId/pages/:pageIdOrName",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageIdOrName",
+                "value": "canvas-IjkLmnO",
+                "type": "path",
+                "description": "ID or name of the page. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.\n"
+              }
+            ]
+          },
+          "docs": "Deletes the specified page."
+        },
+        {
+          "info": {
+            "name": "List page content",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId/pages/:pageIdOrName/content",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageIdOrName",
+                "value": "canvas-IjkLmnO",
+                "type": "path",
+                "description": "ID or name of the page. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.\n"
+              },
+              {
+                "name": "limit",
+                "value": "50",
+                "type": "query",
+                "description": "Maximum number of content items to return in this query."
+              },
+              {
+                "name": "pageToken",
+                "value": "eyJsaW1pd",
+                "type": "query",
+                "description": "An opaque token used to fetch the next page of results."
+              },
+              {
+                "name": "contentFormat",
+                "value": "plainText",
+                "type": "query",
+                "description": "The format to return content in. Defaults to plainText."
+              }
+            ]
+          },
+          "docs": "Returns a list of content elements in a page."
+        },
+        {
+          "info": {
+            "name": "Delete page content",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://coda.io/apis/v1/docs/:docId/pages/:pageIdOrName/content",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageIdOrName",
+                "value": "canvas-IjkLmnO",
+                "type": "path",
+                "description": "ID or name of the page. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Delete content from a page. You can delete specific elements by providing their IDs, or delete all content from the page.\n"
+        },
+        {
+          "info": {
+            "name": "Begin content export",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://coda.io/apis/v1/docs/:docId/pages/:pageIdOrName/export",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageIdOrName",
+                "value": "canvas-IjkLmnO",
+                "type": "path",
+                "description": "ID or name of the page. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiate an export of content for the given page."
+        },
+        {
+          "info": {
+            "name": "Content export status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://coda.io/apis/v1/docs/:docId/pages/:pageIdOrName/export/:requestId",
+            "params": [
+              {
+                "name": "docId",
+                "value": "AbCDeFGH",
+                "type": "path",
+                "description": "ID of the doc."
+              },
+              {
+                "name": "pageIdOrName",
+                "value": "canvas-IjkLmnO",
+                "type": "path",
+                "description": "ID or name of the page. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.\n"
+              },
+              {
+                "name": "requestId",
+                "value": "abc-123-def-456",
+                "type": "path",
+                "description": "ID of the request."
+              }
+            ]
+          },
+          "docs": "Check the status of a page content export"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
