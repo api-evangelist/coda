@@ -230,7 +230,8 @@ apis:
     These endpoints wouldn't fit anywhere else, but you may find them useful when working with Coda.
   humanURL: https://coda.io/developers/apis/v1
   baseURL: https://coda.io/apis/v1
-  tags:
+  tags: []
+  tags_raw:
   - Miscellaneous
   properties:
   - type: OpenAPI
