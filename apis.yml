@@ -88,6 +88,8 @@ apis:
   humanURL: https://coda.io/developers/apis/v1
   baseURL: https://coda.io/apis/v1
   tags:
+  - Automation
+  tags_raw:
   - Automations
   properties:
   - type: OpenAPI
@@ -129,6 +131,8 @@ apis:
   humanURL: https://coda.io/developers/apis/v1
   baseURL: https://coda.io/apis/v1
   tags:
+  - Control
+  tags_raw:
   - Controls
   properties:
   - type: OpenAPI
@@ -381,6 +385,8 @@ apis:
   humanURL: https://coda.io/developers/apis/v1
   baseURL: https://coda.io/apis/v1
   tags:
+  - Workspace
+  tags_raw:
   - Workspaces
   properties:
   - type: OpenAPI
