@@ -1,24 +1,7 @@
 {
   "provider": "coda",
   "sources": [
-    "coda-account-api-openapi.yml",
-    "coda-analytics-api-openapi.yml",
-    "coda-automations-api-openapi.yml",
-    "coda-columns-api-openapi.yml",
-    "coda-controls-api-openapi.yml",
-    "coda-customdocdomains-api-openapi.yml",
-    "coda-docs-api-openapi.yml",
-    "coda-folders-api-openapi.yml",
-    "coda-formulas-api-openapi.yml",
-    "coda-go-links-api-openapi.yml",
-    "coda-miscellaneous-api-openapi.yml",
-    "coda-packs-api-openapi.yml",
-    "coda-pages-api-openapi.yml",
-    "coda-permissions-api-openapi.yml",
-    "coda-publishing-api-openapi.yml",
-    "coda-rows-api-openapi.yml",
-    "coda-tables-api-openapi.yml",
-    "coda-workspaces-api-openapi.yml"
+    "_original/coda-openapi.json"
   ],
   "outputs": [
     "coda-account-api-openapi.yml",
@@ -43,6 +26,32 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "coda-openapi.json: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "coda-openapi.json: declared missing tag: CustomDocDomains",
+    "coda-openapi.json: declared missing tag: Go Links",
+    "coda-openapi.json: declared missing tag: Tables",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "coda-account-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coda-analytics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coda-automations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coda-columns-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coda-controls-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coda-customdocdomains-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coda-docs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coda-folders-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coda-formulas-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coda-go-links-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coda-miscellaneous-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coda-packs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coda-pages-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coda-permissions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coda-publishing-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coda-rows-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coda-tables-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "coda-workspaces-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
