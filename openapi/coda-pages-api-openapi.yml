@@ -626,212 +626,87 @@ paths:
 
           '
 components:
-  responses:
-    GoneError:
-      description: The resource has been deleted.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 410
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Gone
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Gone
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
-    UnauthorizedError:
-      description: The API token is invalid or has expired.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 401
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Unauthorized
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Unauthorized
-    TooManyRequestsError:
-      description: The client has sent too many requests.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 429
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Too Many Requests
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Too Many Requests
-    ForbiddenError:
-      description: The API token does not grant access to this resource.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 403
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Forbidden
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Forbidden
-    BadRequestError:
-      description: The request parameters did not conform to expectations.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 400
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Bad Request
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Bad Request
-  schemas:
-    nextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
-    PageContentItemType:
-      x-schema-name: PageContentItemType
-      description: The type of content item in a page.
-      type: string
-      enum:
-      - line
-      x-tsEnumNames:
-      - Line
-    PageUpdate:
-      x-schema-name: PageUpdate
-      description: Payload for updating a page.
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-          description: Name of the page.
-          example: Launch Status
-        subtitle:
-          type: string
-          description: Subtitle of the page.
-          example: See the status of launch-related tasks.
-        iconName:
-          type: string
-          description: Name of the icon.
-          example: rocket
-        imageUrl:
-          type: string
-          description: Url of the cover image to use.
-          example: https://example.com/image.jpg
-        isHidden:
-          type: boolean
-          description: Whether the page is hidden or not. Note that for pages that cannot be hidden, like the sole top-level page in a doc, this will be ignored.
-          example: true
-        contentUpdate:
-          allOf:
-          - type: object
-            description: Content with which to update an existing page.
-            additionalProperties: false
-          - $ref: '#/components/schemas/PageContentUpdate'
-    PageContentDelete:
-      x-schema-name: PageContentDelete
-      description: Payload for deleting content from a page.
-      type: object
-      additionalProperties: false
-      properties:
-        elementIds:
-          type: array
-          description: 'IDs of the elements to delete from the page. If omitted or empty, all content will be deleted.
+  parameters:
+    requestId:
+      name: requestId
+      description: ID of the request.
+      in: path
+      required: true
+      example: abc-123-def-456
+      schema:
+        type: string
+    docId:
+      name: docId
+      description: ID of the doc.
+      in: path
+      required: true
+      example: AbCDeFGH
+      schema:
+        type: string
+    pageContentLimit:
+      name: limit
+      description: Maximum number of content items to return in this query.
+      in: query
+      example: 50
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 500
+        default: 50
+    pageIdOrName:
+      name: pageIdOrName
+      description: 'ID or name of the page. Names are discouraged because they''re easily prone to being changed by users. If you''re using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.
 
-            '
-          items:
+        '
+      x-sdk-description: 'ID or name of the page. Names are discouraged because they''re easily prone to being changed by users. Note that if you''re using a name and there are multiple pages with the same name, an arbitrary one will be returned.
+
+        '
+      in: path
+      required: true
+      example: canvas-IjkLmnO
+      schema:
+        type: string
+    limit:
+      name: limit
+      description: Maximum number of results to return in this query.
+      in: query
+      example: 10
+      schema:
+        type: integer
+        minimum: 1
+        default: 25
+    contentFormat:
+      name: contentFormat
+      description: The format to return content in. Defaults to plainText.
+      in: query
+      example: plainText
+      schema:
+        type: string
+        enum:
+        - plainText
+        default: plainText
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
+  schemas:
+    PageUpdateResult:
+      x-schema-name: PageUpdateResult
+      description: The result of a page update.
+      allOf:
+      - $ref: '#/components/schemas/DocumentMutateResponse'
+      - type: object
+        required:
+        - id
+        additionalProperties: false
+        properties:
+          id:
             type: string
-          example:
-          - cl-lzqh0Q0poT
-          - cl-abc123def
+            description: ID of the updated page.
+            example: canvas-tuVwxYz
     PageContent:
       x-schema-name: PageContent
       description: 'Content to be added or replaced with in a page (canvas).
@@ -859,88 +734,16 @@ components:
       x-tsEnumNames:
       - Compatibility
       - Standard
-    nextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
-    BeginPageContentExportResponse:
-      x-schema-name: BeginPageContentExportResponse
-      description: Response when beginning an export of page content.
+    BeginPageContentExportRequest:
+      x-schema-name: BeginPageContentExportRequest
+      description: Request for beginning an export of page content.
       type: object
       additionalProperties: false
       required:
-      - id
-      - status
-      - href
+      - outputFormat
       properties:
-        id:
-          type: string
-          description: The identifier of this export request.
-          example: AbCDeFGH
-        status:
-          type: string
-          description: The status of this export.
-          example: complete
-        href:
-          type: string
-          description: The URL that reports the status of this export. Poll this URL to get the content URL when the export has completed.
-          example: https://coda.io/apis/v1/docs/somedoc/pages/somepage/export/some-request-id
-    PageList:
-      x-schema-name: PageList
-      description: List of pages.
-      type: object
-      required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Page'
-        href:
-          type: string
-          format: url
-          description: API link to these results
-          example: https://coda.io/apis/v1/docs/AbCDeFGH/pages?limit=20
-        nextPageToken:
-          $ref: '#/components/schemas/nextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/nextPageLink'
-          - type: string
-            example: https://coda.io/apis/v1/docs/AbCDeFGH/pages?pageToken=eyJsaW1pd
-    LinkedDataObject:
-      x-schema-name: LinkedDataObject
-      description: Base type for a JSON-LD (Linked Data) object.
-      type: object
-      additionalProperties: false
-      required:
-      - '@context'
-      - '@type'
-      properties:
-        '@context':
-          type: string
-          description: A url describing the schema context for this object, typically "http://schema.org/".
-          example: http://schema.org/
-        '@type':
-          $ref: '#/components/schemas/LinkedDataType'
-        additionalType:
-          type: string
-          description: 'An identifier of additional type info specific to Coda that may not be present in a schema.org taxonomy,
-
-            '
-    DocumentMutateResponse:
-      x-schema-name: DocumentMutateResponse
-      description: Base response type for an operation that mutates a document.
-      type: object
-      additionalProperties: false
-      required:
-      - requestId
-      properties:
-        requestId:
-          type: string
-          description: An arbitrary unique identifier for this request.
-          example: abc-123-def-456
+        outputFormat:
+          $ref: '#/components/schemas/PageContentOutputFormat'
     PageContentItem:
       x-schema-name: PageContentItem
       description: Content item in a page (canvas).
@@ -958,157 +761,6 @@ components:
           $ref: '#/components/schemas/PageContentItemType'
         itemContent:
           $ref: '#/components/schemas/PageContentItemContent'
-    PageUpdateResult:
-      x-schema-name: PageUpdateResult
-      description: The result of a page update.
-      allOf:
-      - $ref: '#/components/schemas/DocumentMutateResponse'
-      - type: object
-        required:
-        - id
-        additionalProperties: false
-        properties:
-          id:
-            type: string
-            description: ID of the updated page.
-            example: canvas-tuVwxYz
-    PageContentOutputFormat:
-      x-schema-name: PageContentOutputFormat
-      description: Supported output content formats that can be requested for getting content for an existing page.
-      type: string
-      enum:
-      - html
-      - markdown
-      x-tsEnumNames:
-      - Html
-      - Markdown
-    PersonValue:
-      x-schema-name: PersonValue
-      description: A named reference to a person, where the person is identified by email address.
-      allOf:
-      - $ref: '#/components/schemas/LinkedDataObject'
-      - type: object
-        additionalProperties: false
-        required:
-        - '@type'
-        - name
-        properties:
-          '@type':
-            type: string
-            enum:
-            - Person
-            x-tsType: LinkedDataType.Person
-          name:
-            type: string
-            description: The full name of the person.
-            example: Alice Atkins
-          email:
-            type: string
-            description: The email address of the person.
-            example: alice@atkins.com
-    PageCreateResult:
-      x-schema-name: PageCreateResult
-      description: The result of a page creation.
-      allOf:
-      - $ref: '#/components/schemas/DocumentMutateResponse'
-      - type: object
-        required:
-        - id
-        additionalProperties: false
-        properties:
-          id:
-            type: string
-            description: ID of the created page.
-            example: canvas-tuVwxYz
-    PageContentList:
-      x-schema-name: PageContentList
-      description: List of page content elements.
-      type: object
-      required:
-      - items
-      - href
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/PageContentItem'
-        href:
-          type: string
-          format: url
-          description: API link to these results
-          example: https://coda.io/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO/content?limit=20
-        nextPageToken:
-          $ref: '#/components/schemas/nextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/nextPageLink'
-          - type: string
-            example: https://coda.io/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO/content?pageToken=eyJsaW1pd
-    PageContentItemContent:
-      x-schema-name: PageContentItemContent
-      description: Content details of the item.
-      type: object
-      required:
-      - style
-      - format
-      - content
-      additionalProperties: false
-      properties:
-        style:
-          $ref: '#/components/schemas/PageLineStyle'
-        format:
-          $ref: '#/components/schemas/PageContentItemContentFormat'
-        content:
-          type: string
-          description: Content of the item in the specified format.
-          example: This is a paragraph of text.
-        lineLevel:
-          type: integer
-          description: 'Indentation level of the element. Present for indentable elements (paragraphs, blockquotes, and list items).
-
-            '
-          example: 0
-    PageType:
-      x-schema-name: PageType
-      description: The type of a page in a doc.
-      type: string
-      enum:
-      - canvas
-      - embed
-      - syncPage
-      x-tsEnumNames:
-      - Canvas
-      - Embed
-      - SyncPage
-    PageCreate:
-      x-schema-name: PageCreate
-      description: Payload for creating a new page in a doc.
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-          description: Name of the page.
-          example: Launch Status
-        subtitle:
-          type: string
-          description: Subtitle of the page.
-          example: See the status of launch-related tasks.
-        iconName:
-          type: string
-          description: Name of the icon.
-          example: rocket
-        imageUrl:
-          type: string
-          description: Url of the cover image to use.
-          example: https://example.com/image.jpg
-        parentPageId:
-          type: string
-          description: The ID of this new page's parent, if creating a subpage.
-          example: canvas-tuVwxYz
-        pageContent:
-          $ref: '#/components/schemas/PageCreateContent'
     Icon:
       x-schema-name: icon
       description: Info about the icon.
@@ -1130,239 +782,6 @@ components:
           format: url
           description: Browser-friendly link to an icon.
           example: https://cdn.coda.io/icons/png/color/icon-32.png
-    PageContentUpdate:
-      x-schema-name: PageContentUpdate
-      description: Payload for updating the content of an existing page.
-      type: object
-      additionalProperties: false
-      required:
-      - insertionMode
-      - canvasContent
-      properties:
-        insertionMode:
-          $ref: '#/components/schemas/PageContentInsertionMode'
-        elementId:
-          type: string
-          example: cl-lzqh0Q0poT
-          description: 'ID of the element on the page to use as a reference point for editing content. If provided, the operation will be relative to this element (e.g., append after it, prepend before it, replace it). If omitted, the operation will be performed on the entire page (e.g., append to end, prepend to beginning, replace all).
-
-            '
-        canvasContent:
-          $ref: '#/components/schemas/PageContent'
-    PageDeleteResult:
-      x-schema-name: PageDeleteResult
-      description: The result of a page deletion.
-      allOf:
-      - $ref: '#/components/schemas/DocumentMutateResponse'
-      - type: object
-        required:
-        - id
-        additionalProperties: false
-        properties:
-          id:
-            type: string
-            description: ID of the page to be deleted.
-            example: canvas-tuVwxYz
-    Page:
-      x-schema-name: Page
-      description: Metadata about a page.
-      type: object
-      required:
-      - id
-      - type
-      - href
-      - name
-      - isHidden
-      - isEffectivelyHidden
-      - browserLink
-      - children
-      - contentType
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: ID of the page.
-          example: canvas-IjkLmnO
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - page
-          x-tsType: Type.Page
-        href:
-          type: string
-          format: url
-          description: API link to the page.
-          example: https://coda.io/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO
-        browserLink:
-          type: string
-          format: url
-          description: Browser-friendly link to the page.
-          example: https://coda.io/d/_dAbCDeFGH/Launch-Status_sumnO
-        name:
-          type: string
-          description: Name of the page.
-          example: Launch Status
-        subtitle:
-          type: string
-          description: Subtitle of the page.
-          example: See the status of launch-related tasks.
-        icon:
-          $ref: '#/components/schemas/Icon'
-        image:
-          $ref: '#/components/schemas/Image'
-        contentType:
-          $ref: '#/components/schemas/PageType'
-        isHidden:
-          type: boolean
-          description: Whether the page is hidden in the UI.
-          example: true
-        isEffectivelyHidden:
-          type: boolean
-          description: Whether the page or any of its parents is hidden in the UI.
-          example: true
-        parent:
-          $ref: '#/components/schemas/PageReference'
-        children:
-          type: array
-          items:
-            $ref: '#/components/schemas/PageReference'
-        authors:
-          description: Authors of the page
-          type: array
-          items:
-            $ref: '#/components/schemas/PersonValue'
-        createdAt:
-          type: string
-          format: date-time
-          description: Timestamp for when the page was created.
-          example: '2018-04-11T00:18:57.946Z'
-        createdBy:
-          $ref: '#/components/schemas/PersonValue'
-        updatedAt:
-          type: string
-          format: date-time
-          description: Timestamp for when page content was last modified.
-          example: '2018-04-11T00:18:57.946Z'
-        updatedBy:
-          $ref: '#/components/schemas/PersonValue'
-    PageContentItemContentFormat:
-      x-schema-name: PageContentItemContentFormat
-      description: Content format for the item.
-      type: string
-      enum:
-      - plainText
-      x-tsEnumNames:
-      - PlainText
-    PageLineStyle:
-      x-schema-name: PageLineStyle
-      description: The style of a line element in a canvas page.
-      type: string
-      enum:
-      - blockQuote
-      - bulletedList
-      - checkboxList
-      - code
-      - collapsibleList
-      - h1
-      - h2
-      - h3
-      - numberedList
-      - paragraph
-      - pullQuote
-      x-tsEnumNames:
-      - BlockQuote
-      - BulletedList
-      - CheckboxList
-      - Code
-      - CollapsibleList
-      - H1
-      - H2
-      - H3
-      - NumberedList
-      - Paragraph
-      - PullQuote
-    PageContentExportStatusResponse:
-      x-schema-name: PageContentExportStatusResponse
-      description: Response when requesting the status of a page content export.
-      type: object
-      additionalProperties: false
-      required:
-      - id
-      - status
-      - href
-      properties:
-        id:
-          type: string
-          description: The identifier of this export request.
-          example: AbCDeFGH
-        status:
-          type: string
-          description: The status of this export.
-          example: complete
-        href:
-          type: string
-          description: The URL that reports the status of this export.
-          example: https://coda.io/apis/v1/docs/somedoc/pages/somepage/export/some-request-id
-        downloadLink:
-          type: string
-          description: Once the export completes, the location where the resulting export file can be downloaded; this link typically expires after a short time.  Call this method again to get a fresh link.
-          example: https://coda.io/blobs/DOC_EXPORT_RENDERING/some-request-id
-        error:
-          type: string
-          description: Message describing an error, if this export failed.
-    BeginPageContentExportRequest:
-      x-schema-name: BeginPageContentExportRequest
-      description: Request for beginning an export of page content.
-      type: object
-      additionalProperties: false
-      required:
-      - outputFormat
-      properties:
-        outputFormat:
-          $ref: '#/components/schemas/PageContentOutputFormat'
-    PageContentInsertionMode:
-      x-schema-name: PageContentInsertionMode
-      description: Mode for updating the content on an existing page.
-      type: string
-      enum:
-      - append
-      - prepend
-      - replace
-      x-tsEnumNames:
-      - Append
-      - Prepend
-      - Replace
-    PageContentDeleteResult:
-      x-schema-name: PageContentDeleteResult
-      description: The result of a page content deletion.
-      allOf:
-      - $ref: '#/components/schemas/DocumentMutateResponse'
-      - type: object
-        required:
-        - id
-        additionalProperties: false
-        properties:
-          id:
-            type: string
-            description: ID of the page whose content was deleted.
-            example: canvas-tuVwxYz
-    LinkedDataType:
-      x-schema-name: LinkedDataType
-      description: A schema.org identifier for the object.
-      type: string
-      enum:
-      - ImageObject
-      - MonetaryAmount
-      - Person
-      - WebPage
-      - StructuredValue
-      x-tsEnumNames:
-      - ImageObject
-      - MonetaryAmount
-      - Person
-      - WebPage
-      - StructuredValue
     PageCreateContent:
       x-schema-name: PageCreateContent
       description: Content that can be added to a page at creation time, either text (or rich text) or a URL to create a full-page embed.
@@ -1459,6 +878,62 @@ components:
               type: string
               description: The id of the document to insert as a sync page.
               example: sHbI4uIwiK
+    PageCreate:
+      x-schema-name: PageCreate
+      description: Payload for creating a new page in a doc.
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: Name of the page.
+          example: Launch Status
+        subtitle:
+          type: string
+          description: Subtitle of the page.
+          example: See the status of launch-related tasks.
+        iconName:
+          type: string
+          description: Name of the icon.
+          example: rocket
+        imageUrl:
+          type: string
+          description: Url of the cover image to use.
+          example: https://example.com/image.jpg
+        parentPageId:
+          type: string
+          description: The ID of this new page's parent, if creating a subpage.
+          example: canvas-tuVwxYz
+        pageContent:
+          $ref: '#/components/schemas/PageCreateContent'
+    PageList:
+      x-schema-name: PageList
+      description: List of pages.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Page'
+        href:
+          type: string
+          format: url
+          description: API link to these results
+          example: https://coda.io/apis/v1/docs/AbCDeFGH/pages?limit=20
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://coda.io/apis/v1/docs/AbCDeFGH/pages?pageToken=eyJsaW1pd
+    nextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
     PageContentFormat:
       x-schema-name: PageContentFormat
       description: Supported content types for page (canvas) content.
@@ -1469,30 +944,165 @@ components:
       x-tsEnumNames:
       - Html
       - Markdown
-    Image:
-      x-schema-name: Image
-      description: Info about the image.
+    PageLineStyle:
+      x-schema-name: PageLineStyle
+      description: The style of a line element in a canvas page.
+      type: string
+      enum:
+      - blockQuote
+      - bulletedList
+      - checkboxList
+      - code
+      - collapsibleList
+      - h1
+      - h2
+      - h3
+      - numberedList
+      - paragraph
+      - pullQuote
+      x-tsEnumNames:
+      - BlockQuote
+      - BulletedList
+      - CheckboxList
+      - Code
+      - CollapsibleList
+      - H1
+      - H2
+      - H3
+      - NumberedList
+      - Paragraph
+      - PullQuote
+    BeginPageContentExportResponse:
+      x-schema-name: BeginPageContentExportResponse
+      description: Response when beginning an export of page content.
       type: object
+      additionalProperties: false
       required:
-      - browserLink
+      - id
+      - status
+      - href
+      properties:
+        id:
+          type: string
+          description: The identifier of this export request.
+          example: AbCDeFGH
+        status:
+          type: string
+          description: The status of this export.
+          example: complete
+        href:
+          type: string
+          description: The URL that reports the status of this export. Poll this URL to get the content URL when the export has completed.
+          example: https://coda.io/apis/v1/docs/somedoc/pages/somepage/export/some-request-id
+    PageContentExportStatusResponse:
+      x-schema-name: PageContentExportStatusResponse
+      description: Response when requesting the status of a page content export.
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - status
+      - href
+      properties:
+        id:
+          type: string
+          description: The identifier of this export request.
+          example: AbCDeFGH
+        status:
+          type: string
+          description: The status of this export.
+          example: complete
+        href:
+          type: string
+          description: The URL that reports the status of this export.
+          example: https://coda.io/apis/v1/docs/somedoc/pages/somepage/export/some-request-id
+        downloadLink:
+          type: string
+          description: Once the export completes, the location where the resulting export file can be downloaded; this link typically expires after a short time.  Call this method again to get a fresh link.
+          example: https://coda.io/blobs/DOC_EXPORT_RENDERING/some-request-id
+        error:
+          type: string
+          description: Message describing an error, if this export failed.
+    PageCreateResult:
+      x-schema-name: PageCreateResult
+      description: The result of a page creation.
+      allOf:
+      - $ref: '#/components/schemas/DocumentMutateResponse'
+      - type: object
+        required:
+        - id
+        additionalProperties: false
+        properties:
+          id:
+            type: string
+            description: ID of the created page.
+            example: canvas-tuVwxYz
+    PageContentDeleteResult:
+      x-schema-name: PageContentDeleteResult
+      description: The result of a page content deletion.
+      allOf:
+      - $ref: '#/components/schemas/DocumentMutateResponse'
+      - type: object
+        required:
+        - id
+        additionalProperties: false
+        properties:
+          id:
+            type: string
+            description: ID of the page whose content was deleted.
+            example: canvas-tuVwxYz
+    DocumentMutateResponse:
+      x-schema-name: DocumentMutateResponse
+      description: Base response type for an operation that mutates a document.
+      type: object
+      additionalProperties: false
+      required:
+      - requestId
+      properties:
+        requestId:
+          type: string
+          description: An arbitrary unique identifier for this request.
+          example: abc-123-def-456
+    PageUpdate:
+      x-schema-name: PageUpdate
+      description: Payload for updating a page.
+      type: object
       additionalProperties: false
       properties:
-        browserLink:
+        name:
           type: string
-          format: url
-          description: Browser-friendly link to an image.
-          example: https://codahosted.io/docs/nUYhlXysYO/blobs/bl-lYkYKNzkuT/3f879b9ecfa27448
-        type:
+          description: Name of the page.
+          example: Launch Status
+        subtitle:
           type: string
-          description: MIME type of the image.
-        width:
-          type: number
-          description: The width in pixels of the image.
-          example: 800
-        height:
-          type: number
-          description: The height in pixels of the image.
-          example: 600
+          description: Subtitle of the page.
+          example: See the status of launch-related tasks.
+        iconName:
+          type: string
+          description: Name of the icon.
+          example: rocket
+        imageUrl:
+          type: string
+          description: Url of the cover image to use.
+          example: https://example.com/image.jpg
+        isHidden:
+          type: boolean
+          description: Whether the page is hidden or not. Note that for pages that cannot be hidden, like the sole top-level page in a doc, this will be ignored.
+          example: true
+        contentUpdate:
+          allOf:
+          - type: object
+            description: Content with which to update an existing page.
+            additionalProperties: false
+          - $ref: '#/components/schemas/PageContentUpdate'
+    PageContentItemContentFormat:
+      x-schema-name: PageContentItemContentFormat
+      description: Content format for the item.
+      type: string
+      enum:
+      - plainText
+      x-tsEnumNames:
+      - PlainText
     PageReference:
       x-schema-name: PageReference
       description: Reference to a page.
@@ -1529,72 +1139,462 @@ components:
           type: string
           description: Name of the page.
           example: Launch Status
-  parameters:
-    requestId:
-      name: requestId
-      description: ID of the request.
-      in: path
-      required: true
-      example: abc-123-def-456
-      schema:
-        type: string
-    limit:
-      name: limit
-      description: Maximum number of results to return in this query.
-      in: query
-      example: 10
-      schema:
-        type: integer
-        minimum: 1
-        default: 25
-    pageToken:
-      name: pageToken
-      description: An opaque token used to fetch the next page of results.
-      in: query
+    PageType:
+      x-schema-name: PageType
+      description: The type of a page in a doc.
+      type: string
+      enum:
+      - canvas
+      - embed
+      - syncPage
+      x-tsEnumNames:
+      - Canvas
+      - Embed
+      - SyncPage
+    PageContentOutputFormat:
+      x-schema-name: PageContentOutputFormat
+      description: Supported output content formats that can be requested for getting content for an existing page.
+      type: string
+      enum:
+      - html
+      - markdown
+      x-tsEnumNames:
+      - Html
+      - Markdown
+    PageContentItemType:
+      x-schema-name: PageContentItemType
+      description: The type of content item in a page.
+      type: string
+      enum:
+      - line
+      x-tsEnumNames:
+      - Line
+    PageContentList:
+      x-schema-name: PageContentList
+      description: List of page content elements.
+      type: object
+      required:
+      - items
+      - href
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PageContentItem'
+        href:
+          type: string
+          format: url
+          description: API link to these results
+          example: https://coda.io/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO/content?limit=20
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://coda.io/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO/content?pageToken=eyJsaW1pd
+    PageContentUpdate:
+      x-schema-name: PageContentUpdate
+      description: Payload for updating the content of an existing page.
+      type: object
+      additionalProperties: false
+      required:
+      - insertionMode
+      - canvasContent
+      properties:
+        insertionMode:
+          $ref: '#/components/schemas/PageContentInsertionMode'
+        elementId:
+          type: string
+          example: cl-lzqh0Q0poT
+          description: 'ID of the element on the page to use as a reference point for editing content. If provided, the operation will be relative to this element (e.g., append after it, prepend before it, replace it). If omitted, the operation will be performed on the entire page (e.g., append to end, prepend to beginning, replace all).
+
+            '
+        canvasContent:
+          $ref: '#/components/schemas/PageContent'
+    PersonValue:
+      x-schema-name: PersonValue
+      description: A named reference to a person, where the person is identified by email address.
+      allOf:
+      - $ref: '#/components/schemas/LinkedDataObject'
+      - type: object
+        additionalProperties: false
+        required:
+        - '@type'
+        - name
+        properties:
+          '@type':
+            type: string
+            enum:
+            - Person
+            x-tsType: LinkedDataType.Person
+          name:
+            type: string
+            description: The full name of the person.
+            example: Alice Atkins
+          email:
+            type: string
+            description: The email address of the person.
+            example: alice@atkins.com
+    PageContentInsertionMode:
+      x-schema-name: PageContentInsertionMode
+      description: Mode for updating the content on an existing page.
+      type: string
+      enum:
+      - append
+      - prepend
+      - replace
+      x-tsEnumNames:
+      - Append
+      - Prepend
+      - Replace
+    LinkedDataObject:
+      x-schema-name: LinkedDataObject
+      description: Base type for a JSON-LD (Linked Data) object.
+      type: object
+      additionalProperties: false
+      required:
+      - '@context'
+      - '@type'
+      properties:
+        '@context':
+          type: string
+          description: A url describing the schema context for this object, typically "http://schema.org/".
+          example: http://schema.org/
+        '@type':
+          $ref: '#/components/schemas/LinkedDataType'
+        additionalType:
+          type: string
+          description: 'An identifier of additional type info specific to Coda that may not be present in a schema.org taxonomy,
+
+            '
+    nextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
       example: eyJsaW1pd
-      schema:
-        type: string
-    contentFormat:
-      name: contentFormat
-      description: The format to return content in. Defaults to plainText.
-      in: query
-      example: plainText
-      schema:
-        type: string
-        enum:
-        - plainText
-        default: plainText
-    pageIdOrName:
-      name: pageIdOrName
-      description: 'ID or name of the page. Names are discouraged because they''re easily prone to being changed by users. If you''re using a name, be sure to URI-encode it. If you provide a name and there are multiple pages with the same name, an arbitrary one will be selected.
+    LinkedDataType:
+      x-schema-name: LinkedDataType
+      description: A schema.org identifier for the object.
+      type: string
+      enum:
+      - ImageObject
+      - MonetaryAmount
+      - Person
+      - WebPage
+      - StructuredValue
+      x-tsEnumNames:
+      - ImageObject
+      - MonetaryAmount
+      - Person
+      - WebPage
+      - StructuredValue
+    PageContentItemContent:
+      x-schema-name: PageContentItemContent
+      description: Content details of the item.
+      type: object
+      required:
+      - style
+      - format
+      - content
+      additionalProperties: false
+      properties:
+        style:
+          $ref: '#/components/schemas/PageLineStyle'
+        format:
+          $ref: '#/components/schemas/PageContentItemContentFormat'
+        content:
+          type: string
+          description: Content of the item in the specified format.
+          example: This is a paragraph of text.
+        lineLevel:
+          type: integer
+          description: 'Indentation level of the element. Present for indentable elements (paragraphs, blockquotes, and list items).
 
-        '
-      x-sdk-description: 'ID or name of the page. Names are discouraged because they''re easily prone to being changed by users. Note that if you''re using a name and there are multiple pages with the same name, an arbitrary one will be returned.
+            '
+          example: 0
+    Page:
+      x-schema-name: Page
+      description: Metadata about a page.
+      type: object
+      required:
+      - id
+      - type
+      - href
+      - name
+      - isHidden
+      - isEffectivelyHidden
+      - browserLink
+      - children
+      - contentType
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the page.
+          example: canvas-IjkLmnO
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - page
+          x-tsType: Type.Page
+        href:
+          type: string
+          format: url
+          description: API link to the page.
+          example: https://coda.io/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to the page.
+          example: https://coda.io/d/_dAbCDeFGH/Launch-Status_sumnO
+        name:
+          type: string
+          description: Name of the page.
+          example: Launch Status
+        subtitle:
+          type: string
+          description: Subtitle of the page.
+          example: See the status of launch-related tasks.
+        icon:
+          $ref: '#/components/schemas/Icon'
+        image:
+          $ref: '#/components/schemas/Image'
+        contentType:
+          $ref: '#/components/schemas/PageType'
+        isHidden:
+          type: boolean
+          description: Whether the page is hidden in the UI.
+          example: true
+        isEffectivelyHidden:
+          type: boolean
+          description: Whether the page or any of its parents is hidden in the UI.
+          example: true
+        parent:
+          $ref: '#/components/schemas/PageReference'
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/PageReference'
+        authors:
+          description: Authors of the page
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonValue'
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp for when the page was created.
+          example: '2018-04-11T00:18:57.946Z'
+        createdBy:
+          $ref: '#/components/schemas/PersonValue'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp for when page content was last modified.
+          example: '2018-04-11T00:18:57.946Z'
+        updatedBy:
+          $ref: '#/components/schemas/PersonValue'
+    PageDeleteResult:
+      x-schema-name: PageDeleteResult
+      description: The result of a page deletion.
+      allOf:
+      - $ref: '#/components/schemas/DocumentMutateResponse'
+      - type: object
+        required:
+        - id
+        additionalProperties: false
+        properties:
+          id:
+            type: string
+            description: ID of the page to be deleted.
+            example: canvas-tuVwxYz
+    PageContentDelete:
+      x-schema-name: PageContentDelete
+      description: Payload for deleting content from a page.
+      type: object
+      additionalProperties: false
+      properties:
+        elementIds:
+          type: array
+          description: 'IDs of the elements to delete from the page. If omitted or empty, all content will be deleted.
 
-        '
-      in: path
-      required: true
-      example: canvas-IjkLmnO
-      schema:
-        type: string
-    docId:
-      name: docId
-      description: ID of the doc.
-      in: path
-      required: true
-      example: AbCDeFGH
-      schema:
-        type: string
-    pageContentLimit:
-      name: limit
-      description: Maximum number of content items to return in this query.
-      in: query
-      example: 50
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 500
-        default: 50
+            '
+          items:
+            type: string
+          example:
+          - cl-lzqh0Q0poT
+          - cl-abc123def
+    Image:
+      x-schema-name: Image
+      description: Info about the image.
+      type: object
+      required:
+      - browserLink
+      additionalProperties: false
+      properties:
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to an image.
+          example: https://codahosted.io/docs/nUYhlXysYO/blobs/bl-lYkYKNzkuT/3f879b9ecfa27448
+        type:
+          type: string
+          description: MIME type of the image.
+        width:
+          type: number
+          description: The width in pixels of the image.
+          example: 800
+        height:
+          type: number
+          description: The height in pixels of the image.
+          example: 600
+  responses:
+    BadRequestError:
+      description: The request parameters did not conform to expectations.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 400
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Bad Request
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Bad Request
+    UnauthorizedError:
+      description: The API token is invalid or has expired.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 401
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Unauthorized
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Unauthorized
+    TooManyRequestsError:
+      description: The client has sent too many requests.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 429
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Too Many Requests
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Too Many Requests
+    GoneError:
+      description: The resource has been deleted.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 410
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Gone
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Gone
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
+    ForbiddenError:
+      description: The API token does not grant access to this resource.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 403
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Forbidden
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Forbidden
   securitySchemes:
     Bearer:
       description: "The Coda API can be accessed using an API token, which can be obtained from [*My account*](https://coda.io/account)\nin Coda. This token should be specified by setting a header as follows.\n\n```Authorization: Bearer <api_token>```\n\nKeep your token safe, as anyone who gets access to it can access your account. Once a token is created\nit cannot be viewed or modified, so don't lose it.\n\nIf you're logged into Coda, you can also query the API directly using your browser. Note that only GET\nendpoints are supported; for anything else, you'll have to use Bearer authentication.\n\n### Restricting token authorization\n\nBy default, bearer tokens created for the Coda API can perform any action that the user who created the token\ncan perform. However, Coda API bearer tokens can also be created with restrictions. These restrictions\ncan limit what objects can be operated on and the types of operations that can be performed.\n\n#### Operation types\n\nThe table below describes the types of authorization restrictions that can be placed on a Coda API token.\n<table>\n  <tr><th>Restriction</th><th>Description</th><th>Allowed HTTP Methods</th></tr>\n  <tr>\n    <td>Read access</td>\n    <td>Allows access to API methods that read the state of an object</td>\n    <td>GET</td>\n  </tr>\n  <tr>\n    <td>Write access</td>\n    <td>Allows access to API methods that write the state of an object</td>\n    <td>POST, PUT, DELETE</td>\n  </tr>\n  <tr>\n    <td>Read and write access</td>\n    <td>Allows access to all methods for an object</td>\n    <td>All</td>\n  </tr>\n</table>\n\n#### Object types\n\nCoda API tokens can be restricted to the following types of objects.\n\n* Documents: Restricts access to only allow API calls for `/docs/${DOC_ID}`\n* Tables: Restricts access to only allow API calls for `/docs/${DOC_ID}/tables/${TABLE_ID}`\n\n#### Special cases\n\nThere are a few special case methods that violate the above restrictions.\n\n* `/whoami`: This method can be called by all Coda API tokens.\n* `/resolveBrowserLink`: This method can be called by all Coda API tokens, but will only return a result\nif the token has access (read or write) to the object referenced by the URL.\n\n#### Feedback\n\nThis feature is under development and we'd love to hear your feedback and bug reports. Please\nvisit us at the [Developers Central](https://connect.superhuman.com/c/developers-central) forum within\nthe Coda Community.\n"

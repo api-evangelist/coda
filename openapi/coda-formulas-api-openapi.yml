@@ -172,30 +172,19 @@ paths:
           '
 components:
   schemas:
-    FormulaList:
-      x-schema-name: FormulaList
-      description: List of formulas.
-      type: object
-      required:
-      - items
+    Value:
+      x-schema-name: Value
+      description: A Coda result or entity expressed as a primitive type, or array of primitive types.
       additionalProperties: false
-      properties:
+      oneOf:
+      - $ref: '#/components/schemas/ScalarValue'
+      - type: array
         items:
-          type: array
-          items:
-            $ref: '#/components/schemas/FormulaReference'
-        href:
-          type: string
-          format: url
-          description: API link to these results
-          example: https://coda.io/apis/v1/docs/AbCDeFGH/formulas?limit=20
-        nextPageToken:
-          $ref: '#/components/schemas/nextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/nextPageLink'
-          - type: string
-            example: https://coda.io/apis/v1/docs/AbCDeFGH/formulas?pageToken=eyJsaW1pd
+          oneOf:
+          - $ref: '#/components/schemas/ScalarValue'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ScalarValue'
     Formula:
       x-schema-name: Formula
       description: Details about a formula.
@@ -231,20 +220,6 @@ components:
           $ref: '#/components/schemas/PageReference'
         value:
           $ref: '#/components/schemas/Value'
-    ScalarValue:
-      x-schema-name: ScalarValue
-      description: A Coda result or entity expressed as a primitive type.
-      oneOf:
-      - type: string
-        example: $12.34
-      - type: number
-        example: 12.34
-      - type: boolean
-        example: true
-    nextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
     SortBy:
       x-schema-name: SortBy
       description: Determines how the objects returned are sorted
@@ -253,19 +228,30 @@ components:
       - name
       x-tsEnumNames:
       - Name
-    Value:
-      x-schema-name: Value
-      description: A Coda result or entity expressed as a primitive type, or array of primitive types.
+    FormulaList:
+      x-schema-name: FormulaList
+      description: List of formulas.
+      type: object
+      required:
+      - items
       additionalProperties: false
-      oneOf:
-      - $ref: '#/components/schemas/ScalarValue'
-      - type: array
+      properties:
         items:
-          oneOf:
-          - $ref: '#/components/schemas/ScalarValue'
-          - type: array
-            items:
-              $ref: '#/components/schemas/ScalarValue'
+          type: array
+          items:
+            $ref: '#/components/schemas/FormulaReference'
+        href:
+          type: string
+          format: url
+          description: API link to these results
+          example: https://coda.io/apis/v1/docs/AbCDeFGH/formulas?limit=20
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://coda.io/apis/v1/docs/AbCDeFGH/formulas?pageToken=eyJsaW1pd
     FormulaReference:
       x-schema-name: FormulaReference
       description: Reference to a formula.
@@ -298,6 +284,24 @@ components:
           example: Sum of expenses
         parent:
           $ref: '#/components/schemas/PageReference'
+    nextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
+    nextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    ScalarValue:
+      x-schema-name: ScalarValue
+      description: A Coda result or entity expressed as a primitive type.
+      oneOf:
+      - type: string
+        example: $12.34
+      - type: number
+        example: 12.34
+      - type: boolean
+        example: true
     PageReference:
       x-schema-name: PageReference
       description: Reference to a page.
@@ -334,83 +338,7 @@ components:
           type: string
           description: Name of the page.
           example: Launch Status
-    nextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
   responses:
-    ForbiddenError:
-      description: The API token does not grant access to this resource.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 403
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Forbidden
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Forbidden
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
-    UnauthorizedError:
-      description: The API token is invalid or has expired.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 401
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Unauthorized
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Unauthorized
     TooManyRequestsError:
       description: The client has sent too many requests.
       content:
@@ -435,7 +363,86 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Too Many Requests
+    ForbiddenError:
+      description: The API token does not grant access to this resource.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 403
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Forbidden
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Forbidden
+    UnauthorizedError:
+      description: The API token is invalid or has expired.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 401
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Unauthorized
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Unauthorized
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
   parameters:
+    sortBy:
+      name: sortBy
+      description: Determines how to sort the given objects.
+      in: query
+      example: name
+      schema:
+        $ref: '#/components/schemas/SortBy'
     limit:
       name: limit
       description: Maximum number of results to return in this query.
@@ -445,13 +452,6 @@ components:
         type: integer
         minimum: 1
         default: 25
-    pageToken:
-      name: pageToken
-      description: An opaque token used to fetch the next page of results.
-      in: query
-      example: eyJsaW1pd
-      schema:
-        type: string
     formulaIdOrName:
       name: formulaIdOrName
       description: ID or name of the formula. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it.
@@ -459,6 +459,13 @@ components:
       in: path
       required: true
       example: f-fgHijkLm
+      schema:
+        type: string
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
       schema:
         type: string
     docId:
@@ -469,13 +476,6 @@ components:
       example: AbCDeFGH
       schema:
         type: string
-    sortBy:
-      name: sortBy
-      description: Determines how to sort the given objects.
-      in: query
-      example: name
-      schema:
-        $ref: '#/components/schemas/SortBy'
   securitySchemes:
     Bearer:
       description: "The Coda API can be accessed using an API token, which can be obtained from [*My account*](https://coda.io/account)\nin Coda. This token should be specified by setting a header as follows.\n\n```Authorization: Bearer <api_token>```\n\nKeep your token safe, as anyone who gets access to it can access your account. Once a token is created\nit cannot be viewed or modified, so don't lose it.\n\nIf you're logged into Coda, you can also query the API directly using your browser. Note that only GET\nendpoints are supported; for anything else, you'll have to use Bearer authentication.\n\n### Restricting token authorization\n\nBy default, bearer tokens created for the Coda API can perform any action that the user who created the token\ncan perform. However, Coda API bearer tokens can also be created with restrictions. These restrictions\ncan limit what objects can be operated on and the types of operations that can be performed.\n\n#### Operation types\n\nThe table below describes the types of authorization restrictions that can be placed on a Coda API token.\n<table>\n  <tr><th>Restriction</th><th>Description</th><th>Allowed HTTP Methods</th></tr>\n  <tr>\n    <td>Read access</td>\n    <td>Allows access to API methods that read the state of an object</td>\n    <td>GET</td>\n  </tr>\n  <tr>\n    <td>Write access</td>\n    <td>Allows access to API methods that write the state of an object</td>\n    <td>POST, PUT, DELETE</td>\n  </tr>\n  <tr>\n    <td>Read and write access</td>\n    <td>Allows access to all methods for an object</td>\n    <td>All</td>\n  </tr>\n</table>\n\n#### Object types\n\nCoda API tokens can be restricted to the following types of objects.\n\n* Documents: Restricts access to only allow API calls for `/docs/${DOC_ID}`\n* Tables: Restricts access to only allow API calls for `/docs/${DOC_ID}/tables/${TABLE_ID}`\n\n#### Special cases\n\nThere are a few special case methods that violate the above restrictions.\n\n* `/whoami`: This method can be called by all Coda API tokens.\n* `/resolveBrowserLink`: This method can be called by all Coda API tokens, but will only return a result\nif the token has access (read or write) to the object referenced by the URL.\n\n#### Feedback\n\nThis feature is under development and we'd love to hear your feedback and bug reports. Please\nvisit us at the [Developers Central](https://connect.superhuman.com/c/developers-central) forum within\nthe Coda Community.\n"

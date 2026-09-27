@@ -280,6 +280,57 @@ paths:
         source: "curl -s -X DELETE -H 'Authorization: Bearer <your API token>' \\\n  'https://coda.io/apis/v1/folders/<your folder id>'\n"
 components:
   schemas:
+    UpdateFolderRequest:
+      x-schema-name: UpdateFolderRequest
+      description: Request for updating a folder.
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: Name of the folder.
+          example: Projects
+        description:
+          type: string
+          description: Description of the folder.
+          example: A collection of project docs.
+    WorkspaceReference:
+      x-schema-name: WorkspaceReference
+      description: Reference to a Coda workspace.
+      type: object
+      required:
+      - id
+      - type
+      - browserLink
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the Coda workspace.
+          example: ws-1Ab234
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - workspace
+          x-tsType: Type.Workspace
+        organizationId:
+          type: string
+          description: ID of the organization bound to this workspace, if any.
+          example: org-2Bc456
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to the Coda workspace.
+          example: https://coda.io/docs?workspaceId=ws-1Ab234
+        name:
+          type: string
+          description: Name of the workspace; included if the user has access to the workspace.
+          example: My workspace
+    nextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
     Folder:
       x-schema-name: Folder
       description: A Coda folder.
@@ -328,39 +379,10 @@ components:
           example: true
         workspace:
           $ref: '#/components/schemas/WorkspaceReference'
-    WorkspaceReference:
-      x-schema-name: WorkspaceReference
-      description: Reference to a Coda workspace.
-      type: object
-      required:
-      - id
-      - type
-      - browserLink
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: ID of the Coda workspace.
-          example: ws-1Ab234
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - workspace
-          x-tsType: Type.Workspace
-        organizationId:
-          type: string
-          description: ID of the organization bound to this workspace, if any.
-          example: org-2Bc456
-        browserLink:
-          type: string
-          format: url
-          description: Browser-friendly link to the Coda workspace.
-          example: https://coda.io/docs?workspaceId=ws-1Ab234
-        name:
-          type: string
-          description: Name of the workspace; included if the user has access to the workspace.
-          example: My workspace
+    nextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
     FolderList:
       x-schema-name: FolderList
       description: List of folders.
@@ -385,31 +407,6 @@ components:
           - $ref: '#/components/schemas/nextPageLink'
           - type: string
             example: https://coda.io/apis/v1/folders?pageToken=xyz
-    CreateFolderRequest:
-      x-schema-name: CreateFolderRequest
-      description: Request for creating a folder.
-      type: object
-      required:
-      - name
-      - workspaceId
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-          description: Name of the folder.
-          example: Projects
-        workspaceId:
-          type: string
-          description: ID of the workspace where the folder should be created.
-          example: ws-1Ab234
-        description:
-          type: string
-          description: Description of the folder.
-          example: A collection of project docs.
-    nextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
     Icon:
       x-schema-name: icon
       description: Info about the icon.
@@ -431,30 +428,81 @@ components:
           format: url
           description: Browser-friendly link to an icon.
           example: https://cdn.coda.io/icons/png/color/icon-32.png
-    UpdateFolderRequest:
-      x-schema-name: UpdateFolderRequest
-      description: Request for updating a folder.
+    CreateFolderRequest:
+      x-schema-name: CreateFolderRequest
+      description: Request for creating a folder.
       type: object
+      required:
+      - name
+      - workspaceId
       additionalProperties: false
       properties:
         name:
           type: string
           description: Name of the folder.
           example: Projects
+        workspaceId:
+          type: string
+          description: ID of the workspace where the folder should be created.
+          example: ws-1Ab234
         description:
           type: string
           description: Description of the folder.
           example: A collection of project docs.
-    nextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
     DeleteFolderResult:
       x-schema-name: DeleteFolderResult
       description: The result of a folder deletion.
       type: object
       additionalProperties: false
   responses:
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
+    TooManyRequestsError:
+      description: The client has sent too many requests.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 429
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Too Many Requests
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Too Many Requests
     ForbiddenError:
       description: The API token does not grant access to this resource.
       content:
@@ -503,30 +551,6 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Bad Request
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
     UnauthorizedError:
       description: The API token is invalid or has expired.
       content:
@@ -551,30 +575,6 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Unauthorized
-    TooManyRequestsError:
-      description: The client has sent too many requests.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 429
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Too Many Requests
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Too Many Requests
   parameters:
     limit:
       name: limit
@@ -585,19 +585,19 @@ components:
         type: integer
         minimum: 1
         default: 25
-    pageToken:
-      name: pageToken
-      description: An opaque token used to fetch the next page of results.
-      in: query
-      example: eyJsaW1pd
-      schema:
-        type: string
     folderId:
       name: folderId
       description: ID of the folder.
       in: path
       required: true
       example: fl-1Ab234
+      schema:
+        type: string
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
       schema:
         type: string
   securitySchemes:
