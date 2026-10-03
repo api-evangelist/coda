@@ -189,18 +189,42 @@ paths:
           '
 components:
   schemas:
-    CurrencyFormatType:
-      x-schema-name: CurrencyFormatType
-      description: How the numeric value should be formatted (with or without symbol, negative numbers in parens).
+    ColumnList:
+      x-schema-name: ColumnList
+      description: List of columns.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Column'
+        href:
+          type: string
+          format: url
+          description: API link to these results
+          example: https://coda.io/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/columns?limit=20
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://coda.io/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/columns?pageToken=eyJsaW1pd
+    EmailDisplayType:
+      x-schema-name: EmailDisplayType
+      description: How an email address should be displayed in the user interface.
       type: string
       enum:
-      - currency
-      - accounting
-      - financial
+      - iconAndEmail
+      - iconOnly
+      - emailOnly
       x-tsEnumNames:
-      - Currency
-      - Accounting
-      - Financial
+      - IconAndEmail
+      - IconOnly
+      - EmailOnly
     TableReference:
       x-schema-name: TableReference
       description: Reference to a table or view.
@@ -242,236 +266,6 @@ components:
           example: Tasks
         parent:
           $ref: '#/components/schemas/PageReference'
-    IconSet:
-      x-schema-name: IconSet
-      description: List of available icon sets.
-      type: string
-      enum:
-      - star
-      - circle
-      - fire
-      - bug
-      - diamond
-      - bell
-      - thumbsup
-      - heart
-      - chili
-      - smiley
-      - lightning
-      - currency
-      - coffee
-      - person
-      - battery
-      - cocktail
-      - cloud
-      - sun
-      - checkmark
-      - lightbulb
-      x-tsEnumNames:
-      - Star
-      - Circle
-      - Fire
-      - Bug
-      - Diamond
-      - Bell
-      - ThumbsUp
-      - Heart
-      - Chili
-      - Smiley
-      - Lightning
-      - Currency
-      - Coffee
-      - Person
-      - Battery
-      - Cocktail
-      - Cloud
-      - Sun
-      - Checkmark
-      - LightBulb
-    ImageShapeStyle:
-      x-schema-name: ImageShapeStyle
-      description: How an image should be displayed.
-      type: string
-      enum:
-      - auto
-      - circle
-      x-tsEnumNames:
-      - Auto
-      - Circle
-    ColumnList:
-      x-schema-name: ColumnList
-      description: List of columns.
-      type: object
-      required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Column'
-        href:
-          type: string
-          format: url
-          description: API link to these results
-          example: https://coda.io/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/columns?limit=20
-        nextPageToken:
-          $ref: '#/components/schemas/nextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/nextPageLink'
-          - type: string
-            example: https://coda.io/apis/v1/docs/AbCDeFGH/tables/grid-pqRst-U/columns?pageToken=eyJsaW1pd
-    ReferenceColumnFormat:
-      x-schema-name: ReferenceColumnFormat
-      description: Format of a column that refers to another table.
-      allOf:
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - type: object
-        additionalProperties: false
-        required:
-        - table
-        properties:
-          table:
-            allOf:
-            - description: Reference to the table this column refers to, if applicable.
-              additionalProperties: false
-            - $ref: '#/components/schemas/TableReference'
-    SliderDisplayType:
-      x-schema-name: SliderDisplayType
-      description: How the slider should be rendered.
-      type: string
-      enum:
-      - slider
-      - progress
-      x-tsEnumNames:
-      - Slider
-      - Progress
-    nextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
-    CheckboxDisplayType:
-      x-schema-name: CheckboxDisplayType
-      description: How a checkbox should be displayed.
-      type: string
-      enum:
-      - toggle
-      - check
-      x-tsEnumNames:
-      - Toggle
-      - Check
-    SimpleColumnFormat:
-      x-schema-name: SimpleColumnFormat
-      description: Format of a simple column.
-      type: object
-      required:
-      - type
-      - isArray
-      additionalProperties: false
-      properties:
-        type:
-          $ref: '#/components/schemas/ColumnFormatType'
-        isArray:
-          type: boolean
-          description: Whether or not this column is an array.
-          example: true
-    DurationColumnFormat:
-      x-schema-name: DurationColumnFormat
-      description: Format of a duration column.
-      allOf:
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - type: object
-        additionalProperties: false
-        properties:
-          precision:
-            type: integer
-            example: 2
-          maxUnit:
-            allOf:
-            - description: The maximum unit of precision, e.g. "hours" if this duration need not include minutes.
-              additionalProperties: false
-            - $ref: '#/components/schemas/DurationUnit'
-    ScaleColumnFormat:
-      x-schema-name: ScaleColumnFormat
-      description: Format of a numeric column that renders as a scale, like star ratings.
-      allOf:
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - type: object
-        additionalProperties: false
-        required:
-        - maximum
-        - icon
-        properties:
-          maximum:
-            type: number
-            description: The maximum number allowed for this scale.
-            example: 5
-          icon:
-            allOf:
-            - description: The icon set to use when rendering the scale, e.g. render a 5 star scale.
-              additionalProperties: false
-            - $ref: '#/components/schemas/IconSet'
-    DateColumnFormat:
-      x-schema-name: DateColumnFormat
-      description: Format of a date column.
-      allOf:
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - type: object
-        additionalProperties: false
-        properties:
-          format:
-            type: string
-            description: 'A format string using Moment syntax: https://momentjs.com/docs/#/displaying/'
-            example: YYYY-MM-DD
-    ButtonColumnFormat:
-      x-schema-name: ButtonColumnFormat
-      description: Format of a button column.
-      allOf:
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - type: object
-        additionalProperties: false
-        properties:
-          label:
-            type: string
-            description: Label formula for the button.
-            example: Click me
-          disableIf:
-            type: string
-            description: DisableIf formula for the button.
-            example: False()
-          action:
-            type: string
-            description: Action formula for the button.
-            example: OpenUrl("www.google.com")
-    NumberOrNumberFormula:
-      x-schema-name: NumberOrNumberFormula
-      description: A number or a string representing a formula that evaluates to a number.
-      oneOf:
-      - type: number
-        description: A numeric value.
-        example: 1
-      - type: string
-        description: A formula that evaluates to a numeric value.
-        example: 5 * 10
-    NumericColumnFormat:
-      x-schema-name: NumericColumnFormat
-      description: Format of a numeric column.
-      allOf:
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - type: object
-        additionalProperties: false
-        properties:
-          precision:
-            type: integer
-            minimum: 0
-            maximum: 10
-            description: The decimal precision.
-            example: 2
-          useThousandsSeparator:
-            type: boolean
-            description: Whether to use a thousands separator (like ",") to format the numeric value.
-            example: true
     DateTimeColumnFormat:
       x-schema-name: DateTimeColumnFormat
       description: Format of a date column.
@@ -488,50 +282,6 @@ components:
             type: string
             description: 'A format string using Moment syntax: https://momentjs.com/docs/#/displaying/'
             example: h:mm:ss A
-    CurrencyColumnFormat:
-      x-schema-name: CurrencyColumnFormat
-      description: Format of a currency column.
-      allOf:
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - type: object
-        additionalProperties: false
-        properties:
-          currencyCode:
-            type: string
-            description: The currency symbol
-            example: $
-          precision:
-            type: integer
-            minimum: 0
-            maximum: 10
-            description: The decimal precision.
-            example: 2
-          format:
-            $ref: '#/components/schemas/CurrencyFormatType'
-    TimeColumnFormat:
-      x-schema-name: TimeColumnFormat
-      description: Format of a time column.
-      allOf:
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - type: object
-        additionalProperties: false
-        properties:
-          format:
-            type: string
-            description: 'A format string using Moment syntax: https://momentjs.com/docs/#/displaying/'
-            example: h:mm:ss A
-    EmailDisplayType:
-      x-schema-name: EmailDisplayType
-      description: How an email address should be displayed in the user interface.
-      type: string
-      enum:
-      - iconAndEmail
-      - iconOnly
-      - emailOnly
-      x-tsEnumNames:
-      - IconAndEmail
-      - IconOnly
-      - EmailOnly
     SelectOption:
       x-schema-name: SelectOption
       description: An option for a select column.
@@ -552,79 +302,6 @@ components:
           type: string
           description: The foreground color of the option.
           example: '#ffffff'
-    TableType:
-      x-schema-name: TableType
-      type: string
-      enum:
-      - table
-      - view
-      x-tsEnumNames:
-      - Table
-      - View
-    DurationUnit:
-      x-schema-name: DurationUnit
-      description: A time unit used as part of a duration value.
-      type: string
-      enum:
-      - days
-      - hours
-      - minutes
-      - seconds
-      x-tsEnumNames:
-      - Days
-      - Hours
-      - Minutes
-      - Seconds
-    LinkColumnFormat:
-      x-schema-name: LinkColumnFormat
-      description: Format of a link column.
-      allOf:
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - type: object
-        additionalProperties: false
-        properties:
-          display:
-            $ref: '#/components/schemas/LinkDisplayType'
-          force:
-            type: boolean
-            description: Force embeds to render on the client instead of the server (for sites that require user login).
-            example: true
-    PageReference:
-      x-schema-name: PageReference
-      description: Reference to a page.
-      type: object
-      required:
-      - id
-      - type
-      - browserLink
-      - href
-      - name
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: ID of the page.
-          example: canvas-IjkLmnO
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - page
-          x-tsType: Type.Page
-        href:
-          type: string
-          format: url
-          description: API link to the page.
-          example: https://coda.io/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO
-        browserLink:
-          type: string
-          format: url
-          description: Browser-friendly link to the page.
-          example: https://coda.io/d/_dAbCDeFGH/Launch-Status_sumnO
-        name:
-          type: string
-          description: Name of the page.
-          example: Launch Status
     ColumnFormatType:
       x-schema-name: ColumnFormatType
       description: Format type of the column
@@ -679,59 +356,70 @@ components:
       - Reaction
       - Canvas
       - Other
-    SliderColumnFormat:
-      x-schema-name: SliderColumnFormat
-      description: Format of a numeric column that renders as a slider.
+    IconSet:
+      x-schema-name: IconSet
+      description: List of available icon sets.
+      type: string
+      enum:
+      - star
+      - circle
+      - fire
+      - bug
+      - diamond
+      - bell
+      - thumbsup
+      - heart
+      - chili
+      - smiley
+      - lightning
+      - currency
+      - coffee
+      - person
+      - battery
+      - cocktail
+      - cloud
+      - sun
+      - checkmark
+      - lightbulb
+      x-tsEnumNames:
+      - Star
+      - Circle
+      - Fire
+      - Bug
+      - Diamond
+      - Bell
+      - ThumbsUp
+      - Heart
+      - Chili
+      - Smiley
+      - Lightning
+      - Currency
+      - Coffee
+      - Person
+      - Battery
+      - Cocktail
+      - Cloud
+      - Sun
+      - Checkmark
+      - LightBulb
+    NumericColumnFormat:
+      x-schema-name: NumericColumnFormat
+      description: Format of a numeric column.
       allOf:
       - $ref: '#/components/schemas/SimpleColumnFormat'
       - type: object
         additionalProperties: false
         properties:
-          minimum:
-            allOf:
-            - description: The minimum allowed value for this slider.
-              additionalProperties: false
-            - $ref: '#/components/schemas/NumberOrNumberFormula'
-          maximum:
-            allOf:
-            - description: The maximum allowed value for this slider.
-              additionalProperties: false
-            - $ref: '#/components/schemas/NumberOrNumberFormula'
-          step:
-            allOf:
-            - description: The step size (numeric increment) for this slider.
-              additionalProperties: false
-            - $ref: '#/components/schemas/NumberOrNumberFormula'
-          displayType:
-            $ref: '#/components/schemas/SliderDisplayType'
-          showValue:
+          precision:
+            type: integer
+            minimum: 0
+            maximum: 10
+            description: The decimal precision.
+            example: 2
+          useThousandsSeparator:
             type: boolean
-            description: Whether the underyling numeric value is also displayed.
+            description: Whether to use a thousands separator (like ",") to format the numeric value.
             example: true
-    ImageReferenceColumnFormat:
-      x-schema-name: ImageReferenceColumnFormat
-      description: Format of an image reference column.
-      allOf:
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - type: object
-        additionalProperties: false
-        required:
-        - width
-        - height
-        - style
-        properties:
-          width:
-            allOf:
-            - description: The image width.
-              additionalProperties: false
-            - $ref: '#/components/schemas/NumberOrNumberFormula'
-          height:
-            allOf:
-            - description: The image height.
-              additionalProperties: false
-            - $ref: '#/components/schemas/NumberOrNumberFormula'
-          style:
-            $ref: '#/components/schemas/ImageShapeStyle'
     ColumnDetail:
       x-schema-name: ColumnDetail
       description: Info about a column.
@@ -784,22 +472,154 @@ components:
           $ref: '#/components/schemas/ColumnFormat'
         parent:
           $ref: '#/components/schemas/TableReference'
-    CheckboxColumnFormat:
-      x-schema-name: CheckboxColumnFormat
-      description: Format of a checkbox column.
+    DurationColumnFormat:
+      x-schema-name: DurationColumnFormat
+      description: Format of a duration column.
+      allOf:
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - type: object
+        additionalProperties: false
+        properties:
+          precision:
+            type: integer
+            example: 2
+          maxUnit:
+            allOf:
+            - description: The maximum unit of precision, e.g. "hours" if this duration need not include minutes.
+              additionalProperties: false
+            - $ref: '#/components/schemas/DurationUnit'
+    ImageReferenceColumnFormat:
+      x-schema-name: ImageReferenceColumnFormat
+      description: Format of an image reference column.
       allOf:
       - $ref: '#/components/schemas/SimpleColumnFormat'
       - type: object
         additionalProperties: false
         required:
-        - displayType
+        - width
+        - height
+        - style
         properties:
+          width:
+            allOf:
+            - description: The image width.
+              additionalProperties: false
+            - $ref: '#/components/schemas/NumberOrNumberFormula'
+          height:
+            allOf:
+            - description: The image height.
+              additionalProperties: false
+            - $ref: '#/components/schemas/NumberOrNumberFormula'
+          style:
+            $ref: '#/components/schemas/ImageShapeStyle'
+    NumberOrNumberFormula:
+      x-schema-name: NumberOrNumberFormula
+      description: A number or a string representing a formula that evaluates to a number.
+      oneOf:
+      - type: number
+        description: A numeric value.
+        example: 1
+      - type: string
+        description: A formula that evaluates to a numeric value.
+        example: 5 * 10
+    ReferenceColumnFormat:
+      x-schema-name: ReferenceColumnFormat
+      description: Format of a column that refers to another table.
+      allOf:
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - type: object
+        additionalProperties: false
+        required:
+        - table
+        properties:
+          table:
+            allOf:
+            - description: Reference to the table this column refers to, if applicable.
+              additionalProperties: false
+            - $ref: '#/components/schemas/TableReference'
+    ColumnFormat:
+      x-schema-name: ColumnFormat
+      description: Format of a column.
+      oneOf:
+      - $ref: '#/components/schemas/ButtonColumnFormat'
+      - $ref: '#/components/schemas/CheckboxColumnFormat'
+      - $ref: '#/components/schemas/DateColumnFormat'
+      - $ref: '#/components/schemas/DateTimeColumnFormat'
+      - $ref: '#/components/schemas/DurationColumnFormat'
+      - $ref: '#/components/schemas/EmailColumnFormat'
+      - $ref: '#/components/schemas/LinkColumnFormat'
+      - $ref: '#/components/schemas/CurrencyColumnFormat'
+      - $ref: '#/components/schemas/ImageReferenceColumnFormat'
+      - $ref: '#/components/schemas/NumericColumnFormat'
+      - $ref: '#/components/schemas/ReferenceColumnFormat'
+      - $ref: '#/components/schemas/SelectColumnFormat'
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - $ref: '#/components/schemas/ScaleColumnFormat'
+      - $ref: '#/components/schemas/SliderColumnFormat'
+      - $ref: '#/components/schemas/TimeColumnFormat'
+      discriminator:
+        propertyName: type
+        mapping:
+          text: '#/components/schemas/SimpleColumnFormat'
+          person: '#/components/schemas/ReferenceColumnFormat'
+          lookup: '#/components/schemas/ReferenceColumnFormat'
+          number: '#/components/schemas/NumericColumnFormat'
+          percent: '#/components/schemas/NumericColumnFormat'
+          currency: '#/components/schemas/CurrencyColumnFormat'
+          date: '#/components/schemas/DateColumnFormat'
+          dateTime: '#/components/schemas/DateTimeColumnFormat'
+          time: '#/components/schemas/TimeColumnFormat'
+          duration: '#/components/schemas/DurationColumnFormat'
+          slider: '#/components/schemas/SliderColumnFormat'
+          scale: '#/components/schemas/ScaleColumnFormat'
+          image: '#/components/schemas/SimpleColumnFormat'
+          imageReference: '#/components/schemas/ImageReferenceColumnFormat'
+          attachments: '#/components/schemas/SimpleColumnFormat'
+          button: '#/components/schemas/ButtonColumnFormat'
+          checkbox: '#/components/schemas/CheckboxColumnFormat'
+          select: '#/components/schemas/SelectColumnFormat'
+          packObject: '#/components/schemas/SimpleColumnFormat'
+          canvas: '#/components/schemas/SimpleColumnFormat'
+          other: '#/components/schemas/SimpleColumnFormat'
+    SliderColumnFormat:
+      x-schema-name: SliderColumnFormat
+      description: Format of a numeric column that renders as a slider.
+      allOf:
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - type: object
+        additionalProperties: false
+        properties:
+          minimum:
+            allOf:
+            - description: The minimum allowed value for this slider.
+              additionalProperties: false
+            - $ref: '#/components/schemas/NumberOrNumberFormula'
+          maximum:
+            allOf:
+            - description: The maximum allowed value for this slider.
+              additionalProperties: false
+            - $ref: '#/components/schemas/NumberOrNumberFormula'
+          step:
+            allOf:
+            - description: The step size (numeric increment) for this slider.
+              additionalProperties: false
+            - $ref: '#/components/schemas/NumberOrNumberFormula'
           displayType:
-            $ref: '#/components/schemas/CheckboxDisplayType'
-    nextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
+            $ref: '#/components/schemas/SliderDisplayType'
+          showValue:
+            type: boolean
+            description: Whether the underyling numeric value is also displayed.
+            example: true
+    SliderDisplayType:
+      x-schema-name: SliderDisplayType
+      description: How the slider should be rendered.
       type: string
-      example: eyJsaW1pd
+      enum:
+      - slider
+      - progress
+      x-tsEnumNames:
+      - Slider
+      - Progress
     LinkDisplayType:
       x-schema-name: LinkDisplayType
       description: How a link should be displayed in the user interface.
@@ -816,6 +636,174 @@ components:
       - Title
       - Card
       - Embed
+    nextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    ImageShapeStyle:
+      x-schema-name: ImageShapeStyle
+      description: How an image should be displayed.
+      type: string
+      enum:
+      - auto
+      - circle
+      x-tsEnumNames:
+      - Auto
+      - Circle
+    CheckboxDisplayType:
+      x-schema-name: CheckboxDisplayType
+      description: How a checkbox should be displayed.
+      type: string
+      enum:
+      - toggle
+      - check
+      x-tsEnumNames:
+      - Toggle
+      - Check
+    PageReference:
+      x-schema-name: PageReference
+      description: Reference to a page.
+      type: object
+      required:
+      - id
+      - type
+      - browserLink
+      - href
+      - name
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the page.
+          example: canvas-IjkLmnO
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - page
+          x-tsType: Type.Page
+        href:
+          type: string
+          format: url
+          description: API link to the page.
+          example: https://coda.io/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to the page.
+          example: https://coda.io/d/_dAbCDeFGH/Launch-Status_sumnO
+        name:
+          type: string
+          description: Name of the page.
+          example: Launch Status
+    nextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
+    LinkColumnFormat:
+      x-schema-name: LinkColumnFormat
+      description: Format of a link column.
+      allOf:
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - type: object
+        additionalProperties: false
+        properties:
+          display:
+            $ref: '#/components/schemas/LinkDisplayType'
+          force:
+            type: boolean
+            description: Force embeds to render on the client instead of the server (for sites that require user login).
+            example: true
+    CurrencyFormatType:
+      x-schema-name: CurrencyFormatType
+      description: How the numeric value should be formatted (with or without symbol, negative numbers in parens).
+      type: string
+      enum:
+      - currency
+      - accounting
+      - financial
+      x-tsEnumNames:
+      - Currency
+      - Accounting
+      - Financial
+    DateColumnFormat:
+      x-schema-name: DateColumnFormat
+      description: Format of a date column.
+      allOf:
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - type: object
+        additionalProperties: false
+        properties:
+          format:
+            type: string
+            description: 'A format string using Moment syntax: https://momentjs.com/docs/#/displaying/'
+            example: YYYY-MM-DD
+    ButtonColumnFormat:
+      x-schema-name: ButtonColumnFormat
+      description: Format of a button column.
+      allOf:
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - type: object
+        additionalProperties: false
+        properties:
+          label:
+            type: string
+            description: Label formula for the button.
+            example: Click me
+          disableIf:
+            type: string
+            description: DisableIf formula for the button.
+            example: False()
+          action:
+            type: string
+            description: Action formula for the button.
+            example: OpenUrl("www.google.com")
+    EmailColumnFormat:
+      x-schema-name: EmailColumnFormat
+      description: Format of an email column.
+      allOf:
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - type: object
+        additionalProperties: false
+        properties:
+          display:
+            $ref: '#/components/schemas/EmailDisplayType'
+          autocomplete:
+            type: boolean
+    CurrencyColumnFormat:
+      x-schema-name: CurrencyColumnFormat
+      description: Format of a currency column.
+      allOf:
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - type: object
+        additionalProperties: false
+        properties:
+          currencyCode:
+            type: string
+            description: The currency symbol
+            example: $
+          precision:
+            type: integer
+            minimum: 0
+            maximum: 10
+            description: The decimal precision.
+            example: 2
+          format:
+            $ref: '#/components/schemas/CurrencyFormatType'
+    DurationUnit:
+      x-schema-name: DurationUnit
+      description: A time unit used as part of a duration value.
+      type: string
+      enum:
+      - days
+      - hours
+      - minutes
+      - seconds
+      x-tsEnumNames:
+      - Days
+      - Hours
+      - Minutes
+      - Seconds
     Column:
       x-schema-name: Column
       description: Info about a column.
@@ -865,62 +853,47 @@ components:
           example: Test
         format:
           $ref: '#/components/schemas/ColumnFormat'
-    ColumnFormat:
-      x-schema-name: ColumnFormat
-      description: Format of a column.
-      oneOf:
-      - $ref: '#/components/schemas/ButtonColumnFormat'
-      - $ref: '#/components/schemas/CheckboxColumnFormat'
-      - $ref: '#/components/schemas/DateColumnFormat'
-      - $ref: '#/components/schemas/DateTimeColumnFormat'
-      - $ref: '#/components/schemas/DurationColumnFormat'
-      - $ref: '#/components/schemas/EmailColumnFormat'
-      - $ref: '#/components/schemas/LinkColumnFormat'
-      - $ref: '#/components/schemas/CurrencyColumnFormat'
-      - $ref: '#/components/schemas/ImageReferenceColumnFormat'
-      - $ref: '#/components/schemas/NumericColumnFormat'
-      - $ref: '#/components/schemas/ReferenceColumnFormat'
-      - $ref: '#/components/schemas/SelectColumnFormat'
-      - $ref: '#/components/schemas/SimpleColumnFormat'
-      - $ref: '#/components/schemas/ScaleColumnFormat'
-      - $ref: '#/components/schemas/SliderColumnFormat'
-      - $ref: '#/components/schemas/TimeColumnFormat'
-      discriminator:
-        propertyName: type
-        mapping:
-          text: '#/components/schemas/SimpleColumnFormat'
-          person: '#/components/schemas/ReferenceColumnFormat'
-          lookup: '#/components/schemas/ReferenceColumnFormat'
-          number: '#/components/schemas/NumericColumnFormat'
-          percent: '#/components/schemas/NumericColumnFormat'
-          currency: '#/components/schemas/CurrencyColumnFormat'
-          date: '#/components/schemas/DateColumnFormat'
-          dateTime: '#/components/schemas/DateTimeColumnFormat'
-          time: '#/components/schemas/TimeColumnFormat'
-          duration: '#/components/schemas/DurationColumnFormat'
-          slider: '#/components/schemas/SliderColumnFormat'
-          scale: '#/components/schemas/ScaleColumnFormat'
-          image: '#/components/schemas/SimpleColumnFormat'
-          imageReference: '#/components/schemas/ImageReferenceColumnFormat'
-          attachments: '#/components/schemas/SimpleColumnFormat'
-          button: '#/components/schemas/ButtonColumnFormat'
-          checkbox: '#/components/schemas/CheckboxColumnFormat'
-          select: '#/components/schemas/SelectColumnFormat'
-          packObject: '#/components/schemas/SimpleColumnFormat'
-          canvas: '#/components/schemas/SimpleColumnFormat'
-          other: '#/components/schemas/SimpleColumnFormat'
-    EmailColumnFormat:
-      x-schema-name: EmailColumnFormat
-      description: Format of an email column.
+    TableType:
+      x-schema-name: TableType
+      type: string
+      enum:
+      - table
+      - view
+      x-tsEnumNames:
+      - Table
+      - View
+    ScaleColumnFormat:
+      x-schema-name: ScaleColumnFormat
+      description: Format of a numeric column that renders as a scale, like star ratings.
       allOf:
       - $ref: '#/components/schemas/SimpleColumnFormat'
       - type: object
         additionalProperties: false
+        required:
+        - maximum
+        - icon
         properties:
-          display:
-            $ref: '#/components/schemas/EmailDisplayType'
-          autocomplete:
-            type: boolean
+          maximum:
+            type: number
+            description: The maximum number allowed for this scale.
+            example: 5
+          icon:
+            allOf:
+            - description: The icon set to use when rendering the scale, e.g. render a 5 star scale.
+              additionalProperties: false
+            - $ref: '#/components/schemas/IconSet'
+    CheckboxColumnFormat:
+      x-schema-name: CheckboxColumnFormat
+      description: Format of a checkbox column.
+      allOf:
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - type: object
+        additionalProperties: false
+        required:
+        - displayType
+        properties:
+          displayType:
+            $ref: '#/components/schemas/CheckboxDisplayType'
     SelectColumnFormat:
       x-schema-name: SelectColumnFormat
       description: Format of a select column.
@@ -934,6 +907,67 @@ components:
             description: For select format columns, the list of available options. Only returned for select lists that used a fixed set of options. Returns the first 5000 options.
             items:
               $ref: '#/components/schemas/SelectOption'
+    SimpleColumnFormat:
+      x-schema-name: SimpleColumnFormat
+      description: Format of a simple column.
+      type: object
+      required:
+      - type
+      - isArray
+      additionalProperties: false
+      properties:
+        type:
+          $ref: '#/components/schemas/ColumnFormatType'
+        isArray:
+          type: boolean
+          description: Whether or not this column is an array.
+          example: true
+    TimeColumnFormat:
+      x-schema-name: TimeColumnFormat
+      description: Format of a time column.
+      allOf:
+      - $ref: '#/components/schemas/SimpleColumnFormat'
+      - type: object
+        additionalProperties: false
+        properties:
+          format:
+            type: string
+            description: 'A format string using Moment syntax: https://momentjs.com/docs/#/displaying/'
+            example: h:mm:ss A
+  parameters:
+    tableIdOrName:
+      name: tableIdOrName
+      description: ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it.
+      x-sdk-description: ID or name of the table. Names are discouraged because they're easily prone to being changed by users.
+      in: path
+      required: true
+      example: grid-pqRst-U
+      schema:
+        type: string
+    docId:
+      name: docId
+      description: ID of the doc.
+      in: path
+      required: true
+      example: AbCDeFGH
+      schema:
+        type: string
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
+    columnIdOrName:
+      name: columnIdOrName
+      description: ID or name of the column. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it.
+      x-sdk-description: ID or name of the column. Names are discouraged because they're easily prone to being changed by users.
+      in: path
+      required: true
+      example: c-tuVwxYz
+      schema:
+        type: string
   responses:
     UnauthorizedError:
       description: The API token is invalid or has expired.
@@ -959,30 +993,6 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Unauthorized
-    TooManyRequestsError:
-      description: The client has sent too many requests.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 429
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Too Many Requests
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Too Many Requests
     NotFoundError:
       description: The resource could not be located with the current API token.
       content:
@@ -1031,40 +1041,30 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Forbidden
-  parameters:
-    docId:
-      name: docId
-      description: ID of the doc.
-      in: path
-      required: true
-      example: AbCDeFGH
-      schema:
-        type: string
-    tableIdOrName:
-      name: tableIdOrName
-      description: ID or name of the table. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it.
-      x-sdk-description: ID or name of the table. Names are discouraged because they're easily prone to being changed by users.
-      in: path
-      required: true
-      example: grid-pqRst-U
-      schema:
-        type: string
-    pageToken:
-      name: pageToken
-      description: An opaque token used to fetch the next page of results.
-      in: query
-      example: eyJsaW1pd
-      schema:
-        type: string
-    columnIdOrName:
-      name: columnIdOrName
-      description: ID or name of the column. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it.
-      x-sdk-description: ID or name of the column. Names are discouraged because they're easily prone to being changed by users.
-      in: path
-      required: true
-      example: c-tuVwxYz
-      schema:
-        type: string
+    TooManyRequestsError:
+      description: The client has sent too many requests.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 429
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Too Many Requests
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Too Many Requests
   securitySchemes:
     Bearer:
       description: "The Coda API can be accessed using an API token, which can be obtained from [*My account*](https://coda.io/account)\nin Coda. This token should be specified by setting a header as follows.\n\n```Authorization: Bearer <api_token>```\n\nKeep your token safe, as anyone who gets access to it can access your account. Once a token is created\nit cannot be viewed or modified, so don't lose it.\n\nIf you're logged into Coda, you can also query the API directly using your browser. Note that only GET\nendpoints are supported; for anything else, you'll have to use Bearer authentication.\n\n### Restricting token authorization\n\nBy default, bearer tokens created for the Coda API can perform any action that the user who created the token\ncan perform. However, Coda API bearer tokens can also be created with restrictions. These restrictions\ncan limit what objects can be operated on and the types of operations that can be performed.\n\n#### Operation types\n\nThe table below describes the types of authorization restrictions that can be placed on a Coda API token.\n<table>\n  <tr><th>Restriction</th><th>Description</th><th>Allowed HTTP Methods</th></tr>\n  <tr>\n    <td>Read access</td>\n    <td>Allows access to API methods that read the state of an object</td>\n    <td>GET</td>\n  </tr>\n  <tr>\n    <td>Write access</td>\n    <td>Allows access to API methods that write the state of an object</td>\n    <td>POST, PUT, DELETE</td>\n  </tr>\n  <tr>\n    <td>Read and write access</td>\n    <td>Allows access to all methods for an object</td>\n    <td>All</td>\n  </tr>\n</table>\n\n#### Object types\n\nCoda API tokens can be restricted to the following types of objects.\n\n* Documents: Restricts access to only allow API calls for `/docs/${DOC_ID}`\n* Tables: Restricts access to only allow API calls for `/docs/${DOC_ID}/tables/${TABLE_ID}`\n\n#### Special cases\n\nThere are a few special case methods that violate the above restrictions.\n\n* `/whoami`: This method can be called by all Coda API tokens.\n* `/resolveBrowserLink`: This method can be called by all Coda API tokens, but will only return a result\nif the token has access (read or write) to the object referenced by the URL.\n\n#### Feedback\n\nThis feature is under development and we'd love to hear your feedback and bug reports. Please\nvisit us at the [Developers Central](https://connect.superhuman.com/c/developers-central) forum within\nthe Coda Community.\n"

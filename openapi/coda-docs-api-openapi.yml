@@ -341,49 +341,266 @@ paths:
           '
 components:
   schemas:
-    WorkspaceReference:
-      x-schema-name: WorkspaceReference
-      description: Reference to a Coda workspace.
+    PageCreate:
+      x-schema-name: PageCreate
+      description: Payload for creating a new page in a doc.
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: Name of the page.
+          example: Launch Status
+        subtitle:
+          type: string
+          description: Subtitle of the page.
+          example: See the status of launch-related tasks.
+        iconName:
+          type: string
+          description: Name of the icon.
+          example: rocket
+        imageUrl:
+          type: string
+          description: Url of the cover image to use.
+          example: https://example.com/image.jpg
+        parentPageId:
+          type: string
+          description: The ID of this new page's parent, if creating a subpage.
+          example: canvas-tuVwxYz
+        pageContent:
+          $ref: '#/components/schemas/PageCreateContent'
+    DocPublished:
+      x-schema-name: DocPublished
+      description: Information about the publishing state of the document.
       type: object
       required:
-      - id
+      - browserLink
+      - discoverable
+      - earnCredit
+      - mode
+      - categories
+      additionalProperties: false
+      properties:
+        description:
+          type: string
+          description: Description of the published doc.
+          example: Hello World!
+        browserLink:
+          type: string
+          description: URL to the published doc.
+          example: https://coda.io/@coda/hello-world
+        imageLink:
+          type: string
+          description: URL to the cover image for the published doc.
+        discoverable:
+          type: boolean
+          description: If true, indicates that the doc is discoverable.
+          example: true
+        earnCredit:
+          type: boolean
+          description: 'If true, new users may be required to sign in to view content within this document. You will receive Coda credit for each user who signs up via your doc.
+
+            '
+          example: true
+        mode:
+          $ref: '#/components/schemas/DocPublishMode'
+        categories:
+          type: array
+          description: Categories applied to the doc.
+          example:
+          - Project Management
+          items:
+            $ref: '#/components/schemas/DocCategory'
+    DocSize:
+      x-schema-name: DocSize
+      description: The number of components within a Coda doc.
+      type: object
+      required:
+      - totalRowCount
+      - tableAndViewCount
+      - pageCount
+      - overApiSizeLimit
+      additionalProperties: false
+      properties:
+        totalRowCount:
+          type: number
+          description: The number of rows contained within all tables of the doc.
+          example: 31337
+        tableAndViewCount:
+          type: number
+          description: The total number of tables and views contained within the doc.
+          example: 42
+        pageCount:
+          type: number
+          description: The total number of page contained within the doc.
+          example: 10
+        overApiSizeLimit:
+          type: boolean
+          description: If true, indicates that the doc is over the API size limit.
+          example: false
+    Icon:
+      x-schema-name: icon
+      description: Info about the icon.
+      type: object
+      required:
+      - name
       - type
       - browserLink
       additionalProperties: false
       properties:
+        name:
+          type: string
+          description: Name of the icon.
+        type:
+          type: string
+          description: MIME type of the icon
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to an icon.
+          example: https://cdn.coda.io/icons/png/color/icon-32.png
+    DocDelete:
+      x-schema-name: DocDelete
+      description: The result of a doc deletion.
+      type: object
+      additionalProperties: false
+      properties: {}
+    Doc:
+      x-schema-name: Doc
+      description: Metadata about a Coda doc.
+      type: object
+      required:
+      - id
+      - type
+      - href
+      - browserLink
+      - name
+      - owner
+      - ownerName
+      - createdAt
+      - updatedAt
+      - workspace
+      - folder
+      - workspaceId
+      - folderId
+      additionalProperties: false
+      properties:
         id:
           type: string
-          description: ID of the Coda workspace.
-          example: ws-1Ab234
+          description: ID of the Coda doc.
+          example: AbCDeFGH
         type:
           type: string
           description: The type of this resource.
           enum:
-          - workspace
-          x-tsType: Type.Workspace
-        organizationId:
+          - doc
+          x-tsType: Type.Doc
+        href:
           type: string
-          description: ID of the organization bound to this workspace, if any.
-          example: org-2Bc456
+          format: url
+          description: API link to the Coda doc.
+          example: https://coda.io/apis/v1/docs/AbCDeFGH
         browserLink:
           type: string
           format: url
-          description: Browser-friendly link to the Coda workspace.
-          example: https://coda.io/docs?workspaceId=ws-1Ab234
+          description: Browser-friendly link to the Coda doc.
+          example: https://coda.io/d/_dAbCDeFGH
+        icon:
+          $ref: '#/components/schemas/Icon'
         name:
           type: string
-          description: Name of the workspace; included if the user has access to the workspace.
-          example: My workspace
-    PageEmbedRenderMethod:
-      x-schema-name: PageEmbedRenderMethod
-      description: Render mode for a page using the Embed page type.
-      type: string
-      enum:
-      - compatibility
-      - standard
-      x-tsEnumNames:
-      - Compatibility
-      - Standard
+          description: Name of the doc.
+          example: Product Launch Hub
+        owner:
+          type: string
+          format: email
+          description: Email address of the doc owner.
+          example: user@example.com
+        ownerName:
+          type: string
+          description: Name of the doc owner.
+          example: Some User
+        docSize:
+          $ref: '#/components/schemas/DocSize'
+        sourceDoc:
+          allOf:
+          - type: object
+            description: Reference to a Coda doc from which this doc was copied, if any.
+            additionalProperties: false
+          - $ref: '#/components/schemas/DocReference'
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp for when the doc was created.
+          example: '2018-04-11T00:18:57.946Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp for when the doc was last modified.
+          example: '2018-04-11T00:18:57.946Z'
+        published:
+          $ref: '#/components/schemas/DocPublished'
+        folder:
+          $ref: '#/components/schemas/FolderReference'
+        workspace:
+          $ref: '#/components/schemas/WorkspaceReference'
+        workspaceId:
+          type: string
+          description: ID of the Coda workspace containing this doc.
+          example: ws-1Ab234
+          deprecated: true
+        folderId:
+          type: string
+          description: ID of the Coda folder containing this doc.
+          example: fl-1Ab234
+          deprecated: true
+    DocCreate:
+      x-schema-name: DocCreate
+      description: Payload for creating a new doc.
+      type: object
+      additionalProperties: false
+      properties:
+        title:
+          type: string
+          description: Title of the new doc. Defaults to 'Untitled'.
+          example: Project Tracker
+        sourceDoc:
+          type: string
+          description: An optional doc ID from which to create a copy.
+          example: iJKlm_noPq
+        timezone:
+          type: string
+          description: The timezone to use for the newly created doc.
+          example: America/Los_Angeles
+        folderId:
+          type: string
+          description: 'The ID of the folder within which to create this doc. Defaults to your "My docs" folder in the oldest workspace you joined; this is subject to change. You can get this ID by opening the folder in the docs list on your computer and grabbing the `folderId` query parameter.
+
+            '
+          example: fl-ABcdEFgHJi
+        initialPage:
+          allOf:
+          - type: object
+            description: The contents of the initial page of the doc.
+            additionalProperties: false
+          - $ref: '#/components/schemas/PageCreate'
+    PageContent:
+      x-schema-name: PageContent
+      description: 'Content to be added or replaced with in a page (canvas).
+
+        '
+      type: object
+      additionalProperties: false
+      required:
+      - format
+      - content
+      properties:
+        format:
+          $ref: '#/components/schemas/PageContentFormat'
+        content:
+          type: string
+          description: The actual page content.
+          example: <p><b>This</b> is rich text</p>
     DocReference:
       x-schema-name: DocReference
       description: Reference to a Coda doc.
@@ -415,68 +632,51 @@ components:
           format: url
           description: Browser-friendly link to the Coda doc.
           example: https://coda.io/d/_dAbCDeFGH
-    PageContent:
-      x-schema-name: PageContent
-      description: 'Content to be added or replaced with in a page (canvas).
-
-        '
-      type: object
-      additionalProperties: false
-      required:
-      - format
-      - content
-      properties:
-        format:
-          $ref: '#/components/schemas/PageContentFormat'
-        content:
-          type: string
-          description: The actual page content.
-          example: <p><b>This</b> is rich text</p>
-    DocList:
-      x-schema-name: DocList
-      description: List of Coda docs.
+    FolderReference:
+      x-schema-name: FolderReference
+      description: Reference to a Coda folder.
       type: object
       required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Doc'
-        href:
-          type: string
-          format: url
-          description: API link to these results
-          example: https://coda.io/apis/v1/docs?limit=20
-        nextPageToken:
-          $ref: '#/components/schemas/nextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/nextPageLink'
-          - type: string
-            example: https://coda.io/apis/v1/docs?pageToken=eyJsaW1pd
-    Icon:
-      x-schema-name: icon
-      description: Info about the icon.
-      type: object
-      required:
-      - name
+      - id
       - type
       - browserLink
       additionalProperties: false
       properties:
-        name:
+        id:
           type: string
-          description: Name of the icon.
+          description: ID of the Coda folder.
+          example: fl-1Ab234
         type:
           type: string
-          description: MIME type of the icon
+          description: The type of this resource.
+          enum:
+          - folder
+          x-tsType: Type.Folder
         browserLink:
           type: string
           format: url
-          description: Browser-friendly link to an icon.
-          example: https://cdn.coda.io/icons/png/color/icon-32.png
+          description: Browser-friendly link to the folder.
+          example: https://coda.io/folders/fl-1Ab234
+        name:
+          type: string
+          description: Name of the folder; included if the user has access to the folder.
+          example: My docs
+    nextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    DocPublishMode:
+      x-schema-name: DocPublishMode
+      description: Which interaction mode the published doc should use.
+      type: string
+      enum:
+      - view
+      - play
+      - edit
+      x-tsEnumNames:
+      - View
+      - Play
+      - Edit
     PageCreateContent:
       x-schema-name: PageCreateContent
       description: Content that can be added to a page at creation time, either text (or rich text) or a URL to create a full-page embed.
@@ -573,139 +773,54 @@ components:
               type: string
               description: The id of the document to insert as a sync page.
               example: sHbI4uIwiK
-    Doc:
-      x-schema-name: Doc
-      description: Metadata about a Coda doc.
+    DocUpdateResult:
+      x-schema-name: DocUpdate
+      description: The result of a doc update
       type: object
-      required:
-      - id
-      - type
-      - href
-      - browserLink
-      - name
-      - owner
-      - ownerName
-      - createdAt
-      - updatedAt
-      - workspace
-      - folder
-      - workspaceId
-      - folderId
       additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: ID of the Coda doc.
-          example: AbCDeFGH
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - doc
-          x-tsType: Type.Doc
-        href:
-          type: string
-          format: url
-          description: API link to the Coda doc.
-          example: https://coda.io/apis/v1/docs/AbCDeFGH
-        browserLink:
-          type: string
-          format: url
-          description: Browser-friendly link to the Coda doc.
-          example: https://coda.io/d/_dAbCDeFGH
-        icon:
-          $ref: '#/components/schemas/Icon'
-        name:
-          type: string
-          description: Name of the doc.
-          example: Product Launch Hub
-        owner:
-          type: string
-          format: email
-          description: Email address of the doc owner.
-          example: user@example.com
-        ownerName:
-          type: string
-          description: Name of the doc owner.
-          example: Some User
-        docSize:
-          $ref: '#/components/schemas/DocSize'
-        sourceDoc:
-          allOf:
-          - type: object
-            description: Reference to a Coda doc from which this doc was copied, if any.
-            additionalProperties: false
-          - $ref: '#/components/schemas/DocReference'
-        createdAt:
-          type: string
-          format: date-time
-          description: Timestamp for when the doc was created.
-          example: '2018-04-11T00:18:57.946Z'
-        updatedAt:
-          type: string
-          format: date-time
-          description: Timestamp for when the doc was last modified.
-          example: '2018-04-11T00:18:57.946Z'
-        published:
-          $ref: '#/components/schemas/DocPublished'
-        folder:
-          $ref: '#/components/schemas/FolderReference'
-        workspace:
-          $ref: '#/components/schemas/WorkspaceReference'
-        workspaceId:
-          type: string
-          description: ID of the Coda workspace containing this doc.
-          example: ws-1Ab234
-          deprecated: true
-        folderId:
-          type: string
-          description: ID of the Coda folder containing this doc.
-          example: fl-1Ab234
-          deprecated: true
-    PageCreate:
-      x-schema-name: PageCreate
-      description: Payload for creating a new page in a doc.
+      properties: {}
+    nextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
+    DocUpdate:
+      x-schema-name: DocUpdate
+      description: Payload for updating a doc.
       type: object
       additionalProperties: false
       properties:
-        name:
+        title:
           type: string
-          description: Name of the page.
-          example: Launch Status
-        subtitle:
-          type: string
-          description: Subtitle of the page.
-          example: See the status of launch-related tasks.
+          description: Title of the doc.
+          example: Project Tracker
         iconName:
           type: string
           description: Name of the icon.
           example: rocket
-        imageUrl:
-          type: string
-          description: Url of the cover image to use.
-          example: https://example.com/image.jpg
-        parentPageId:
-          type: string
-          description: The ID of this new page's parent, if creating a subpage.
-          example: canvas-tuVwxYz
-        pageContent:
-          $ref: '#/components/schemas/PageCreateContent'
-    DocCategory:
-      x-schema-name: DocCategory
+    DocList:
+      x-schema-name: DocList
+      description: List of Coda docs.
       type: object
-      description: The category applied to a doc.
       required:
-      - name
+      - items
       additionalProperties: false
       properties:
-        name:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Doc'
+        href:
           type: string
-          description: Name of the category.
-          example: Project Management
-    nextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
+          format: url
+          description: API link to these results
+          example: https://coda.io/apis/v1/docs?limit=20
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://coda.io/apis/v1/docs?pageToken=eyJsaW1pd
     PageContentFormat:
       x-schema-name: PageContentFormat
       description: Supported content types for page (canvas) content.
@@ -716,69 +831,9 @@ components:
       x-tsEnumNames:
       - Html
       - Markdown
-    DocUpdateResult:
-      x-schema-name: DocUpdate
-      description: The result of a doc update
-      type: object
-      additionalProperties: false
-      properties: {}
-    DocPublished:
-      x-schema-name: DocPublished
-      description: Information about the publishing state of the document.
-      type: object
-      required:
-      - browserLink
-      - discoverable
-      - earnCredit
-      - mode
-      - categories
-      additionalProperties: false
-      properties:
-        description:
-          type: string
-          description: Description of the published doc.
-          example: Hello World!
-        browserLink:
-          type: string
-          description: URL to the published doc.
-          example: https://coda.io/@coda/hello-world
-        imageLink:
-          type: string
-          description: URL to the cover image for the published doc.
-        discoverable:
-          type: boolean
-          description: If true, indicates that the doc is discoverable.
-          example: true
-        earnCredit:
-          type: boolean
-          description: 'If true, new users may be required to sign in to view content within this document. You will receive Coda credit for each user who signs up via your doc.
-
-            '
-          example: true
-        mode:
-          $ref: '#/components/schemas/DocPublishMode'
-        categories:
-          type: array
-          description: Categories applied to the doc.
-          example:
-          - Project Management
-          items:
-            $ref: '#/components/schemas/DocCategory'
-    DocPublishMode:
-      x-schema-name: DocPublishMode
-      description: Which interaction mode the published doc should use.
-      type: string
-      enum:
-      - view
-      - play
-      - edit
-      x-tsEnumNames:
-      - View
-      - Play
-      - Edit
-    FolderReference:
-      x-schema-name: FolderReference
-      description: Reference to a Coda folder.
+    WorkspaceReference:
+      x-schema-name: WorkspaceReference
+      description: Reference to a Coda workspace.
       type: object
       required:
       - id
@@ -788,23 +843,27 @@ components:
       properties:
         id:
           type: string
-          description: ID of the Coda folder.
-          example: fl-1Ab234
+          description: ID of the Coda workspace.
+          example: ws-1Ab234
         type:
           type: string
           description: The type of this resource.
           enum:
-          - folder
-          x-tsType: Type.Folder
+          - workspace
+          x-tsType: Type.Workspace
+        organizationId:
+          type: string
+          description: ID of the organization bound to this workspace, if any.
+          example: org-2Bc456
         browserLink:
           type: string
           format: url
-          description: Browser-friendly link to the folder.
-          example: https://coda.io/folders/fl-1Ab234
+          description: Browser-friendly link to the Coda workspace.
+          example: https://coda.io/docs?workspaceId=ws-1Ab234
         name:
           type: string
-          description: Name of the folder; included if the user has access to the folder.
-          example: My docs
+          description: Name of the workspace; included if the user has access to the workspace.
+          example: My workspace
     DocumentCreationResult:
       x-schema-name: Doc
       description: The result of a doc creation.
@@ -898,87 +957,28 @@ components:
           type: string
           description: An arbitrary unique identifier for this request.
           example: abc-123-def-456
-    DocUpdate:
-      x-schema-name: DocUpdate
-      description: Payload for updating a doc.
+    DocCategory:
+      x-schema-name: DocCategory
       type: object
-      additionalProperties: false
-      properties:
-        title:
-          type: string
-          description: Title of the doc.
-          example: Project Tracker
-        iconName:
-          type: string
-          description: Name of the icon.
-          example: rocket
-    DocCreate:
-      x-schema-name: DocCreate
-      description: Payload for creating a new doc.
-      type: object
-      additionalProperties: false
-      properties:
-        title:
-          type: string
-          description: Title of the new doc. Defaults to 'Untitled'.
-          example: Project Tracker
-        sourceDoc:
-          type: string
-          description: An optional doc ID from which to create a copy.
-          example: iJKlm_noPq
-        timezone:
-          type: string
-          description: The timezone to use for the newly created doc.
-          example: America/Los_Angeles
-        folderId:
-          type: string
-          description: 'The ID of the folder within which to create this doc. Defaults to your "My docs" folder in the oldest workspace you joined; this is subject to change. You can get this ID by opening the folder in the docs list on your computer and grabbing the `folderId` query parameter.
-
-            '
-          example: fl-ABcdEFgHJi
-        initialPage:
-          allOf:
-          - type: object
-            description: The contents of the initial page of the doc.
-            additionalProperties: false
-          - $ref: '#/components/schemas/PageCreate'
-    DocDelete:
-      x-schema-name: DocDelete
-      description: The result of a doc deletion.
-      type: object
-      additionalProperties: false
-      properties: {}
-    nextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
-    DocSize:
-      x-schema-name: DocSize
-      description: The number of components within a Coda doc.
-      type: object
+      description: The category applied to a doc.
       required:
-      - totalRowCount
-      - tableAndViewCount
-      - pageCount
-      - overApiSizeLimit
+      - name
       additionalProperties: false
       properties:
-        totalRowCount:
-          type: number
-          description: The number of rows contained within all tables of the doc.
-          example: 31337
-        tableAndViewCount:
-          type: number
-          description: The total number of tables and views contained within the doc.
-          example: 42
-        pageCount:
-          type: number
-          description: The total number of page contained within the doc.
-          example: 10
-        overApiSizeLimit:
-          type: boolean
-          description: If true, indicates that the doc is over the API size limit.
-          example: false
+        name:
+          type: string
+          description: Name of the category.
+          example: Project Management
+    PageEmbedRenderMethod:
+      x-schema-name: PageEmbedRenderMethod
+      description: Render mode for a page using the Embed page type.
+      type: string
+      enum:
+      - compatibility
+      - standard
+      x-tsEnumNames:
+      - Compatibility
+      - Standard
   responses:
     BadRequestError:
       description: The request parameters did not conform to expectations.
@@ -1028,30 +1028,6 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Unauthorized
-    TooManyRequestsError:
-      description: The client has sent too many requests.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 429
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Too Many Requests
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Too Many Requests
     NotFoundError:
       description: The resource could not be located with the current API token.
       content:
@@ -1100,15 +1076,31 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Forbidden
+    TooManyRequestsError:
+      description: The client has sent too many requests.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 429
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Too Many Requests
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Too Many Requests
   parameters:
-    docId:
-      name: docId
-      description: ID of the doc.
-      in: path
-      required: true
-      example: AbCDeFGH
-      schema:
-        type: string
     query:
       name: query
       description: Search term used to filter down results.
@@ -1125,6 +1117,14 @@ components:
         type: integer
         minimum: 1
         default: 25
+    docId:
+      name: docId
+      description: ID of the doc.
+      in: path
+      required: true
+      example: AbCDeFGH
+      schema:
+        type: string
     pageToken:
       name: pageToken
       description: An opaque token used to fetch the next page of results.

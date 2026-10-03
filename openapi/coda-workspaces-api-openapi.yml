@@ -146,6 +146,103 @@ paths:
         lang: python
         source: "import requests\n\nheaders = {'Authorization': 'Bearer <your API token>'}\nuri = 'https://coda.io/apis/v1/workspaces/<your workspace id>/roles'\nparams = {\n  'limit': 10,\n}\nres = requests.get(uri, headers=headers, params=params).json()\n\nprint(f'First month is: {res[\"items\"][0][\"month\"]}')\n# => First month is: 2020-09-15\n"
 components:
+  responses:
+    TooManyRequestsError:
+      description: The client has sent too many requests.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 429
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Too Many Requests
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Too Many Requests
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
+    UnauthorizedError:
+      description: The API token is invalid or has expired.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 401
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Unauthorized
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Unauthorized
+    ForbiddenError:
+      description: The API token does not grant access to this resource.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 403
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Forbidden
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Forbidden
   schemas:
     WorkspaceUserRole:
       x-schema-name: WorkspaceUserRole
@@ -158,61 +255,6 @@ components:
       - Admin
       - DocMaker
       - Editor
-    ChangeRoleResult:
-      x-schema-name: ChangeRoleResult
-      description: The result of changing a user's workspace user role.
-      type: object
-      required:
-      - roleChangedAt
-      additionalProperties: false
-      properties:
-        roleChangedAt:
-          type: string
-          format: date-time
-          description: Timestamp for when the user's role last changed in this workspace.
-          example: '2018-04-11T00:18:57.946Z'
-    WorkspaceRoleActivity:
-      x-schema-name: WorkspaceRoleActivity
-      description: Metadata for workspace role activity.
-      type: object
-      required:
-      - month
-      - activeAdminCount
-      - activeDocMakerCount
-      - activeEditorCount
-      - inactiveAdminCount
-      - inactiveDocMakerCount
-      - inactiveEditorCount
-      additionalProperties: false
-      properties:
-        month:
-          type: string
-          description: Month corresponding to the data.
-          example: '2020-09-15'
-        activeAdminCount:
-          type: number
-          description: Number of active Admins.
-          example: 2
-        activeDocMakerCount:
-          type: number
-          description: Number of active Doc Makers.
-          example: 2
-        activeEditorCount:
-          type: number
-          description: Number of active Editors.
-          example: 2
-        inactiveAdminCount:
-          type: number
-          description: Number of inactive Admins.
-          example: 2
-        inactiveDocMakerCount:
-          type: number
-          description: Number of inactive Doc Makers.
-          example: 2
-        inactiveEditorCount:
-          type: number
-          description: Number of inactive Editor users.
-          example: 2
     GetWorkspaceRoleActivity:
       x-schema-name: GetWorkspaceRoleActivity
       description: Response for getting workspace role activity.
@@ -225,10 +267,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/WorkspaceRoleActivity'
-    nextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
     ChangeRole:
       x-schema-name: ChangeRole
       description: Parameters for changing a workspace user role.
@@ -244,6 +282,25 @@ components:
           example: hello@coda.io
         newRole:
           $ref: '#/components/schemas/WorkspaceUserRole'
+    WorkspaceMembersList:
+      x-schema-name: WorkspaceMembersList
+      description: Response for listing workspace users.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkspaceUser'
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://coda.io/apis/v1/workspaces/{workspaceId}/users?pageToken=xyz
     nextPageToken:
       description: If specified, an opaque token used to fetch the next page of results.
       type: string
@@ -315,122 +372,65 @@ components:
           type: number
           description: Number of unique users that have viewed any doc the user owns, manages, or has added pages to in the last 90 days.
           example: 2
-    WorkspaceMembersList:
-      x-schema-name: WorkspaceMembersList
-      description: Response for listing workspace users.
+    WorkspaceRoleActivity:
+      x-schema-name: WorkspaceRoleActivity
+      description: Metadata for workspace role activity.
       type: object
       required:
-      - items
+      - month
+      - activeAdminCount
+      - activeDocMakerCount
+      - activeEditorCount
+      - inactiveAdminCount
+      - inactiveDocMakerCount
+      - inactiveEditorCount
       additionalProperties: false
       properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkspaceUser'
-        nextPageToken:
-          $ref: '#/components/schemas/nextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/nextPageLink'
-          - type: string
-            example: https://coda.io/apis/v1/workspaces/{workspaceId}/users?pageToken=xyz
-  responses:
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
-    TooManyRequestsError:
-      description: The client has sent too many requests.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 429
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Too Many Requests
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Too Many Requests
-    ForbiddenError:
-      description: The API token does not grant access to this resource.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 403
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Forbidden
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Forbidden
-    UnauthorizedError:
-      description: The API token is invalid or has expired.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 401
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Unauthorized
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Unauthorized
+        month:
+          type: string
+          description: Month corresponding to the data.
+          example: '2020-09-15'
+        activeAdminCount:
+          type: number
+          description: Number of active Admins.
+          example: 2
+        activeDocMakerCount:
+          type: number
+          description: Number of active Doc Makers.
+          example: 2
+        activeEditorCount:
+          type: number
+          description: Number of active Editors.
+          example: 2
+        inactiveAdminCount:
+          type: number
+          description: Number of inactive Admins.
+          example: 2
+        inactiveDocMakerCount:
+          type: number
+          description: Number of inactive Doc Makers.
+          example: 2
+        inactiveEditorCount:
+          type: number
+          description: Number of inactive Editor users.
+          example: 2
+    nextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    ChangeRoleResult:
+      x-schema-name: ChangeRoleResult
+      description: The result of changing a user's workspace user role.
+      type: object
+      required:
+      - roleChangedAt
+      additionalProperties: false
+      properties:
+        roleChangedAt:
+          type: string
+          format: date-time
+          description: Timestamp for when the user's role last changed in this workspace.
+          example: '2018-04-11T00:18:57.946Z'
   parameters:
     pageToken:
       name: pageToken

@@ -172,6 +172,124 @@ paths:
           '
 components:
   schemas:
+    FormulaList:
+      x-schema-name: FormulaList
+      description: List of formulas.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormulaReference'
+        href:
+          type: string
+          format: url
+          description: API link to these results
+          example: https://coda.io/apis/v1/docs/AbCDeFGH/formulas?limit=20
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://coda.io/apis/v1/docs/AbCDeFGH/formulas?pageToken=eyJsaW1pd
+    ScalarValue:
+      x-schema-name: ScalarValue
+      description: A Coda result or entity expressed as a primitive type.
+      oneOf:
+      - type: string
+        example: $12.34
+      - type: number
+        example: 12.34
+      - type: boolean
+        example: true
+    FormulaReference:
+      x-schema-name: FormulaReference
+      description: Reference to a formula.
+      type: object
+      required:
+      - id
+      - type
+      - href
+      - name
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the formula.
+          example: f-fgHijkLm
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - formula
+          x-tsType: Type.Formula
+        href:
+          type: string
+          format: url
+          description: API link to the formula.
+          example: https://coda.io/apis/v1/docs/AbCDeFGH/formulas/f-fgHijkLm
+        name:
+          type: string
+          description: Name of the formula.
+          example: Sum of expenses
+        parent:
+          $ref: '#/components/schemas/PageReference'
+    PageReference:
+      x-schema-name: PageReference
+      description: Reference to a page.
+      type: object
+      required:
+      - id
+      - type
+      - browserLink
+      - href
+      - name
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the page.
+          example: canvas-IjkLmnO
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - page
+          x-tsType: Type.Page
+        href:
+          type: string
+          format: url
+          description: API link to the page.
+          example: https://coda.io/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to the page.
+          example: https://coda.io/d/_dAbCDeFGH/Launch-Status_sumnO
+        name:
+          type: string
+          description: Name of the page.
+          example: Launch Status
+    nextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
+    nextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    SortBy:
+      x-schema-name: SortBy
+      description: Determines how the objects returned are sorted
+      type: string
+      enum:
+      - name
+      x-tsEnumNames:
+      - Name
     Value:
       x-schema-name: Value
       description: A Coda result or entity expressed as a primitive type, or array of primitive types.
@@ -220,124 +338,6 @@ components:
           $ref: '#/components/schemas/PageReference'
         value:
           $ref: '#/components/schemas/Value'
-    SortBy:
-      x-schema-name: SortBy
-      description: Determines how the objects returned are sorted
-      type: string
-      enum:
-      - name
-      x-tsEnumNames:
-      - Name
-    FormulaList:
-      x-schema-name: FormulaList
-      description: List of formulas.
-      type: object
-      required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/FormulaReference'
-        href:
-          type: string
-          format: url
-          description: API link to these results
-          example: https://coda.io/apis/v1/docs/AbCDeFGH/formulas?limit=20
-        nextPageToken:
-          $ref: '#/components/schemas/nextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/nextPageLink'
-          - type: string
-            example: https://coda.io/apis/v1/docs/AbCDeFGH/formulas?pageToken=eyJsaW1pd
-    FormulaReference:
-      x-schema-name: FormulaReference
-      description: Reference to a formula.
-      type: object
-      required:
-      - id
-      - type
-      - href
-      - name
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: ID of the formula.
-          example: f-fgHijkLm
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - formula
-          x-tsType: Type.Formula
-        href:
-          type: string
-          format: url
-          description: API link to the formula.
-          example: https://coda.io/apis/v1/docs/AbCDeFGH/formulas/f-fgHijkLm
-        name:
-          type: string
-          description: Name of the formula.
-          example: Sum of expenses
-        parent:
-          $ref: '#/components/schemas/PageReference'
-    nextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
-    nextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
-    ScalarValue:
-      x-schema-name: ScalarValue
-      description: A Coda result or entity expressed as a primitive type.
-      oneOf:
-      - type: string
-        example: $12.34
-      - type: number
-        example: 12.34
-      - type: boolean
-        example: true
-    PageReference:
-      x-schema-name: PageReference
-      description: Reference to a page.
-      type: object
-      required:
-      - id
-      - type
-      - browserLink
-      - href
-      - name
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: ID of the page.
-          example: canvas-IjkLmnO
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - page
-          x-tsType: Type.Page
-        href:
-          type: string
-          format: url
-          description: API link to the page.
-          example: https://coda.io/apis/v1/docs/AbCDeFGH/pages/canvas-IjkLmnO
-        browserLink:
-          type: string
-          format: url
-          description: Browser-friendly link to the page.
-          example: https://coda.io/d/_dAbCDeFGH/Launch-Status_sumnO
-        name:
-          type: string
-          description: Name of the page.
-          example: Launch Status
   responses:
     TooManyRequestsError:
       description: The client has sent too many requests.
@@ -363,54 +363,6 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Too Many Requests
-    ForbiddenError:
-      description: The API token does not grant access to this resource.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 403
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Forbidden
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Forbidden
-    UnauthorizedError:
-      description: The API token is invalid or has expired.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 401
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Unauthorized
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Unauthorized
     NotFoundError:
       description: The resource could not be located with the current API token.
       content:
@@ -435,30 +387,61 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Not Found
+    UnauthorizedError:
+      description: The API token is invalid or has expired.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 401
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Unauthorized
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Unauthorized
+    ForbiddenError:
+      description: The API token does not grant access to this resource.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 403
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Forbidden
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Forbidden
   parameters:
-    sortBy:
-      name: sortBy
-      description: Determines how to sort the given objects.
-      in: query
-      example: name
-      schema:
-        $ref: '#/components/schemas/SortBy'
-    limit:
-      name: limit
-      description: Maximum number of results to return in this query.
-      in: query
-      example: 10
-      schema:
-        type: integer
-        minimum: 1
-        default: 25
-    formulaIdOrName:
-      name: formulaIdOrName
-      description: ID or name of the formula. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it.
-      x-sdk-description: ID or name of the formula. Names are discouraged because they're easily prone to being changed by users.
+    docId:
+      name: docId
+      description: ID of the doc.
       in: path
       required: true
-      example: f-fgHijkLm
+      example: AbCDeFGH
       schema:
         type: string
     pageToken:
@@ -468,12 +451,29 @@ components:
       example: eyJsaW1pd
       schema:
         type: string
-    docId:
-      name: docId
-      description: ID of the doc.
+    limit:
+      name: limit
+      description: Maximum number of results to return in this query.
+      in: query
+      example: 10
+      schema:
+        type: integer
+        minimum: 1
+        default: 25
+    sortBy:
+      name: sortBy
+      description: Determines how to sort the given objects.
+      in: query
+      example: name
+      schema:
+        $ref: '#/components/schemas/SortBy'
+    formulaIdOrName:
+      name: formulaIdOrName
+      description: ID or name of the formula. Names are discouraged because they're easily prone to being changed by users. If you're using a name, be sure to URI-encode it.
+      x-sdk-description: ID or name of the formula. Names are discouraged because they're easily prone to being changed by users.
       in: path
       required: true
-      example: AbCDeFGH
+      example: f-fgHijkLm
       schema:
         type: string
   securitySchemes:
