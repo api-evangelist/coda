@@ -341,133 +341,9 @@ paths:
           '
 components:
   schemas:
-    PageCreate:
-      x-schema-name: PageCreate
-      description: Payload for creating a new page in a doc.
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-          description: Name of the page.
-          example: Launch Status
-        subtitle:
-          type: string
-          description: Subtitle of the page.
-          example: See the status of launch-related tasks.
-        iconName:
-          type: string
-          description: Name of the icon.
-          example: rocket
-        imageUrl:
-          type: string
-          description: Url of the cover image to use.
-          example: https://example.com/image.jpg
-        parentPageId:
-          type: string
-          description: The ID of this new page's parent, if creating a subpage.
-          example: canvas-tuVwxYz
-        pageContent:
-          $ref: '#/components/schemas/PageCreateContent'
-    DocPublished:
-      x-schema-name: DocPublished
-      description: Information about the publishing state of the document.
-      type: object
-      required:
-      - browserLink
-      - discoverable
-      - earnCredit
-      - mode
-      - categories
-      additionalProperties: false
-      properties:
-        description:
-          type: string
-          description: Description of the published doc.
-          example: Hello World!
-        browserLink:
-          type: string
-          description: URL to the published doc.
-          example: https://coda.io/@coda/hello-world
-        imageLink:
-          type: string
-          description: URL to the cover image for the published doc.
-        discoverable:
-          type: boolean
-          description: If true, indicates that the doc is discoverable.
-          example: true
-        earnCredit:
-          type: boolean
-          description: 'If true, new users may be required to sign in to view content within this document. You will receive Coda credit for each user who signs up via your doc.
-
-            '
-          example: true
-        mode:
-          $ref: '#/components/schemas/DocPublishMode'
-        categories:
-          type: array
-          description: Categories applied to the doc.
-          example:
-          - Project Management
-          items:
-            $ref: '#/components/schemas/DocCategory'
-    DocSize:
-      x-schema-name: DocSize
-      description: The number of components within a Coda doc.
-      type: object
-      required:
-      - totalRowCount
-      - tableAndViewCount
-      - pageCount
-      - overApiSizeLimit
-      additionalProperties: false
-      properties:
-        totalRowCount:
-          type: number
-          description: The number of rows contained within all tables of the doc.
-          example: 31337
-        tableAndViewCount:
-          type: number
-          description: The total number of tables and views contained within the doc.
-          example: 42
-        pageCount:
-          type: number
-          description: The total number of page contained within the doc.
-          example: 10
-        overApiSizeLimit:
-          type: boolean
-          description: If true, indicates that the doc is over the API size limit.
-          example: false
-    Icon:
-      x-schema-name: icon
-      description: Info about the icon.
-      type: object
-      required:
-      - name
-      - type
-      - browserLink
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-          description: Name of the icon.
-        type:
-          type: string
-          description: MIME type of the icon
-        browserLink:
-          type: string
-          format: url
-          description: Browser-friendly link to an icon.
-          example: https://cdn.coda.io/icons/png/color/icon-32.png
-    DocDelete:
-      x-schema-name: DocDelete
-      description: The result of a doc deletion.
-      type: object
-      additionalProperties: false
-      properties: {}
-    Doc:
+    DocumentCreationResult:
       x-schema-name: Doc
-      description: Metadata about a Coda doc.
+      description: The result of a doc creation.
       type: object
       required:
       - id
@@ -554,6 +430,32 @@ components:
           description: ID of the Coda folder containing this doc.
           example: fl-1Ab234
           deprecated: true
+        requestId:
+          type: string
+          description: An arbitrary unique identifier for this request.
+          example: abc-123-def-456
+    PageEmbedRenderMethod:
+      x-schema-name: PageEmbedRenderMethod
+      description: Render mode for a page using the Embed page type.
+      type: string
+      enum:
+      - compatibility
+      - standard
+      x-tsEnumNames:
+      - Compatibility
+      - Standard
+    DocPublishMode:
+      x-schema-name: DocPublishMode
+      description: Which interaction mode the published doc should use.
+      type: string
+      enum:
+      - view
+      - play
+      - edit
+      x-tsEnumNames:
+      - View
+      - Play
+      - Edit
     DocCreate:
       x-schema-name: DocCreate
       description: Payload for creating a new doc.
@@ -584,99 +486,125 @@ components:
             description: The contents of the initial page of the doc.
             additionalProperties: false
           - $ref: '#/components/schemas/PageCreate'
-    PageContent:
-      x-schema-name: PageContent
-      description: 'Content to be added or replaced with in a page (canvas).
-
-        '
+    DocUpdateResult:
+      x-schema-name: DocUpdate
+      description: The result of a doc update
       type: object
       additionalProperties: false
-      required:
-      - format
-      - content
-      properties:
-        format:
-          $ref: '#/components/schemas/PageContentFormat'
-        content:
-          type: string
-          description: The actual page content.
-          example: <p><b>This</b> is rich text</p>
-    DocReference:
-      x-schema-name: DocReference
-      description: Reference to a Coda doc.
+      properties: {}
+    WorkspaceReference:
+      x-schema-name: WorkspaceReference
+      description: Reference to a Coda workspace.
       type: object
       required:
       - id
       - type
       - browserLink
-      - href
       additionalProperties: false
       properties:
         id:
           type: string
-          description: ID of the Coda doc.
-          example: AbCDeFGH
+          description: ID of the Coda workspace.
+          example: ws-1Ab234
         type:
           type: string
           description: The type of this resource.
           enum:
-          - doc
-          x-tsType: Type.Doc
+          - workspace
+          x-tsType: Type.Workspace
+        organizationId:
+          type: string
+          description: ID of the organization bound to this workspace, if any.
+          example: org-2Bc456
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to the Coda workspace.
+          example: https://coda.io/docs?workspaceId=ws-1Ab234
+        name:
+          type: string
+          description: Name of the workspace; included if the user has access to the workspace.
+          example: My workspace
+    DocList:
+      x-schema-name: DocList
+      description: List of Coda docs.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Doc'
         href:
           type: string
           format: url
-          description: API link to the Coda doc.
-          example: https://coda.io/apis/v1/docs/AbCDeFGH
-        browserLink:
-          type: string
-          format: url
-          description: Browser-friendly link to the Coda doc.
-          example: https://coda.io/d/_dAbCDeFGH
-    FolderReference:
-      x-schema-name: FolderReference
-      description: Reference to a Coda folder.
-      type: object
-      required:
-      - id
-      - type
-      - browserLink
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: ID of the Coda folder.
-          example: fl-1Ab234
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - folder
-          x-tsType: Type.Folder
-        browserLink:
-          type: string
-          format: url
-          description: Browser-friendly link to the folder.
-          example: https://coda.io/folders/fl-1Ab234
-        name:
-          type: string
-          description: Name of the folder; included if the user has access to the folder.
-          example: My docs
+          description: API link to these results
+          example: https://coda.io/apis/v1/docs?limit=20
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://coda.io/apis/v1/docs?pageToken=eyJsaW1pd
+    PageContentFormat:
+      x-schema-name: PageContentFormat
+      description: Supported content types for page (canvas) content.
+      type: string
+      enum:
+      - html
+      - markdown
+      x-tsEnumNames:
+      - Html
+      - Markdown
     nextPageLink:
       description: If specified, a link that can be used to fetch the next page of results.
       type: string
       format: url
-    DocPublishMode:
-      x-schema-name: DocPublishMode
-      description: Which interaction mode the published doc should use.
-      type: string
-      enum:
-      - view
-      - play
-      - edit
-      x-tsEnumNames:
-      - View
-      - Play
-      - Edit
+    DocPublished:
+      x-schema-name: DocPublished
+      description: Information about the publishing state of the document.
+      type: object
+      required:
+      - browserLink
+      - discoverable
+      - earnCredit
+      - mode
+      - categories
+      additionalProperties: false
+      properties:
+        description:
+          type: string
+          description: Description of the published doc.
+          example: Hello World!
+        browserLink:
+          type: string
+          description: URL to the published doc.
+          example: https://coda.io/@coda/hello-world
+        imageLink:
+          type: string
+          description: URL to the cover image for the published doc.
+        discoverable:
+          type: boolean
+          description: If true, indicates that the doc is discoverable.
+          example: true
+        earnCredit:
+          type: boolean
+          description: 'If true, new users may be required to sign in to view content within this document. You will receive Coda credit for each user who signs up via your doc.
+
+            '
+          example: true
+        mode:
+          $ref: '#/components/schemas/DocPublishMode'
+        categories:
+          type: array
+          description: Categories applied to the doc.
+          example:
+          - Project Management
+          items:
+            $ref: '#/components/schemas/DocCategory'
     PageCreateContent:
       x-schema-name: PageCreateContent
       description: Content that can be added to a page at creation time, either text (or rich text) or a URL to create a full-page embed.
@@ -773,100 +701,9 @@ components:
               type: string
               description: The id of the document to insert as a sync page.
               example: sHbI4uIwiK
-    DocUpdateResult:
-      x-schema-name: DocUpdate
-      description: The result of a doc update
-      type: object
-      additionalProperties: false
-      properties: {}
-    nextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
-    DocUpdate:
-      x-schema-name: DocUpdate
-      description: Payload for updating a doc.
-      type: object
-      additionalProperties: false
-      properties:
-        title:
-          type: string
-          description: Title of the doc.
-          example: Project Tracker
-        iconName:
-          type: string
-          description: Name of the icon.
-          example: rocket
-    DocList:
-      x-schema-name: DocList
-      description: List of Coda docs.
-      type: object
-      required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Doc'
-        href:
-          type: string
-          format: url
-          description: API link to these results
-          example: https://coda.io/apis/v1/docs?limit=20
-        nextPageToken:
-          $ref: '#/components/schemas/nextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/nextPageLink'
-          - type: string
-            example: https://coda.io/apis/v1/docs?pageToken=eyJsaW1pd
-    PageContentFormat:
-      x-schema-name: PageContentFormat
-      description: Supported content types for page (canvas) content.
-      type: string
-      enum:
-      - html
-      - markdown
-      x-tsEnumNames:
-      - Html
-      - Markdown
-    WorkspaceReference:
-      x-schema-name: WorkspaceReference
-      description: Reference to a Coda workspace.
-      type: object
-      required:
-      - id
-      - type
-      - browserLink
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: ID of the Coda workspace.
-          example: ws-1Ab234
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - workspace
-          x-tsType: Type.Workspace
-        organizationId:
-          type: string
-          description: ID of the organization bound to this workspace, if any.
-          example: org-2Bc456
-        browserLink:
-          type: string
-          format: url
-          description: Browser-friendly link to the Coda workspace.
-          example: https://coda.io/docs?workspaceId=ws-1Ab234
-        name:
-          type: string
-          description: Name of the workspace; included if the user has access to the workspace.
-          example: My workspace
-    DocumentCreationResult:
+    Doc:
       x-schema-name: Doc
-      description: The result of a doc creation.
+      description: Metadata about a Coda doc.
       type: object
       required:
       - id
@@ -953,10 +790,33 @@ components:
           description: ID of the Coda folder containing this doc.
           example: fl-1Ab234
           deprecated: true
-        requestId:
-          type: string
-          description: An arbitrary unique identifier for this request.
-          example: abc-123-def-456
+    DocSize:
+      x-schema-name: DocSize
+      description: The number of components within a Coda doc.
+      type: object
+      required:
+      - totalRowCount
+      - tableAndViewCount
+      - pageCount
+      - overApiSizeLimit
+      additionalProperties: false
+      properties:
+        totalRowCount:
+          type: number
+          description: The number of rows contained within all tables of the doc.
+          example: 31337
+        tableAndViewCount:
+          type: number
+          description: The total number of tables and views contained within the doc.
+          example: 42
+        pageCount:
+          type: number
+          description: The total number of page contained within the doc.
+          example: 10
+        overApiSizeLimit:
+          type: boolean
+          description: If true, indicates that the doc is over the API size limit.
+          example: false
     DocCategory:
       x-schema-name: DocCategory
       type: object
@@ -969,89 +829,189 @@ components:
           type: string
           description: Name of the category.
           example: Project Management
-    PageEmbedRenderMethod:
-      x-schema-name: PageEmbedRenderMethod
-      description: Render mode for a page using the Embed page type.
+    Icon:
+      x-schema-name: icon
+      description: Info about the icon.
+      type: object
+      required:
+      - name
+      - type
+      - browserLink
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: Name of the icon.
+        type:
+          type: string
+          description: MIME type of the icon
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to an icon.
+          example: https://cdn.coda.io/icons/png/color/icon-32.png
+    PageCreate:
+      x-schema-name: PageCreate
+      description: Payload for creating a new page in a doc.
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: Name of the page.
+          example: Launch Status
+        subtitle:
+          type: string
+          description: Subtitle of the page.
+          example: See the status of launch-related tasks.
+        iconName:
+          type: string
+          description: Name of the icon.
+          example: rocket
+        imageUrl:
+          type: string
+          description: Url of the cover image to use.
+          example: https://example.com/image.jpg
+        parentPageId:
+          type: string
+          description: The ID of this new page's parent, if creating a subpage.
+          example: canvas-tuVwxYz
+        pageContent:
+          $ref: '#/components/schemas/PageCreateContent'
+    DocUpdate:
+      x-schema-name: DocUpdate
+      description: Payload for updating a doc.
+      type: object
+      additionalProperties: false
+      properties:
+        title:
+          type: string
+          description: Title of the doc.
+          example: Project Tracker
+        iconName:
+          type: string
+          description: Name of the icon.
+          example: rocket
+    DocDelete:
+      x-schema-name: DocDelete
+      description: The result of a doc deletion.
+      type: object
+      additionalProperties: false
+      properties: {}
+    PageContent:
+      x-schema-name: PageContent
+      description: 'Content to be added or replaced with in a page (canvas).
+
+        '
+      type: object
+      additionalProperties: false
+      required:
+      - format
+      - content
+      properties:
+        format:
+          $ref: '#/components/schemas/PageContentFormat'
+        content:
+          type: string
+          description: The actual page content.
+          example: <p><b>This</b> is rich text</p>
+    DocReference:
+      x-schema-name: DocReference
+      description: Reference to a Coda doc.
+      type: object
+      required:
+      - id
+      - type
+      - browserLink
+      - href
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the Coda doc.
+          example: AbCDeFGH
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - doc
+          x-tsType: Type.Doc
+        href:
+          type: string
+          format: url
+          description: API link to the Coda doc.
+          example: https://coda.io/apis/v1/docs/AbCDeFGH
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to the Coda doc.
+          example: https://coda.io/d/_dAbCDeFGH
+    FolderReference:
+      x-schema-name: FolderReference
+      description: Reference to a Coda folder.
+      type: object
+      required:
+      - id
+      - type
+      - browserLink
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the Coda folder.
+          example: fl-1Ab234
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - folder
+          x-tsType: Type.Folder
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to the folder.
+          example: https://coda.io/folders/fl-1Ab234
+        name:
+          type: string
+          description: Name of the folder; included if the user has access to the folder.
+          example: My docs
+    nextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
       type: string
-      enum:
-      - compatibility
-      - standard
-      x-tsEnumNames:
-      - Compatibility
-      - Standard
+      example: eyJsaW1pd
+  parameters:
+    limit:
+      name: limit
+      description: Maximum number of results to return in this query.
+      in: query
+      example: 10
+      schema:
+        type: integer
+        minimum: 1
+        default: 25
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
+    docId:
+      name: docId
+      description: ID of the doc.
+      in: path
+      required: true
+      example: AbCDeFGH
+      schema:
+        type: string
+    query:
+      name: query
+      description: Search term used to filter down results.
+      in: query
+      example: Supercalifragilisticexpialidocious
+      schema:
+        type: string
   responses:
-    BadRequestError:
-      description: The request parameters did not conform to expectations.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 400
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Bad Request
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Bad Request
-    UnauthorizedError:
-      description: The API token is invalid or has expired.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 401
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Unauthorized
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Unauthorized
-    NotFoundError:
-      description: The resource could not be located with the current API token.
-      content:
-        application/json:
-          schema:
-            description: An HTTP error resulting from an unsuccessful request.
-            required:
-            - statusCode
-            - statusMessage
-            - message
-            additionalProperties: false
-            properties:
-              statusCode:
-                type: number
-                description: HTTP status code of the error.
-                example: 404
-              statusMessage:
-                type: string
-                description: HTTP status message of the error.
-                example: Not Found
-              message:
-                type: string
-                description: Any additional context on the error, or the same as `statusMessage` otherwise.
-                example: Not Found
     ForbiddenError:
       description: The API token does not grant access to this resource.
       content:
@@ -1100,38 +1060,78 @@ components:
                 type: string
                 description: Any additional context on the error, or the same as `statusMessage` otherwise.
                 example: Too Many Requests
-  parameters:
-    query:
-      name: query
-      description: Search term used to filter down results.
-      in: query
-      example: Supercalifragilisticexpialidocious
-      schema:
-        type: string
-    limit:
-      name: limit
-      description: Maximum number of results to return in this query.
-      in: query
-      example: 10
-      schema:
-        type: integer
-        minimum: 1
-        default: 25
-    docId:
-      name: docId
-      description: ID of the doc.
-      in: path
-      required: true
-      example: AbCDeFGH
-      schema:
-        type: string
-    pageToken:
-      name: pageToken
-      description: An opaque token used to fetch the next page of results.
-      in: query
-      example: eyJsaW1pd
-      schema:
-        type: string
+    NotFoundError:
+      description: The resource could not be located with the current API token.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 404
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Not Found
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Not Found
+    UnauthorizedError:
+      description: The API token is invalid or has expired.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 401
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Unauthorized
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Unauthorized
+    BadRequestError:
+      description: The request parameters did not conform to expectations.
+      content:
+        application/json:
+          schema:
+            description: An HTTP error resulting from an unsuccessful request.
+            required:
+            - statusCode
+            - statusMessage
+            - message
+            additionalProperties: false
+            properties:
+              statusCode:
+                type: number
+                description: HTTP status code of the error.
+                example: 400
+              statusMessage:
+                type: string
+                description: HTTP status message of the error.
+                example: Bad Request
+              message:
+                type: string
+                description: Any additional context on the error, or the same as `statusMessage` otherwise.
+                example: Bad Request
   securitySchemes:
     Bearer:
       description: "The Coda API can be accessed using an API token, which can be obtained from [*My account*](https://coda.io/account)\nin Coda. This token should be specified by setting a header as follows.\n\n```Authorization: Bearer <api_token>```\n\nKeep your token safe, as anyone who gets access to it can access your account. Once a token is created\nit cannot be viewed or modified, so don't lose it.\n\nIf you're logged into Coda, you can also query the API directly using your browser. Note that only GET\nendpoints are supported; for anything else, you'll have to use Bearer authentication.\n\n### Restricting token authorization\n\nBy default, bearer tokens created for the Coda API can perform any action that the user who created the token\ncan perform. However, Coda API bearer tokens can also be created with restrictions. These restrictions\ncan limit what objects can be operated on and the types of operations that can be performed.\n\n#### Operation types\n\nThe table below describes the types of authorization restrictions that can be placed on a Coda API token.\n<table>\n  <tr><th>Restriction</th><th>Description</th><th>Allowed HTTP Methods</th></tr>\n  <tr>\n    <td>Read access</td>\n    <td>Allows access to API methods that read the state of an object</td>\n    <td>GET</td>\n  </tr>\n  <tr>\n    <td>Write access</td>\n    <td>Allows access to API methods that write the state of an object</td>\n    <td>POST, PUT, DELETE</td>\n  </tr>\n  <tr>\n    <td>Read and write access</td>\n    <td>Allows access to all methods for an object</td>\n    <td>All</td>\n  </tr>\n</table>\n\n#### Object types\n\nCoda API tokens can be restricted to the following types of objects.\n\n* Documents: Restricts access to only allow API calls for `/docs/${DOC_ID}`\n* Tables: Restricts access to only allow API calls for `/docs/${DOC_ID}/tables/${TABLE_ID}`\n\n#### Special cases\n\nThere are a few special case methods that violate the above restrictions.\n\n* `/whoami`: This method can be called by all Coda API tokens.\n* `/resolveBrowserLink`: This method can be called by all Coda API tokens, but will only return a result\nif the token has access (read or write) to the object referenced by the URL.\n\n#### Feedback\n\nThis feature is under development and we'd love to hear your feedback and bug reports. Please\nvisit us at the [Developers Central](https://connect.superhuman.com/c/developers-central) forum within\nthe Coda Community.\n"
