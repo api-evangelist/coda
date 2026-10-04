@@ -400,6 +400,9 @@ apis:
   - type: SDKs
     url: https://github.com/coda/packs-sdk
 common:
+  - type: CapabilityMap
+    url: capabilities/coda-capability-edges.yml
+    name: Coda Business Capability Map
   - type: AgenticAccess
     url: agentic-access/coda-agentic-access.yml
   - type: TrustCenter
