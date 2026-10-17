@@ -292,74 +292,167 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequestsError'
 components:
+  parameters:
+    workspaceIdInQuery:
+      name: workspaceId
+      description: ID of the workspace.
+      in: query
+      required: false
+      example: ws-1Ab234
+      schema:
+        type: string
+    packAnalyticsOrderBy:
+      name: orderBy
+      in: query
+      description: Use this parameter to order the Pack analytics returned.
+      schema:
+        $ref: '#/components/schemas/PackAnalyticsOrderBy'
+    packId:
+      name: packId
+      description: ID of a Pack
+      in: path
+      required: true
+      example: 123
+      schema:
+        type: integer
+        minimum: 1
+    packIds:
+      name: packIds
+      description: Which Pack IDs to fetch.
+      in: query
+      explode: false
+      schema:
+        type: array
+        items:
+          type: integer
+    isPublished:
+      name: isPublished
+      description: Limit results to only published items.
+      in: query
+      schema:
+        type: boolean
+    docAnalyticsOrderBy:
+      name: orderBy
+      in: query
+      description: Use this parameter to order the doc analytics returned.
+      schema:
+        $ref: '#/components/schemas/DocAnalyticsOrderBy'
+    pageToken:
+      name: pageToken
+      description: An opaque token used to fetch the next page of results.
+      in: query
+      example: eyJsaW1pd
+      schema:
+        type: string
+    sinceDate:
+      name: sinceDate
+      description: Limit results to activity on or after this date.
+      in: query
+      example: '2020-08-01'
+      schema:
+        type: string
+        format: date
+    scale:
+      name: scale
+      description: Quantization period over which to view analytics. Defaults to daily.
+      in: query
+      example: daily
+      schema:
+        $ref: '#/components/schemas/AnalyticsScale'
+    direction:
+      name: direction
+      description: Direction to sort results in.
+      in: query
+      schema:
+        $ref: '#/components/schemas/SortDirection'
+    query:
+      name: query
+      description: Search term used to filter down results.
+      in: query
+      example: Supercalifragilisticexpialidocious
+      schema:
+        type: string
+    untilDate:
+      name: untilDate
+      description: Limit results to activity on or before this date.
+      in: query
+      example: '2020-08-05'
+      schema:
+        type: string
+        format: date
+    isPublishedNoDefault:
+      name: isPublished
+      description: 'Limit results to only published items. If false or unspecified, returns all items including published ones.
+
+        '
+      in: query
+      schema:
+        type: boolean
+        x-no-default: true
+    docId:
+      name: docId
+      description: ID of the doc.
+      in: path
+      required: true
+      example: AbCDeFGH
+      schema:
+        type: string
+    packFormulaAnalyticsOrderBy:
+      name: orderBy
+      in: query
+      description: Use this parameter to order the Pack formula analytics returned.
+      schema:
+        $ref: '#/components/schemas/PackFormulaAnalyticsOrderBy'
+    docIds:
+      name: docIds
+      description: List of docIds to fetch.
+      in: query
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
   schemas:
-    SortDirection:
-      x-schema-name: SortDirection
-      description: Direction of a sort for a table or view.
-      type: string
-      enum:
-      - ascending
-      - descending
-      x-tsEnumNames:
-      - Ascending
-      - Descending
-    PageAnalyticsItem:
-      x-schema-name: PageAnalyticsItem
-      description: Analytics data for a page within a Coda doc.
+    DocAnalyticsCollection:
+      x-schema-name: DocAnalyticsCollection
+      description: List of analytics for Coda docs over a date range.
       type: object
       required:
-      - page
-      - metrics
+      - items
       additionalProperties: false
       properties:
-        page:
-          $ref: '#/components/schemas/PageAnalyticsDetails'
-        metrics:
+        items:
           type: array
           items:
-            $ref: '#/components/schemas/PageAnalyticsMetrics'
-    DocAnalyticsDetails:
-      allOf:
-      - $ref: '#/components/schemas/DocReference'
-      - type: object
-        description: Metadata about a doc relevant to analytics.
-        required:
-        - title
-        - createdAt
-        additionalProperties: false
-        properties:
-          title:
-            type: string
-            description: The name of the doc.
-            example: Cool Geometry Formulas
-          icon:
-            $ref: '#/components/schemas/Icon'
-            example: https://coda.io/d/_dAbCDeFGH
-          createdAt:
-            type: string
-            format: date-time
-            description: Creation time of the doc.
-            example: '2022-04-11T00:18:57.946Z'
-          publishedAt:
-            type: string
-            format: date-time
-            description: Published time of the doc.
-            example: '2022-04-12T00:18:57.946Z'
-    DocAnalyticsItem:
-      x-schema-name: DocAnalyticsItem
-      description: Analytics data for a Coda doc.
+            $ref: '#/components/schemas/DocAnalyticsItem'
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://coda.io/apis/v1/analytics/docs?pageToken=xyz
+    Icon:
+      x-schema-name: icon
+      description: Info about the icon.
       type: object
       required:
-      - doc
-      - metrics
+      - name
+      - type
+      - browserLink
       additionalProperties: false
       properties:
-        doc:
-          $ref: '#/components/schemas/DocAnalyticsDetails'
-        metrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/DocAnalyticsMetrics'
+        name:
+          type: string
+          description: Name of the icon.
+        type:
+          type: string
+          description: MIME type of the icon
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to an icon.
+          example: https://cdn.coda.io/icons/png/color/icon-32.png
     PackAnalyticsSummary:
       x-schema-name: PackAnalyticsSummary
       description: Summary analytics for Packs.
@@ -379,81 +472,29 @@ components:
         totalInvocations:
           type: integer
           description: The number of times formulas in this Pack were invoked.
-    PackFormulaType:
-      x-schema-name: PackFormulaType
-      type: string
-      enum:
-      - action
-      - formula
-      - sync
-      - metadata
-      x-tsEnumNames:
-      - Action
-      - Formula
-      - Sync
-      - Metadata
-    PageAnalyticsMetrics:
-      x-schema-name: PageAnalyticsMetrics
-      description: Analytics metrics for a page within a Coda doc.
+    PageAnalyticsCollection:
+      x-schema-name: PageAnalyticsCollection
+      description: List of analytics for pages within a Coda doc over a date range.
       type: object
       required:
-      - date
-      - views
-      - sessions
-      - users
-      - averageSecondsViewed
-      - medianSecondsViewed
-      - tabs
+      - items
       additionalProperties: false
       properties:
-        date:
-          type: string
-          format: date
-          description: Date of the analytics data.
-          example: '2022-06-03'
-        views:
-          type: integer
-          description: Number of times the page was viewed within the given day.
-          example: 980
-        sessions:
-          type: integer
-          description: Number of unique browsers that viewed the page on the given day.
-          example: 24
-        users:
-          type: integer
-          description: Number of unique Coda users that viewed the page on the given day.
-          example: 42
-        averageSecondsViewed:
-          type: integer
-          description: Average number of seconds that the page was viewed on the given day.
-          example: 42
-        medianSecondsViewed:
-          type: integer
-          description: Median number of seconds that the page was viewed on the given day.
-          example: 42
-        tabs:
-          type: integer
-          description: Number of unique tabs that opened the doc on the given day.
-          example: 10
-    nextPageLink:
-      description: If specified, a link that can be used to fetch the next page of results.
-      type: string
-      format: url
-    PackFormulaAnalyticsItem:
-      x-schema-name: PackFormulaAnalyticsItem
-      description: Analytics data for a Coda Pack formula.
-      type: object
-      required:
-      - formula
-      - metrics
-      additionalProperties: false
-      properties:
-        formula:
-          $ref: '#/components/schemas/PackFormulaIdentifier'
-        metrics:
+        items:
           type: array
           items:
-            $ref: '#/components/schemas/PackFormulaAnalyticsMetrics'
+            $ref: '#/components/schemas/PageAnalyticsItem'
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://coda.io/apis/v1/analytics/docs/DOC_ID/pages?pageToken=xyz
+    nextPageToken:
+      description: If specified, an opaque token used to fetch the next page of results.
+      type: string
+      example: eyJsaW1pd
     PackFormulaAnalyticsMetrics:
       x-schema-name: PackFormulaAnalyticsMetrics
       description: Analytics metrics for a Coda Pack formula.
@@ -562,21 +603,107 @@ components:
         revenueUsd:
           type: string
           description: Amount of revenue (in USD) that the Pack has produced.
-    PackAnalyticsOrderBy:
-      x-schema-name: PackAnalyticsOrderBy
-      description: Determines how the Pack analytics returned are sorted.
+    AnalyticsLastUpdatedResponse:
+      x-schema-name: AnalyticsLastUpdatedResponse
+      description: Response representing the last day analytics were updated.
+      type: object
+      required:
+      - docAnalyticsLastUpdated
+      - packAnalyticsLastUpdated
+      - packFormulaAnalyticsLastUpdated
+      additionalProperties: false
+      properties:
+        docAnalyticsLastUpdated:
+          type: string
+          format: date
+          description: Date that doc analytics were last updated.
+          example: '2022-05-01'
+        packAnalyticsLastUpdated:
+          type: string
+          format: date
+          description: Date that Pack analytics were last updated.
+          example: '2022-05-01'
+        packFormulaAnalyticsLastUpdated:
+          type: string
+          format: date
+          description: Date that Pack formula analytics were last updated.
+          example: '2022-05-01'
+    AnalyticsScale:
+      x-schema-name: AnalyticsScale
+      description: Quantization period over which to view analytics.
+      type: string
+      enum:
+      - daily
+      - cumulative
+      x-tsEnumNames:
+      - Daily
+      - Cumulative
+    DocReference:
+      x-schema-name: DocReference
+      description: Reference to a Coda doc.
+      type: object
+      required:
+      - id
+      - type
+      - browserLink
+      - href
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: ID of the Coda doc.
+          example: AbCDeFGH
+        type:
+          type: string
+          description: The type of this resource.
+          enum:
+          - doc
+          x-tsType: Type.Doc
+        href:
+          type: string
+          format: url
+          description: API link to the Coda doc.
+          example: https://coda.io/apis/v1/docs/AbCDeFGH
+        browserLink:
+          type: string
+          format: url
+          description: Browser-friendly link to the Coda doc.
+          example: https://coda.io/d/_dAbCDeFGH
+    PackAnalyticsCollection:
+      x-schema-name: PackAnalyticsCollection
+      description: List of analytics for Coda Packs over a date range.
+      type: object
+      required:
+      - items
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackAnalyticsItem'
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://coda.io/apis/v1/analytics/packs?pageToken=xyz
+    nextPageLink:
+      description: If specified, a link that can be used to fetch the next page of results.
+      type: string
+      format: url
+    PackFormulaAnalyticsOrderBy:
+      x-schema-name: PackFormulaAnalyticsOrderBy
+      description: Determines how the Pack formula analytics returned are sorted.
       type: string
       enum:
       - date
-      - packId
-      - name
-      - createdAt
-      - docInstalls
-      - workspaceInstalls
-      - numFormulaInvocations
-      - numActionInvocations
-      - numSyncInvocations
-      - numMetadataInvocations
+      - formulaName
+      - formulaType
+      - formulaInvocations
+      - medianLatencyMs
+      - medianResponseSizeBytes
+      - errors
       - docsActivelyUsing
       - docsActivelyUsing7Day
       - docsActivelyUsing30Day
@@ -587,20 +714,14 @@ components:
       - workspacesActivelyUsing30Day
       - workspacesActivelyUsing90Day
       - workspacesActivelyUsingAllTime
-      - workspacesWithActiveSubscriptions
-      - workspacesWithSuccessfulTrials
-      - revenueUsd
       x-tsEnumNames:
       - AnalyticsDate
-      - PackId
-      - Name
-      - CreatedAt
-      - DocInstalls
-      - WorkspaceInstalls
-      - NumFormulaInvocations
-      - NumActionInvocations
-      - NumSyncInvocations
-      - NumMetadataInvocations
+      - FormulaName
+      - FormulaType
+      - FormulaInvocations
+      - MedianLatencyMs
+      - MedianResponseSizeBytes
+      - Errors
       - DocsActivelyUsing
       - DocsActivelyUsing7Day
       - DocsActivelyUsing30Day
@@ -611,114 +732,118 @@ components:
       - WorkspacesActivelyUsing30Day
       - WorkspacesActivelyUsing90Day
       - WorkspacesActivelyUsingAllTime
-      - WorkspacesWithActiveSubscriptions
-      - WorkspacesWithSuccessfulTrials
-      - RevenueUsd
-    PackAnalyticsDetails:
-      x-schema-name: PackAnalyticsDetails
-      description: Metadata about a Pack relevant to analytics.
+    DocAnalyticsSummary:
+      x-schema-name: DocAnalyticsSummary
+      description: Summarized metrics for Coda docs.
       type: object
-      additionalProperties: false
       required:
-      - id
-      - name
-      - createdAt
+      - totalSessions
+      additionalProperties: false
       properties:
-        id:
-          type: number
-          description: ID of the Pack.
-          example: 1003
-        name:
-          type: string
-          description: The name of the Pack.
-          example: Cool Geometry Formulas
-        logoUrl:
-          type: string
-          format: url
-          description: The link to the logo of the Pack.
-        createdAt:
-          type: string
-          format: date-time
-          description: Creation time of the Pack.
-          example: '2022-04-11T00:18:57.946Z'
-    DocAnalyticsMetrics:
-      x-schema-name: DocAnalyticsMetrics
-      description: Analytics metrics for a Coda Doc.
+        totalSessions:
+          type: integer
+          description: Total number of sessions across all docs.
+          example: 1337
+    PageAnalyticsMetrics:
+      x-schema-name: PageAnalyticsMetrics
+      description: Analytics metrics for a page within a Coda doc.
       type: object
       required:
       - date
       - views
-      - copies
-      - likes
-      - sessionsMobile
-      - sessionsDesktop
-      - sessionsOther
-      - totalSessions
-      - aiCreditsChat,
-      - aiCreditsBlock,
-      - aiCreditsColumn,
-      - aiCreditsAssistant,
-      - aiCreditsReviewer,
-      - aiCredits,
+      - sessions
+      - users
+      - averageSecondsViewed
+      - medianSecondsViewed
+      - tabs
       additionalProperties: false
       properties:
         date:
           type: string
           format: date
           description: Date of the analytics data.
-          example: '2020-09-02'
+          example: '2022-06-03'
         views:
           type: integer
-          description: Number of times the doc was viewed.
+          description: Number of times the page was viewed within the given day.
           example: 980
-        copies:
+        sessions:
           type: integer
-          description: Number of times the doc was copied.
+          description: Number of unique browsers that viewed the page on the given day.
           example: 24
-        likes:
+        users:
           type: integer
-          description: Number of times the doc was liked.
-          example: 342
-        sessionsMobile:
+          description: Number of unique Coda users that viewed the page on the given day.
+          example: 42
+        averageSecondsViewed:
           type: integer
-          description: Number of unique visitors to this doc from a mobile device.
-          example: 530
-        sessionsDesktop:
+          description: Average number of seconds that the page was viewed on the given day.
+          example: 42
+        medianSecondsViewed:
           type: integer
-          description: Number of unique visitors to this doc from a desktop device.
-          example: 212
-        sessionsOther:
+          description: Median number of seconds that the page was viewed on the given day.
+          example: 42
+        tabs:
           type: integer
-          description: Number of unique visitors to this doc from an unknown device type.
+          description: Number of unique tabs that opened the doc on the given day.
           example: 10
-        totalSessions:
-          type: integer
-          description: Sum of the total sessions from any device.
-          example: 1000
-        aiCreditsChat:
-          type: integer
-          description: Number of credits used for AI chat.
-          example: 10
-        aiCreditsBlock:
-          type: integer
-          description: Number of credits used for AI block.
-          example: 10
-        aiCreditsColumn:
-          type: integer
-          description: Number of credits used for AI column.
-          example: 10
-        aiCreditsAssistant:
-          type: integer
-          description: Number of credits used for AI assistant.
-          example: 10
-        aiCreditsReviewer:
-          type: integer
-          description: Number of credits used for AI reviewer.
-          example: 10
-        aiCredits:
-          type: integer
-          description: Total number of AI credits used.
-          example: 50
+    DocAnalyticsItem:
+      x-schema-name: DocAnalyticsItem
+      description: Analytics data for a Coda doc.
+      type: object
+      required:
+      - doc
+      - metrics
+      additionalProperties: false
+      properties:
+        doc:
+          $ref: '#/components/schemas/DocAnalyticsDetails'
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocAnalyticsMetrics'
+    PackAnalyticsItem:
+      x-schema-name: PackAnalyticsItem
+      description: Analytics data for a Coda Pack.
+      type: object
+      required:
+      - pack
+      - metrics
+      additionalProperties: false
+      properties:
+        pack:
+          $ref: '#/components/schemas/PackAnalyticsDetails'
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackAnalyticsMetrics'
+    DocAnalyticsDetails:
+      allOf:
+      - $ref: '#/components/schemas/DocReference'
+      - type: object
+        description: Metadata about a doc relevant to analytics.
+        required:
+        - title
+        - createdAt
+        additionalProperties: false
+        properties:
+          title:
+            type: string
+            description: The name of the doc.
+            example: Cool Geometry Formulas
+          icon:
+            $ref: '#/components/schemas/Icon'
+            example: https://coda.io/d/_dAbCDeFGH
+          createdAt:
+            type: string
+            format: date-time
+            description: Creation time of the doc.
+            example: '2022-04-11T00:18:57.946Z'
+          publishedAt:
+            type: string
+            format: date-time
+            description: Published time of the doc.
+            example: '2022-04-12T00:18:57.946Z'
     PackAnalyticsMetrics:
       x-schema-name: PackAnalyticsMetrics
       description: Analytics metrics for a Coda Pack.
@@ -848,35 +973,6 @@ components:
         revenueUsd:
           type: string
           description: Amount of revenue (in USD) that the Pack has produced.
-    PackAnalyticsCollection:
-      x-schema-name: PackAnalyticsCollection
-      description: List of analytics for Coda Packs over a date range.
-      type: object
-      required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/PackAnalyticsItem'
-        nextPageToken:
-          $ref: '#/components/schemas/nextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/nextPageLink'
-          - type: string
-            example: https://coda.io/apis/v1/analytics/packs?pageToken=xyz
-    AnalyticsScale:
-      x-schema-name: AnalyticsScale
-      description: Quantization period over which to view analytics.
-      type: string
-      enum:
-      - daily
-      - cumulative
-      x-tsEnumNames:
-      - Daily
-      - Cumulative
     PackFormulaIdentifier:
       x-schema-name: PackFormulaIdentifier
       type: object
@@ -891,92 +987,21 @@ components:
           example: SquareRoot
         type:
           $ref: '#/components/schemas/PackFormulaType'
-    PageAnalyticsCollection:
-      x-schema-name: PageAnalyticsCollection
-      description: List of analytics for pages within a Coda doc over a date range.
-      type: object
-      required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/PageAnalyticsItem'
-        nextPageToken:
-          $ref: '#/components/schemas/nextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/nextPageLink'
-          - type: string
-            example: https://coda.io/apis/v1/analytics/docs/DOC_ID/pages?pageToken=xyz
-    PackAnalyticsItem:
-      x-schema-name: PackAnalyticsItem
-      description: Analytics data for a Coda Pack.
-      type: object
-      required:
-      - pack
-      - metrics
-      additionalProperties: false
-      properties:
-        pack:
-          $ref: '#/components/schemas/PackAnalyticsDetails'
-        metrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/PackAnalyticsMetrics'
-    PackFormulaAnalyticsCollection:
-      x-schema-name: PackFormulaAnalyticsCollection
-      description: A collection of analytics for Coda Packs formulas over a date range.
-      type: object
-      required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/PackFormulaAnalyticsItem'
-        nextPageToken:
-          $ref: '#/components/schemas/nextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/nextPageLink'
-          - type: string
-            example: https://coda.io/apis/v1/analytics/packs/:packId/formulas?pageToken=xyz
-    Icon:
-      x-schema-name: icon
-      description: Info about the icon.
-      type: object
-      required:
-      - name
-      - type
-      - browserLink
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-          description: Name of the icon.
-        type:
-          type: string
-          description: MIME type of the icon
-        browserLink:
-          type: string
-          format: url
-          description: Browser-friendly link to an icon.
-          example: https://cdn.coda.io/icons/png/color/icon-32.png
-    PackFormulaAnalyticsOrderBy:
-      x-schema-name: PackFormulaAnalyticsOrderBy
-      description: Determines how the Pack formula analytics returned are sorted.
+    PackAnalyticsOrderBy:
+      x-schema-name: PackAnalyticsOrderBy
+      description: Determines how the Pack analytics returned are sorted.
       type: string
       enum:
       - date
-      - formulaName
-      - formulaType
-      - formulaInvocations
-      - medianLatencyMs
-      - medianResponseSizeBytes
-      - errors
+      - packId
+      - name
+      - createdAt
+      - docInstalls
+      - workspaceInstalls
+      - numFormulaInvocations
+      - numActionInvocations
+      - numSyncInvocations
+      - numMetadataInvocations
       - docsActivelyUsing
       - docsActivelyUsing7Day
       - docsActivelyUsing30Day
@@ -987,14 +1012,20 @@ components:
       - workspacesActivelyUsing30Day
       - workspacesActivelyUsing90Day
       - workspacesActivelyUsingAllTime
+      - workspacesWithActiveSubscriptions
+      - workspacesWithSuccessfulTrials
+      - revenueUsd
       x-tsEnumNames:
       - AnalyticsDate
-      - FormulaName
-      - FormulaType
-      - FormulaInvocations
-      - MedianLatencyMs
-      - MedianResponseSizeBytes
-      - Errors
+      - PackId
+      - Name
+      - CreatedAt
+      - DocInstalls
+      - WorkspaceInstalls
+      - NumFormulaInvocations
+      - NumActionInvocations
+      - NumSyncInvocations
+      - NumMetadataInvocations
       - DocsActivelyUsing
       - DocsActivelyUsing7Day
       - DocsActivelyUsing30Day
@@ -1005,6 +1036,130 @@ components:
       - WorkspacesActivelyUsing30Day
       - WorkspacesActivelyUsing90Day
       - WorkspacesActivelyUsingAllTime
+      - WorkspacesWithActiveSubscriptions
+      - WorkspacesWithSuccessfulTrials
+      - RevenueUsd
+    PackFormulaType:
+      x-schema-name: PackFormulaType
+      type: string
+      enum:
+      - action
+      - formula
+      - sync
+      - metadata
+      x-tsEnumNames:
+      - Action
+      - Formula
+      - Sync
+      - Metadata
+    DocAnalyticsMetrics:
+      x-schema-name: DocAnalyticsMetrics
+      description: Analytics metrics for a Coda Doc.
+      type: object
+      required:
+      - date
+      - views
+      - copies
+      - likes
+      - sessionsMobile
+      - sessionsDesktop
+      - sessionsOther
+      - totalSessions
+      - aiCreditsChat,
+      - aiCreditsBlock,
+      - aiCreditsColumn,
+      - aiCreditsAssistant,
+      - aiCreditsReviewer,
+      - aiCredits,
+      additionalProperties: false
+      properties:
+        date:
+          type: string
+          format: date
+          description: Date of the analytics data.
+          example: '2020-09-02'
+        views:
+          type: integer
+          description: Number of times the doc was viewed.
+          example: 980
+        copies:
+          type: integer
+          description: Number of times the doc was copied.
+          example: 24
+        likes:
+          type: integer
+          description: Number of times the doc was liked.
+          example: 342
+        sessionsMobile:
+          type: integer
+          description: Number of unique visitors to this doc from a mobile device.
+          example: 530
+        sessionsDesktop:
+          type: integer
+          description: Number of unique visitors to this doc from a desktop device.
+          example: 212
+        sessionsOther:
+          type: integer
+          description: Number of unique visitors to this doc from an unknown device type.
+          example: 10
+        totalSessions:
+          type: integer
+          description: Sum of the total sessions from any device.
+          example: 1000
+        aiCreditsChat:
+          type: integer
+          description: Number of credits used for AI chat.
+          example: 10
+        aiCreditsBlock:
+          type: integer
+          description: Number of credits used for AI block.
+          example: 10
+        aiCreditsColumn:
+          type: integer
+          description: Number of credits used for AI column.
+          example: 10
+        aiCreditsAssistant:
+          type: integer
+          description: Number of credits used for AI assistant.
+          example: 10
+        aiCreditsReviewer:
+          type: integer
+          description: Number of credits used for AI reviewer.
+          example: 10
+        aiCredits:
+          type: integer
+          description: Total number of AI credits used.
+          example: 50
+    PageAnalyticsItem:
+      x-schema-name: PageAnalyticsItem
+      description: Analytics data for a page within a Coda doc.
+      type: object
+      required:
+      - page
+      - metrics
+      additionalProperties: false
+      properties:
+        page:
+          $ref: '#/components/schemas/PageAnalyticsDetails'
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/PageAnalyticsMetrics'
+    PackFormulaAnalyticsItem:
+      x-schema-name: PackFormulaAnalyticsItem
+      description: Analytics data for a Coda Pack formula.
+      type: object
+      required:
+      - formula
+      - metrics
+      additionalProperties: false
+      properties:
+        formula:
+          $ref: '#/components/schemas/PackFormulaIdentifier'
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackFormulaAnalyticsMetrics'
     PageAnalyticsDetails:
       x-schema-name: PageAnalyticsDetails
       description: Metadata about a page relevant to analytics.
@@ -1024,81 +1179,33 @@ components:
         icon:
           $ref: '#/components/schemas/Icon'
           example: https://coda.io/d/_dAbCDeFGH
-    DocReference:
-      x-schema-name: DocReference
-      description: Reference to a Coda doc.
+    PackAnalyticsDetails:
+      x-schema-name: PackAnalyticsDetails
+      description: Metadata about a Pack relevant to analytics.
       type: object
+      additionalProperties: false
       required:
       - id
-      - type
-      - browserLink
-      - href
-      additionalProperties: false
+      - name
+      - createdAt
       properties:
         id:
+          type: number
+          description: ID of the Pack.
+          example: 1003
+        name:
           type: string
-          description: ID of the Coda doc.
-          example: AbCDeFGH
-        type:
-          type: string
-          description: The type of this resource.
-          enum:
-          - doc
-          x-tsType: Type.Doc
-        href:
+          description: The name of the Pack.
+          example: Cool Geometry Formulas
+        logoUrl:
           type: string
           format: url
-          description: API link to the Coda doc.
-          example: https://coda.io/apis/v1/docs/AbCDeFGH
-        browserLink:
+          description: The link to the logo of the Pack.
+        createdAt:
           type: string
-          format: url
-          description: Browser-friendly link to the Coda doc.
-          example: https://coda.io/d/_dAbCDeFGH
-    DocAnalyticsCollection:
-      x-schema-name: DocAnalyticsCollection
-      description: List of analytics for Coda docs over a date range.
-      type: object
-      required:
-      - items
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/DocAnalyticsItem'
-        nextPageToken:
-          $ref: '#/components/schemas/nextPageToken'
-        nextPageLink:
-          allOf:
-          - $ref: '#/components/schemas/nextPageLink'
-          - type: string
-            example: https://coda.io/apis/v1/analytics/docs?pageToken=xyz
-    AnalyticsLastUpdatedResponse:
-      x-schema-name: AnalyticsLastUpdatedResponse
-      description: Response representing the last day analytics were updated.
-      type: object
-      required:
-      - docAnalyticsLastUpdated
-      - packAnalyticsLastUpdated
-      - packFormulaAnalyticsLastUpdated
-      additionalProperties: false
-      properties:
-        docAnalyticsLastUpdated:
-          type: string
-          format: date
-          description: Date that doc analytics were last updated.
-          example: '2022-05-01'
-        packAnalyticsLastUpdated:
-          type: string
-          format: date
-          description: Date that Pack analytics were last updated.
-          example: '2022-05-01'
-        packFormulaAnalyticsLastUpdated:
-          type: string
-          format: date
-          description: Date that Pack formula analytics were last updated.
-          example: '2022-05-01'
+          format: date-time
+          description: Creation time of the Pack.
+          example: '2022-04-11T00:18:57.946Z'
     DocAnalyticsOrderBy:
       x-schema-name: DocAnalyticsOrderBy
       description: Determines how the Doc analytics returned are sorted.
@@ -1141,142 +1248,35 @@ components:
       - AiCreditsAssistant
       - AiCreditsReviewer
       - AiCredits
-    DocAnalyticsSummary:
-      x-schema-name: DocAnalyticsSummary
-      description: Summarized metrics for Coda docs.
+    SortDirection:
+      x-schema-name: SortDirection
+      description: Direction of a sort for a table or view.
+      type: string
+      enum:
+      - ascending
+      - descending
+      x-tsEnumNames:
+      - Ascending
+      - Descending
+    PackFormulaAnalyticsCollection:
+      x-schema-name: PackFormulaAnalyticsCollection
+      description: A collection of analytics for Coda Packs formulas over a date range.
       type: object
       required:
-      - totalSessions
+      - items
       additionalProperties: false
       properties:
-        totalSessions:
-          type: integer
-          description: Total number of sessions across all docs.
-          example: 1337
-    nextPageToken:
-      description: If specified, an opaque token used to fetch the next page of results.
-      type: string
-      example: eyJsaW1pd
-  parameters:
-    direction:
-      name: direction
-      description: Direction to sort results in.
-      in: query
-      schema:
-        $ref: '#/components/schemas/SortDirection'
-    packFormulaAnalyticsOrderBy:
-      name: orderBy
-      in: query
-      description: Use this parameter to order the Pack formula analytics returned.
-      schema:
-        $ref: '#/components/schemas/PackFormulaAnalyticsOrderBy'
-    packAnalyticsOrderBy:
-      name: orderBy
-      in: query
-      description: Use this parameter to order the Pack analytics returned.
-      schema:
-        $ref: '#/components/schemas/PackAnalyticsOrderBy'
-    packIds:
-      name: packIds
-      description: Which Pack IDs to fetch.
-      in: query
-      explode: false
-      schema:
-        type: array
         items:
-          type: integer
-    packId:
-      name: packId
-      description: ID of a Pack
-      in: path
-      required: true
-      example: 123
-      schema:
-        type: integer
-        minimum: 1
-    docAnalyticsOrderBy:
-      name: orderBy
-      in: query
-      description: Use this parameter to order the doc analytics returned.
-      schema:
-        $ref: '#/components/schemas/DocAnalyticsOrderBy'
-    scale:
-      name: scale
-      description: Quantization period over which to view analytics. Defaults to daily.
-      in: query
-      example: daily
-      schema:
-        $ref: '#/components/schemas/AnalyticsScale'
-    pageToken:
-      name: pageToken
-      description: An opaque token used to fetch the next page of results.
-      in: query
-      example: eyJsaW1pd
-      schema:
-        type: string
-    untilDate:
-      name: untilDate
-      description: Limit results to activity on or before this date.
-      in: query
-      example: '2020-08-05'
-      schema:
-        type: string
-        format: date
-    sinceDate:
-      name: sinceDate
-      description: Limit results to activity on or after this date.
-      in: query
-      example: '2020-08-01'
-      schema:
-        type: string
-        format: date
-    isPublished:
-      name: isPublished
-      description: Limit results to only published items.
-      in: query
-      schema:
-        type: boolean
-    docIds:
-      name: docIds
-      description: List of docIds to fetch.
-      in: query
-      explode: false
-      schema:
-        type: array
-        items:
-          type: string
-    isPublishedNoDefault:
-      name: isPublished
-      description: 'Limit results to only published items. If false or unspecified, returns all items including published ones.
-
-        '
-      in: query
-      schema:
-        type: boolean
-        x-no-default: true
-    docId:
-      name: docId
-      description: ID of the doc.
-      in: path
-      required: true
-      example: AbCDeFGH
-      schema:
-        type: string
-    workspaceIdInQuery:
-      name: workspaceId
-      description: ID of the workspace.
-      in: query
-      required: false
-      example: ws-1Ab234
-      schema:
-        type: string
-    query:
-      name: query
-      description: Search term used to filter down results.
-      in: query
-      example: Supercalifragilisticexpialidocious
-      schema:
-        type: string
+          type: array
+          items:
+            $ref: '#/components/schemas/PackFormulaAnalyticsItem'
+        nextPageToken:
+          $ref: '#/components/schemas/nextPageToken'
+        nextPageLink:
+          allOf:
+          - $ref: '#/components/schemas/nextPageLink'
+          - type: string
+            example: https://coda.io/apis/v1/analytics/packs/:packId/formulas?pageToken=xyz
   responses:
     TooManyRequestsError:
       description: The client has sent too many requests.
